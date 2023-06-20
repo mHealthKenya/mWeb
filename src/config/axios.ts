@@ -9,4 +9,6 @@ const axiosInstance = axios.create({
   }
 })
 
+export const baseURL = 'https://mimbaplus.mhealthkenya.org/'
+
 export default axiosInstance

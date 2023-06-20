@@ -10,19 +10,24 @@ import {
   faCalculator,
   faChartPie,
   faChevronUp,
-  faCode,
   faDroplet,
   faGauge,
   faLayerGroup,
+  faLocation,
   faLocationArrow,
+  faMap,
   faPencil,
   faPuzzlePiece,
-  faRightToBracket
+  faRightToBracket,
+  faUserAlt,
+  faUserCheck,
+  faUserCircle,
+  faUserNurse
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { PropsWithChildren, useContext, useEffect, useState } from 'react'
 import classNames from 'classnames'
 import Link from 'next/link'
+import { PropsWithChildren, useContext, useEffect, useState } from 'react'
 import Accordion from 'react-bootstrap/Accordion'
 import AccordionContext from 'react-bootstrap/AccordionContext'
 import Badge from 'react-bootstrap/Badge'
@@ -120,7 +125,7 @@ const SidebarNavGroup = (props: SidebarNavGroupProps) => {
 export default function SidebarNav() {
   return (
     <ul className="list-unstyled">
-      <SidebarNavItem icon={faGauge} href="/">
+      <SidebarNavItem icon={faGauge} href="/sadmin">
         Dashboard
         <small className="ms-auto">
           <Badge bg="info" className="ms-auto">
@@ -128,22 +133,29 @@ export default function SidebarNav() {
           </Badge>
         </small>
       </SidebarNavItem>
-      <SidebarNavItem icon={faCode} href="/pokemons">
-        Sample (SSR)
-        <small className="ms-auto">
-          <Badge bg="danger" className="ms-auto">
-            DEMO
-          </Badge>
-        </small>
+
+      <SidebarNavTitle>Users</SidebarNavTitle>
+      <SidebarNavItem icon={faUserCircle} href="/sadmin/users/admin">
+        Admins
       </SidebarNavItem>
-      <SidebarNavItem icon={faCode} href="/pokemons/client">
-        Sample (CSR)
-        <small className="ms-auto">
-          <Badge bg="danger" className="ms-auto">
-            DEMO
-          </Badge>
-        </small>
+      <SidebarNavItem icon={faUserNurse} href="/sadmin/facilities">
+        Facility Admins
       </SidebarNavItem>
+      <SidebarNavItem icon={faUserAlt} href="/sadmin/chv">
+        CHVs
+      </SidebarNavItem>
+      <SidebarNavItem icon={faUserCheck} href="/sadmin/mothers">
+        Mothers
+      </SidebarNavItem>
+
+      <SidebarNavTitle>Coverage</SidebarNavTitle>
+      <SidebarNavItem icon={faLocation} href="/sadmin/locations">
+        Locations
+      </SidebarNavItem>
+      <SidebarNavItem icon={faMap} href="/sadmin/coverage">
+        Map View
+      </SidebarNavItem>
+
       <SidebarNavTitle>Theme</SidebarNavTitle>
       <SidebarNavItem icon={faDroplet} href="#">
         Colors

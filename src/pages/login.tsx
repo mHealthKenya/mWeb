@@ -6,7 +6,6 @@ import { Button, Container, IconButton, InputAdornment, Stack, TextField } from 
 import * as jwt from 'jsonwebtoken'
 import { GetServerSideProps, NextPage } from 'next'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import nookies from 'nookies'
 import { useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
@@ -26,7 +25,6 @@ const validationSchema = Yup.object().shape({
 })
 
 const Login: NextPage = () => {
-  const router = useRouter()
   const [see, setSee] = useState(false)
 
   const toggleSee = () => {
@@ -130,7 +128,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookie = cookies['access-token']
 
   try {
-    const user: any = await jwt.verify(cookie, `${process.env.JWT_SECRET}`)
+    const user: any = await jwt.verify(cookie, `${process.env.NEXT_PUBLIC_JWT_SECRET}`)
 
     switch (user.role) {
       case Users.SuperAdmin:

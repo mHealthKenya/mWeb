@@ -8,20 +8,26 @@ import { ProgressBar } from '@components/ProgressBar'
 import SSRProvider from 'react-bootstrap/SSRProvider'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import Head from 'next/head'
 
 config.autoAddCss = false
 
 function MyApp({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient()
   return (
-    <SSRProvider>
-      <ProgressBar />
-      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <QueryClientProvider client={queryClient}>
-        <Component {...pageProps} />
-        <ReactQueryDevtools initialIsOpen={false} position="bottom-left" />
-      </QueryClientProvider>
-    </SSRProvider>
+    <>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
+      <SSRProvider>
+        <ProgressBar />
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+        <QueryClientProvider client={queryClient}>
+          <Component {...pageProps} />
+          <ReactQueryDevtools initialIsOpen={false} position="bottom-left" />
+        </QueryClientProvider>
+      </SSRProvider>
+    </>
   )
 }
 

@@ -1,19 +1,19 @@
-import { useMutation } from '@tanstack/react-query'
-import axiosInstance from '../../config/axios'
-import { LoginCredentials } from '../../pages/login'
-import Cookies from 'js-cookie'
 import { LoginSuccess } from '@models/login'
+import { useMutation } from '@tanstack/react-query'
+import axios from 'axios'
+import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
-import * as jwt from 'jsonwebtoken'
-import { Users } from 'src/helpers/enums/users.enum'
+import { LoginCredentials } from '../../pages/login'
 
 const userLogin = async ({ email, password }: LoginCredentials) => {
-  const user: LoginSuccess = await axiosInstance
-    .post('users/login', {
+  const user: LoginSuccess = await axios
+    .post('https://mimbaplus.mhealthkenya.org/users/login', {
       email,
       password
     })
-    .then((res) => res.data)
+    .then(async (res) => {
+      return res.data
+    })
 
   return user
 }
@@ -24,7 +24,7 @@ const useLogin = () => {
     mutationFn: userLogin,
     onSuccess: async (data) => {
       const { token } = data
-      Cookies.set('access-token', token, { expires: 1 })
+      await Cookies.set('access-token', token)
       router.push('/')
     }
   })

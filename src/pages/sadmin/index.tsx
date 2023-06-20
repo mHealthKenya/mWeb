@@ -15,7 +15,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookie = cookies['access-token']
 
   try {
-    const user: any = await jwt.verify(cookie, `${process.env.JWT_SECRET}`)
+    const user: any = await jwt.verify(cookie, `${process.env.NEXT_PUBLIC_JWT_SECRET}`)
     return {
       props: {
         user
