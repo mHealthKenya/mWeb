@@ -1,17 +1,17 @@
-import { Location } from '@models/location'
+import { Facility } from '@models/facility'
 import { useQuery } from '@tanstack/react-query'
 import axiosInstance from 'src/config/axios'
 
-export const allLocations = async () => {
-  const locations: Location[] = await axiosInstance.get('locations/all').then((res) => res.data)
+export const allFacilities = async () => {
+  const locations: Facility[] = await axiosInstance.get('facilities/all').then((res) => res.data)
   return locations
 }
 
-const useAllLocations = (initialData: Location[]) =>
+const useAllFacilities = (initialData: Facility[]) =>
   useQuery({
-    queryKey: ['allLocations'],
-    queryFn: allLocations,
+    queryKey: ['allFacilities'],
+    queryFn: allFacilities,
     initialData
   })
 
-export default useAllLocations
+export default useAllFacilities

@@ -1,17 +1,17 @@
 import { AuthenticatedUser } from '@models/authenticateduser'
-import { Location } from '@models/location'
+import { Facility } from '@models/facility'
 import { ListItem, ListItemButton, ListItemText, Tooltip } from '@mui/material'
 import { FC, useState } from 'react'
 import EditOrDeleteLocationComponent from './modal'
 
 export interface LocationData {
-  location: Location
+  facility: Facility
   user?: AuthenticatedUser
 }
 
 const SingleLocationComponent: FC<{ locationData: LocationData }> = ({ locationData }) => {
   const user = locationData?.user
-  const location = locationData.location
+  const location = locationData.facility
   const [open, setOpen] = useState(false)
 
   const handleClick = () => {
@@ -32,7 +32,7 @@ const SingleLocationComponent: FC<{ locationData: LocationData }> = ({ locationD
       <ListItem>
         <ListItemButton onClick={handleClick}>
           <Tooltip title="Click to Edit Or Delete">
-            <ListItemText id={location.id} primary={location.location_name} />
+            <ListItemText id={location.id} primary={location.name} />
           </Tooltip>
         </ListItemButton>{' '}
       </ListItem>

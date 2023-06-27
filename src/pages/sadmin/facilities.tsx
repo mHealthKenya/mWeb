@@ -1,15 +1,15 @@
-import NewLocationComponent from '@components/Locations/add'
-import AllLocationsComponent from '@components/Locations/all'
+import NewLocationComponent from '@components/Facilities/add'
+import AllLocationsComponent from '@components/Facilities/all'
 import AdminLayout from '@layout/AdminLayout/AdminLayout'
 import { Stack } from '@mui/material'
 import * as jwt from 'jsonwebtoken'
 import { GetServerSideProps } from 'next'
 import nookies from 'nookies'
 import { Users } from 'src/helpers/enums/users.enum'
-import useAllLocations, { allLocations } from 'src/services/locations/all'
+import useAllFacilities, { allFacilities } from 'src/services/locations/all'
 
-const NewLocation = ({ user, locations }: any) => {
-  const { data: allLocations } = useAllLocations(locations)
+const NewLocation = ({ user, facilities }: any) => {
+  const { data: allFacilities } = useAllFacilities(facilities)
   return (
     <AdminLayout>
       <Stack spacing={1}>
@@ -17,7 +17,7 @@ const NewLocation = ({ user, locations }: any) => {
         <AllLocationsComponent
           data={{
             user,
-            locations: allLocations
+            facilities: allFacilities
           }}
         />
       </Stack>
@@ -34,7 +34,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   try {
     const user: any = await jwt.verify(cookie, `${process.env.NEXT_PUBLIC_JWT_SECRET}`)
-    const locations = await allLocations()
+    const facilities = await allFacilities()
     if (user?.role !== Users.SuperAdmin) {
       return {
         redirect: {
@@ -46,7 +46,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
       props: {
         user,
-        locations
+        facilities
       }
     }
   } catch (error) {

@@ -1,14 +1,15 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
+// export const baseURL = 'https://mimbaplus.mhealthkenya.org/'
+export const baseURL = 'http://localhost:8000/'
+
 const axiosInstance = axios.create({
-  baseURL: 'https://mimbaplus.mhealthkenya.org/',
+  baseURL,
   timeout: 100000,
   headers: {
     Authorization: `Bearer ${Cookies.get('access-token')}`
   }
 })
-
-export const baseURL = 'https://mimbaplus.mhealthkenya.org/'
 
 export default axiosInstance

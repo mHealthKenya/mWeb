@@ -2,19 +2,19 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import axiosInstance from 'src/config/axios'
 import Swal from 'sweetalert2'
 
-const deleteLocation = async (id: string) => {
-  const del = await axiosInstance.delete('locations/delete?id=' + id).then((res) => res.data)
+const deleteFacility = async (id: string) => {
+  const del = await axiosInstance.delete('facilities/delete?id=' + id).then((res) => res.data)
 
   return del
 }
 
-const useDeleteLocation = () => {
+const useDeleteFacility = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: deleteLocation,
+    mutationFn: deleteFacility,
     onSuccess: async () => {
       await Promise.all([
-        queryClient.invalidateQueries(['allLocations']),
+        queryClient.invalidateQueries(['allFacilities']),
         queryClient.invalidateQueries(['coordinates'])
       ])
       Swal.fire({
@@ -35,4 +35,4 @@ const useDeleteLocation = () => {
   })
 }
 
-export default useDeleteLocation
+export default useDeleteFacility

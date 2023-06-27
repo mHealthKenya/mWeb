@@ -4,42 +4,19 @@ import { Delete, Edit } from '@mui/icons-material'
 import { Button } from '@mui/material'
 import Box from '@mui/material/Box'
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import EditUserWithRoleComponent from './Edit'
+import {
+  colsWithFacilityCol,
+  colsWithOutFacilityCol,
+  rowsWithFacility,
+  rowsWithoutFacility
+} from 'src/data/users-by-role'
 
-interface Col {
-  field: string
-  headerName: string
-}
-
-const cols: Col[] = [
-  {
-    field: 'f_name',
-    headerName: 'First Name'
-  },
-  {
-    field: 'l_name',
-    headerName: 'Last Name'
-  },
-  {
-    field: 'gender',
-    headerName: 'Gender'
-  },
-  {
-    field: 'email',
-    headerName: 'Email'
-  },
-  {
-    field: 'role',
-    headerName: 'Role'
-  },
-  {
-    field: 'action',
-    headerName: 'Action'
-  }
-]
-
-const UsersByRoleComponent: React.FC<{ users: UserByRole[] }> = ({ users }) => {
+const UsersByRoleComponent: React.FC<{ users: UserByRole[]; facility?: boolean }> = ({
+  users,
+  facility
+}) => {
   const [open, setOpen] = useState(false)
   const [user, setUser] = useState<UserByRole>()
 
@@ -47,23 +24,28 @@ const UsersByRoleComponent: React.FC<{ users: UserByRole[] }> = ({ users }) => {
     setOpen((open) => !open)
   }
 
-  const rows = users.map((user) => ({
-    id: user.id,
-    f_name: user.f_name,
-    l_name: user.l_name,
-    gender: user.gender,
-    email: user.email,
-    role: user.role,
-    action: user,
-    user
-  }))
+  const rows = useMemo(() => {
+    if (facility) {
+      return rowsWithFacility(users)
+    }
+
+    return rowsWithoutFacility(users)
+  }, [users, facility])
 
   const handleEdit = (user: UserByRole) => {
     setOpen(true)
     setUser(user)
   }
 
-  const columns: GridColDef[] = cols.map((col) => {
+  const columnTypes = useMemo(() => {
+    if (facility) {
+      return colsWithFacilityCol
+    }
+
+    return colsWithOutFacilityCol
+  }, [facility])
+
+  const columns: GridColDef[] = columnTypes.map((col) => {
     switch (col.field) {
       case 'action':
         return {
@@ -101,7 +83,7 @@ const UsersByRoleComponent: React.FC<{ users: UserByRole[] }> = ({ users }) => {
         return {
           field: col.field,
           headerName: col.headerName,
-          width: 200,
+          width: 250,
           renderCell: (params) => (
             <Box
               sx={{
@@ -120,6 +102,13 @@ const UsersByRoleComponent: React.FC<{ users: UserByRole[] }> = ({ users }) => {
           field: col.field,
           headerName: col.headerName,
           width: 100
+        }
+
+      case 'facility':
+        return {
+          field: col.field,
+          headerName: col.headerName,
+          width: 200
         }
       default:
         return {

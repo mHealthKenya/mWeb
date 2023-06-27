@@ -1,15 +1,15 @@
-import { Location } from '@models/location'
+import { Facility } from '@models/facility'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import axiosInstance from 'src/config/axios'
 import Swal from 'sweetalert2'
 
-export interface UpdateLocation {
+export interface UpdateFacility {
   id: string
-  location_name: string
+  name: string
 }
-const updateLocation = async (locationData: UpdateLocation) => {
-  const update: Location = await axiosInstance
-    .patch('locations/update', {
+const updateFacility = async (locationData: UpdateFacility) => {
+  const update: Facility = await axiosInstance
+    .patch('facilities/update', {
       ...locationData
     })
     .then((res) => res.data)
@@ -17,18 +17,18 @@ const updateLocation = async (locationData: UpdateLocation) => {
   return update
 }
 
-const useUpdateLocation = (handleToggle: () => void) => {
+const useUpdateFacility = (handleToggle: () => void) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: updateLocation,
+    mutationFn: updateFacility,
     onSuccess: async (data) => {
       await Promise.all([
-        queryClient.invalidateQueries(['allLocations']),
+        queryClient.invalidateQueries(['allFacilities']),
         queryClient.invalidateQueries(['coordinates'])
       ])
       Swal.fire({
         title: 'Success!',
-        text: data.location_name + ' updated successfully',
+        text: data.name + ' updated successfully',
         icon: 'success',
         confirmButtonText: 'OK'
       })
@@ -49,4 +49,4 @@ const useUpdateLocation = (handleToggle: () => void) => {
   })
 }
 
-export default useUpdateLocation
+export default useUpdateFacility

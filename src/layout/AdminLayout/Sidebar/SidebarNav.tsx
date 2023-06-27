@@ -138,19 +138,19 @@ export default function SidebarNav() {
       <SidebarNavItem icon={faUserCircle} href="/sadmin/users/admin">
         Admins
       </SidebarNavItem>
-      <SidebarNavItem icon={faUserNurse} href="/sadmin/facilities">
+      <SidebarNavItem icon={faUserNurse} href="/sadmin/users/facility">
         Facility Admins
       </SidebarNavItem>
-      <SidebarNavItem icon={faUserAlt} href="/sadmin/chv">
+      <SidebarNavItem icon={faUserAlt} href="/sadmin/users/chv">
         CHVs
       </SidebarNavItem>
-      <SidebarNavItem icon={faUserCheck} href="/sadmin/mothers">
+      <SidebarNavItem icon={faUserCheck} href="/sadmin/users/mother">
         Mothers
       </SidebarNavItem>
 
       <SidebarNavTitle>Coverage</SidebarNavTitle>
-      <SidebarNavItem icon={faLocation} href="/sadmin/locations">
-        Locations
+      <SidebarNavItem icon={faLocation} href="/sadmin/facilities">
+        Facilities
       </SidebarNavItem>
       <SidebarNavItem icon={faMap} href="/sadmin/coverage">
         Map View

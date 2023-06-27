@@ -10,44 +10,44 @@ import {
   TextField
 } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import useAddLocation from 'src/services/locations/add'
+import useAddFacility from 'src/services/locations/add'
 import * as Yup from 'yup'
 
-interface LocationData {
-  location_name: string
+interface FacilityData {
+  name: string
 }
 
 const schema = Yup.object().shape({
-  location_name: Yup.string().required('Location is a required field')
+  name: Yup.string().required('Location is a required field')
 })
 
-const NewLocationComponent = () => {
+const NewFacilityComponent = () => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors }
-  } = useForm<LocationData>({
+  } = useForm<FacilityData>({
     resolver: yupResolver(schema)
   })
 
-  const { mutate: addLocation, isLoading } = useAddLocation()
+  const { mutate: addLocation, isLoading } = useAddFacility()
 
-  const onSubmit = (data: LocationData) => {
-    addLocation(data.location_name)
+  const onSubmit = (data: FacilityData) => {
+    addLocation(data.name)
     reset()
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {' '}
       <Card>
-        <CardHeader title="Add New Location" />
+        <CardHeader title="Add New Facility" />
         <CardContent>
           <TextField
-            label="Location"
-            {...register('location_name')}
-            error={!!errors.location_name?.message}
-            helperText={errors.location_name?.message}
+            label="Facility Name"
+            {...register('name')}
+            error={!!errors.name?.message}
+            helperText={errors.name?.message}
             size="small"
             fullWidth
           />{' '}
@@ -64,4 +64,4 @@ const NewLocationComponent = () => {
   )
 }
 
-export default NewLocationComponent
+export default NewFacilityComponent

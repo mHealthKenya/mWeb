@@ -1,3 +1,5 @@
+import { yupResolver } from '@hookform/resolvers/yup'
+import { Delete, Edit } from '@mui/icons-material'
 import {
   Button,
   Card,
@@ -10,14 +12,12 @@ import {
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import * as React from 'react'
-import { LocationData } from './single'
-import { Delete, Edit } from '@mui/icons-material'
 import { useForm } from 'react-hook-form'
-import * as Yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-import useUpdateLocation, { UpdateLocation } from 'src/services/locations/update'
-import useDeleteLocation from 'src/services/locations/delete'
+import useDeleteFacility from 'src/services/locations/delete'
+import useUpdateFacility, { UpdateFacility } from 'src/services/locations/update'
 import Swal from 'sweetalert2'
+import * as Yup from 'yup'
+import { LocationData } from './single'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -28,11 +28,11 @@ const style = {
 }
 
 interface EditProps {
-  location_name: string
+  name: string
 }
 
 const schema = Yup.object().shape({
-  location_name: Yup.string().required('Location is required')
+  name: Yup.string().required('Location is required')
 })
 
 const EditOrDeleteLocationComponent: React.FC<{
@@ -48,9 +48,9 @@ const EditOrDeleteLocationComponent: React.FC<{
     resolver: yupResolver(schema)
   })
 
-  const { mutate: updateLocation, isLoading: isEditing } = useUpdateLocation(handleToggle)
+  const { mutate: updateLocation, isLoading: isEditing } = useUpdateFacility(handleToggle)
 
-  const { mutate: deleteLoc, isLoading: isDeleting } = useDeleteLocation()
+  const { mutate: deleteLoc, isLoading: isDeleting } = useDeleteFacility()
 
   const handleDelete = (id: string) => {
     handleToggle()
@@ -67,9 +67,9 @@ const EditOrDeleteLocationComponent: React.FC<{
   }
 
   const onSubmit = (formData: EditProps) => {
-    const updateData: UpdateLocation = {
-      id: locationData.location.id,
-      location_name: formData.location_name
+    const updateData: UpdateFacility = {
+      id: locationData.facility.id,
+      name: formData.name
     }
     updateLocation(updateData)
   }
@@ -89,10 +89,10 @@ const EditOrDeleteLocationComponent: React.FC<{
                 <TextField
                   fullWidth
                   size="small"
-                  defaultValue={locationData.location.location_name}
-                  {...register('location_name')}
-                  error={!!errors.location_name}
-                  helperText={errors.location_name?.message}
+                  defaultValue={locationData.facility.name}
+                  {...register('name')}
+                  error={!!errors.name}
+                  helperText={errors.name?.message}
                 />
               </CardContent>
               <CardActionArea>
@@ -111,7 +111,7 @@ const EditOrDeleteLocationComponent: React.FC<{
                     color="error"
                     size="small"
                     startIcon={<Delete />}
-                    onClick={() => handleDelete(locationData.location.id)}
+                    onClick={() => handleDelete(locationData.facility.id)}
                     disabled={isDeleting}>
                     {isDeleting ? 'Deleting' : 'Delete'}
                   </Button>

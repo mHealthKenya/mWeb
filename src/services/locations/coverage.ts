@@ -4,7 +4,7 @@ import axiosInstance from 'src/config/axios'
 
 export const getCoordinates = async () => {
   const coordinates: Coordinate[] = await axiosInstance
-    .get('locations/coordinates')
+    .get('facilities/coordinates')
     .then((res) => res.data)
 
   return coordinates

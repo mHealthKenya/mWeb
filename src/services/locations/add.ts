@@ -1,30 +1,35 @@
-import { Location } from '@models/location'
+import { Facility } from '@models/facility'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import axiosInstance from 'src/config/axios'
 import Swal from 'sweetalert2'
 
-const addLocation = async (location_name: string) => {
-  const newLocation: Location = await axiosInstance
-    .post('locations/add', {
-      location_name
+interface Results {
+  message: string
+  data: Facility
+}
+
+const addFacility = async (name: string) => {
+  const newLocation: Results = await axiosInstance
+    .post('facilities/add', {
+      name
     })
     .then((res) => res.data)
 
   return newLocation
 }
 
-const useAddLocation = () => {
+const useAddFacility = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: addLocation,
+    mutationFn: addFacility,
     onSuccess: async (data) => {
       await Promise.all([
-        queryClient.invalidateQueries(['allLocations']),
+        queryClient.invalidateQueries(['allFacilities']),
         queryClient.invalidateQueries(['coordinates'])
       ])
       Swal.fire({
         title: 'Success!',
-        text: data.location_name + ' added successfully',
+        text: data.data.name + ' added successfully',
         icon: 'success',
         confirmButtonText: 'OK'
       })
@@ -41,4 +46,4 @@ const useAddLocation = () => {
   })
 }
 
-export default useAddLocation
+export default useAddFacility
