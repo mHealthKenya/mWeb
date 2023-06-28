@@ -55,8 +55,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   } catch (error) {
     return {
-      props: {
-        data: 'Unauthenticated User'
+      redirect: {
+        destination: '/login',
+        permanent: false
       }
     }
   }

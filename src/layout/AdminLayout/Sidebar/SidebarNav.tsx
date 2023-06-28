@@ -6,6 +6,7 @@ import {
   IconDefinition
 } from '@fortawesome/free-regular-svg-icons'
 import {
+  faAdd,
   faBug,
   faCalculator,
   faChartPie,
@@ -135,6 +136,9 @@ export default function SidebarNav() {
       </SidebarNavItem>
 
       <SidebarNavTitle>Users</SidebarNavTitle>
+      <SidebarNavItem icon={faAdd} href="/sadmin/users">
+        Add User
+      </SidebarNavItem>
       <SidebarNavItem icon={faUserCircle} href="/sadmin/users/admin">
         Admins
       </SidebarNavItem>

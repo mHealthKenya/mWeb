@@ -34,8 +34,8 @@ export const colsWithFacilityCol: Col[] = [
     headerName: 'Gender'
   },
   {
-    field: 'email',
-    headerName: 'Email'
+    field: 'phone',
+    headerName: 'Phone'
   },
   {
     field: 'facility',
@@ -63,7 +63,7 @@ export const rowsWithFacility = (users: UserByRole[]) => {
     id: user.id,
     name: user.f_name + ' ' + user.l_name,
     gender: user.gender,
-    email: user.email,
+    phone: user.phone_number,
     facility: user.Facility?.name,
     action: user,
     user
