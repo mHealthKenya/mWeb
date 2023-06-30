@@ -1,9 +1,10 @@
 import CenterComponent from '@components/Shared/Center'
+import { gender } from '@data/gender'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { UserByRole } from '@models/user-by-role'
 import {
   Button,
   Card,
-  CardActionArea,
   CardActions,
   CardContent,
   CardHeader,
@@ -17,12 +18,11 @@ import {
   Stack,
   TextField
 } from '@mui/material'
+import useEditUser from '@services/users/edit-user'
 import { FC } from 'react'
 import { FormLabel } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-import useEditUser from 'src/services/users/edit-user'
 
 export enum Roles {
   ADMIN = 'Admin',
@@ -45,8 +45,6 @@ export interface EditForm {
 }
 
 const roles = [Roles.ADMIN, Roles.FACILITY, Roles.CHV, Roles.MOTHER]
-
-const genders = [Gender.MALE, Gender.FEMALE]
 
 const validationSchema = Yup.object().shape({
   f_name: Yup.string().required('First name is required'),
@@ -92,6 +90,7 @@ const EditUserWithRoleComponent: FC<{ user: UserByRole | undefined; handleToggle
                 {...register('f_name')}
                 error={!!errors.f_name?.message}
                 helperText={errors?.f_name?.message}
+                inputProps={{ 'data-testid': 'f_name_input' }}
               />
               <TextField
                 label="Last Name"
@@ -101,6 +100,7 @@ const EditUserWithRoleComponent: FC<{ user: UserByRole | undefined; handleToggle
                 {...register('l_name')}
                 error={!!errors.l_name?.message}
                 helperText={errors?.l_name?.message}
+                inputProps={{ 'data-testid': 'l_name_input' }}
               />
               <TextField
                 label="Email"
@@ -111,6 +111,7 @@ const EditUserWithRoleComponent: FC<{ user: UserByRole | undefined; handleToggle
                 {...register('email')}
                 error={!!errors.email?.message}
                 helperText={errors?.email?.message}
+                inputProps={{ 'data-testid': 'email_input' }}
               />
               <FormControl fullWidth size="small">
                 <InputLabel id="demo-simple-select-label">Role</InputLabel>
@@ -121,7 +122,8 @@ const EditUserWithRoleComponent: FC<{ user: UserByRole | undefined; handleToggle
                   size="small"
                   defaultValue={user?.role}
                   {...register('role')}
-                  error={!!errors.role?.message}>
+                  error={!!errors.role?.message}
+                  inputProps={{ 'data-testid': 'role_input' }}>
                   {roles.map((role) => (
                     <MenuItem key={role} value={role}>
                       {role === Roles.FACILITY ? 'Facility Admin' : role}
@@ -129,34 +131,25 @@ const EditUserWithRoleComponent: FC<{ user: UserByRole | undefined; handleToggle
                   ))}
                 </Select>
               </FormControl>
-              <FormControl>
-                <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
-                <RadioGroup
-                  aria-labelledby="demo-radio-buttons-group-label"
-                  defaultValue={user?.gender}
-                  {...register('gender')}>
-                  {genders.map((gender) => (
-                    <FormControlLabel
-                      value={gender}
-                      key={gender}
-                      control={<Radio />}
-                      label={gender}
-                    />
+              <FormControl required>
+                <FormLabel id="gender-radio">Gender</FormLabel>
+                <RadioGroup aria-labelledby="gender" defaultValue="Female" {...register('gender')}>
+                  {gender.map((item, index) => (
+                    <FormControlLabel value={item} control={<Radio />} label={item} key={index} />
                   ))}
                 </RadioGroup>
               </FormControl>
             </Stack>
           </CardContent>
-          <CardActionArea>
-            <CardActions>
-              <Button variant="contained" color="success" type="submit" disabled={isLoading}>
-                {isLoading ? 'Editing...' : 'Edit'}
-              </Button>
-              <Button variant="contained" color="error" onClick={handleToggle}>
-                Cancel
-              </Button>
-            </CardActions>
-          </CardActionArea>
+
+          <CardActions>
+            <Button variant="contained" color="success" type="submit" disabled={isLoading}>
+              {isLoading ? 'Editing...' : 'Edit'}
+            </Button>
+            <Button variant="contained" color="error" onClick={handleToggle}>
+              Cancel
+            </Button>
+          </CardActions>
         </Card>
       </form>
     </CenterComponent>

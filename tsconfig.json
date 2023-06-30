@@ -30,9 +30,12 @@
       "@models/*": ["src/models/*"],
       "@pages": ["src/pages"],
       "@store": ["src/store"],
-      "@styles/*": ["src/styles/*"]
+      "@styles/*": ["src/styles/*"],
+      "@services/*": ["src/services/*"],
+      "@config/*": ["src/config/*"],
+      "@data/*": ["src/data/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/Users/Add.spec.tsx"],
   "exclude": ["node_modules"]
 }

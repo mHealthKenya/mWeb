@@ -1,5 +1,5 @@
-export const rolesSuperAdmin = ['Admin', 'Facility Admin', 'CHV', 'Mother']
+import { Users } from '../helpers/enums/users.enum'
 
-export const rolesAdmin = ['Facility Admin', 'CHV', 'Mother']
+export const rolesSuperAdmin = [Users.Admin, 'Facility Admin', Users.CHV, Users.Mother]
 
-
+export const rolesAdmin = ['Facility Admin', Users.CHV, Users.Mother]

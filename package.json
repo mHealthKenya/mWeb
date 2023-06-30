@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest --watch"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",
@@ -26,6 +27,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "@tanstack/react-query": "^4.29.13",
     "@tanstack/react-query-devtools": "^4.29.13",
+    "@testing-library/user-event": "^14.4.3",
     "@types/jsonwebtoken": "^9.0.2",
     "@vespaiach/axios-fetch-adapter": "^0.3.1",
     "axios": "^0.27.2",
@@ -54,7 +56,13 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/react-hooks": "^8.0.1",
     "@types/cookie": "^0.5.1",
+    "@types/enzyme": "^3.10.13",
+    "@types/enzyme-to-json": "^1.5.4",
+    "@types/jest": "^29.5.2",
     "@types/js-cookie": "^3.0.3",
     "@types/node": "^18.16.16",
     "@types/nprogress": "^0.2.0",
@@ -62,8 +70,11 @@
     "@types/react-bootstrap": "^0.32.32",
     "@types/react-dom": "^18.2.4",
     "@types/react-resize-detector": "^6.1.0",
+    "@types/react-test-renderer": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^5.59.9",
     "@typescript-eslint/parser": "^5.59.9",
+    "enzyme": "^3.11.0",
+    "enzyme-to-json": "^3.6.2",
     "eslint": "^8.42.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
@@ -73,8 +84,13 @@
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
     "json-server": "^0.17.3",
+    "msw": "^1.2.2",
+    "react-test-renderer": "^18.2.0",
     "sass": "^1.62.1",
+    "ts-jest": "^29.1.0",
     "typescript": "^5.1.3"
   }
 }

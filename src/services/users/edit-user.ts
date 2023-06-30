@@ -1,6 +1,6 @@
 import { EditForm } from '@components/Users/Edit'
+import axiosInstance from '@config/axios'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import axiosInstance from 'src/config/axios'
 import Swal from 'sweetalert2'
 
 interface EditUser extends EditForm {

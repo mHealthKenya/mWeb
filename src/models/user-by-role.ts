@@ -6,11 +6,10 @@ export interface UserByRole {
   email: string
   phone_number: string
   national_id: string
-  password: string
   role: string
   createdAt: Date
   updatedAt: Date
-  facilityAdmin?: string
+  facilityAdmin: string |  null
   facilityId?: string
   Facility?: Facility
 }
