@@ -1,8 +1,9 @@
+import { axiosConfig } from '@config/axios'
 import { UserByRole } from '@models/user-by-role'
 import { useQuery } from '@tanstack/react-query'
-import axiosInstance from 'src/config/axios'
 
 export const getUsersByRole = async (role: string) => {
+  const axiosInstance = await axiosConfig()
   const users: UserByRole[] = await axiosInstance
     .get('users/roles?role=' + role)
     .then((res) => res.data)

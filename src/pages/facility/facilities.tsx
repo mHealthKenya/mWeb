@@ -1,6 +1,5 @@
-import NewLocationComponent from '@components/Facilities/add'
 import AllLocationsComponent from '@components/Facilities/all'
-import AdminLayout from '@layout/AdminLayout/AdminLayout'
+import FacilityLayout from '@layout/FacilityLayout/FacilityLayout'
 import { Stack } from '@mui/material'
 import * as jwt from 'jsonwebtoken'
 import { GetServerSideProps } from 'next'
@@ -11,9 +10,8 @@ import useAllFacilities, { allFacilities } from 'src/services/locations/all'
 const NewLocation = ({ user, facilities }: any) => {
   const { data: allFacilities } = useAllFacilities(facilities)
   return (
-    <AdminLayout>
+    <FacilityLayout>
       <Stack spacing={1}>
-        <NewLocationComponent />
         <AllLocationsComponent
           data={{
             user,
@@ -21,7 +19,7 @@ const NewLocation = ({ user, facilities }: any) => {
           }}
         />
       </Stack>
-    </AdminLayout>
+    </FacilityLayout>
   )
 }
 
@@ -35,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
     const user: any = await jwt.verify(cookie, `${process.env.NEXT_PUBLIC_JWT_SECRET}`)
     const facilities = await allFacilities()
-    if (user?.role !== Users.SuperAdmin) {
+    if (user?.role !== Users.Facility) {
       return {
         redirect: {
           destination: '/',

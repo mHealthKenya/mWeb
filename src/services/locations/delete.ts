@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import axiosInstance from 'src/config/axios'
+import { axiosConfig } from 'src/config/axios'
 import Swal from 'sweetalert2'
 
 const deleteFacility = async (id: string) => {
+  const axiosInstance = await axiosConfig()
   const del = await axiosInstance.delete('facilities/delete?id=' + id).then((res) => res.data)
 
   return del

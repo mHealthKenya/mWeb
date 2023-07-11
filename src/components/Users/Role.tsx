@@ -1,22 +1,24 @@
 import SharedModal from '@components/Shared/Modal'
 import { UserByRole } from '@models/user-by-role'
-import { Delete, Edit } from '@mui/icons-material'
+import { Delete, Edit, Visibility } from '@mui/icons-material'
 import { Button } from '@mui/material'
 import Box from '@mui/material/Box'
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid'
 import { useMemo, useState } from 'react'
-import EditUserWithRoleComponent from './Edit'
 import {
   colsWithFacilityCol,
   colsWithOutFacilityCol,
   rowsWithFacility,
   rowsWithoutFacility
 } from 'src/data/users-by-role'
+import EditUserWithRoleComponent from './Edit'
+import Swal from 'sweetalert2'
 
-const UsersByRoleComponent: React.FC<{ users: UserByRole[]; facility?: boolean }> = ({
-  users,
-  facility
-}) => {
+const UsersByRoleComponent: React.FC<{
+  users: UserByRole[]
+  facility?: boolean
+  isFacility?: boolean
+}> = ({ users, facility, isFacility }) => {
   const [open, setOpen] = useState(false)
   const [user, setUser] = useState<UserByRole>()
 
@@ -37,6 +39,15 @@ const UsersByRoleComponent: React.FC<{ users: UserByRole[]; facility?: boolean }
     setUser(user)
   }
 
+  const handleComingSoon = () => {
+    Swal.fire({
+      title: 'Coming soon!',
+      text: 'The requested feature is still in development and will be available soon',
+      icon: 'info',
+      confirmButtonText: 'OK'
+    })
+  }
+
   const columnTypes = useMemo(() => {
     if (facility) {
       return colsWithFacilityCol
@@ -48,6 +59,31 @@ const UsersByRoleComponent: React.FC<{ users: UserByRole[]; facility?: boolean }
   const columns: GridColDef[] = columnTypes.map((col) => {
     switch (col.field) {
       case 'action':
+        if (isFacility) {
+          return {
+            field: col.field,
+            headerName: col.headerName,
+            width: 200,
+            renderCell: () => {
+              return (
+                <Box
+                  sx={{
+                    display: 'flex'
+                  }}>
+                  <Button
+                    variant="contained"
+                    color="info"
+                    sx={{ mr: 1 }}
+                    startIcon={<Visibility />}
+                    size="small"
+                    onClick={() => handleComingSoon()}>
+                    View Details
+                  </Button>
+                </Box>
+              )
+            }
+          }
+        }
         return {
           field: col.field,
           headerName: col.headerName,

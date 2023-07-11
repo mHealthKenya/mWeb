@@ -10,7 +10,6 @@ import nookies from 'nookies'
 import { useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
-import { Users } from 'src/helpers/enums/users.enum'
 import useLogin from 'src/services/auth/login'
 import * as Yup from 'yup'
 
@@ -128,42 +127,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookie = cookies['access-token']
 
   try {
-    const user: any = await jwt.verify(cookie, `${process.env.NEXT_PUBLIC_JWT_SECRET}`)
+    await jwt.verify(cookie, `${process.env.NEXT_PUBLIC_JWT_SECRET}`)
 
-    switch (user.role) {
-      case Users.SuperAdmin:
-        return {
-          redirect: {
-            destination: '/sadmin',
-            permanent: false
-          }
-        }
-
-      case Users.Admin: {
-        return {
-          redirect: {
-            destination: '/admin',
-            permanent: false
-          }
-        }
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false
       }
-
-      case Users.CHV: {
-        return {
-          redirect: {
-            destination: '/chv',
-            permanent: false
-          }
-        }
-      }
-
-      default:
-        return {
-          redirect: {
-            destination: '/mother',
-            permanent: false
-          }
-        }
     }
   } catch (error) {
     return {

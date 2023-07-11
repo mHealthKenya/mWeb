@@ -1,5 +1,13 @@
 import { IconDefinition } from '@fortawesome/free-regular-svg-icons'
-import { faCode, faDroplet, faGauge, faPencil } from '@fortawesome/free-solid-svg-icons'
+import {
+  faDroplet,
+  faGauge,
+  faLocation,
+  faMap,
+  faPencil,
+  faPerson,
+  faPersonPregnant
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
 import { PropsWithChildren } from 'react'
@@ -105,11 +113,19 @@ export default function SidebarNav() {
           </Badge>
         </small>
       </SidebarNavItem>
-      <SidebarNavItem icon={faCode} href="/facility/users">
-        Patients
+      <SidebarNavTitle>Users</SidebarNavTitle>
+      <SidebarNavItem icon={faPersonPregnant} href="/facility/mothers">
+        Mothers
       </SidebarNavItem>
-      <SidebarNavItem icon={faCode} href="/pokemons/client">
-        Records
+      <SidebarNavItem icon={faPerson} href="/facility/chv">
+        CHVs
+      </SidebarNavItem>
+      <SidebarNavTitle>Coverage</SidebarNavTitle>
+      <SidebarNavItem icon={faLocation} href="/facility/facilities">
+        Facilities
+      </SidebarNavItem>
+      <SidebarNavItem icon={faMap} href="/facility/coverage">
+        Map View
       </SidebarNavItem>
       <SidebarNavTitle>Materials</SidebarNavTitle>
       <SidebarNavItem icon={faDroplet} href="#">

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import classNames from 'classnames'
 import Button from 'react-bootstrap/Button'
 import SidebarNav from './SidebarNav'
+import Image from 'next/image'
 
 export default function Sidebar(props: { isShow: boolean; isShowMd: boolean }) {
   const { isShow, isShowMd } = props
@@ -31,15 +32,23 @@ export default function Sidebar(props: { isShow: boolean; isShowMd: boolean }) {
       })}
       id="sidebar">
       <div className="sidebar-brand d-none d-md-flex align-items-center justify-content-center">
-        <svg className="sidebar-brand-full" width="118" height="46">
-          <title>CoreUI Logo</title>
-          <use xlinkHref="/assets/brand/coreui.svg#full" />
-        </svg>
-        <svg className="sidebar-brand-narrow d-none" width="46" height="46">
-          <title>CoreUI Logo</title>
-          <use xlinkHref="/assets/brand/coreui.svg#signet" />
-        </svg>
+        <div className="sidebar-brand-full">
+          <Image src="/assets/brand/logo.png" alt="logo" width={200} height={80} />
+        </div>
+        <div className="sidebar-brand-narrow d-none">
+          <Image src="/assets/brand/logo.png" alt="logo" width={200} height={50} />
+        </div>
       </div>
+      {/* <div className="sidebar-brand d-none d-md-flex align-items-center justify-content-center">
+        <svg width="118" height="46">
+          <title>mPlus</title>
+          <use xlinkHref="/assets/brand/logo.svg#full" />
+        </svg>
+        <svg width="46" height="46">
+          <title>mPlus</title>
+          <use xlinkHref="/assets/brand/logo.svg#signet" />
+        </svg>
+      </div> */}
 
       <div className="sidebar-nav flex-fill">
         <SidebarNav />

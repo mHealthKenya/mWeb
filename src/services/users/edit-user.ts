@@ -1,5 +1,5 @@
 import { EditForm } from '@components/Users/Edit'
-import axiosInstance from '@config/axios'
+import { axiosConfig } from '@config/axios'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import Swal from 'sweetalert2'
 
@@ -7,7 +7,8 @@ interface EditUser extends EditForm {
   id: string
 }
 
-const editUser = async (data: EditUser) => {
+export const editUser = async (data: EditUser) => {
+  const axiosInstance = await axiosConfig()
   const edited = await axiosInstance.patch('users/update', data).then((res) => res.data)
   return edited
 }

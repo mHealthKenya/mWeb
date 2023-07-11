@@ -3,10 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
 import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
-import HeaderFeaturedNav from './HeaderFeaturedNav'
-import HeaderNotificationNav from './HeaderNotificationNav'
-import HeaderProfileNav from './HeaderProfileNav'
 import Breadcrumbs from '../Breadcrumb/Breadcrumb'
+import HeaderFeaturedNav from './HeaderFeaturedNav'
+import HeaderProfileNav from './HeaderProfileNav'
 
 type HeaderProps = {
   toggleSidebar: () => void
@@ -42,9 +41,7 @@ export default function Header(props: HeaderProps) {
         <div className="header-nav d-none d-md-flex">
           <HeaderFeaturedNav />
         </div>
-        <div className="header-nav ms-auto">
-          <HeaderNotificationNav />
-        </div>
+        <div className="header-nav ms-auto">{/* <HeaderNotificationNav /> */}</div>
         <div className="header-nav ms-2">
           <HeaderProfileNav />
         </div>

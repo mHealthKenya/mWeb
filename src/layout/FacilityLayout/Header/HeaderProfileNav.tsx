@@ -1,23 +1,15 @@
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+import { faCreditCard, faFile, faUser } from '@fortawesome/free-regular-svg-icons'
+import { faGear, faPowerOff } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Cookies from 'js-cookie'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { PropsWithChildren } from 'react'
 import Dropdown from 'react-bootstrap/Dropdown'
 import Nav from 'react-bootstrap/Nav'
 import NavItem from 'react-bootstrap/NavItem'
-import Badge from 'react-bootstrap/Badge'
-import Image from 'next/image'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faBell,
-  faCreditCard,
-  faEnvelopeOpen,
-  faFile,
-  faMessage,
-  faUser
-} from '@fortawesome/free-regular-svg-icons'
-import { PropsWithChildren } from 'react'
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
-import { faGear, faListCheck, faLock, faPowerOff } from '@fortawesome/free-solid-svg-icons'
-import Link from 'next/link'
-import axios from 'axios'
-import { useRouter } from 'next/router'
 
 type ItemWithIconProps = {
   icon: IconDefinition
@@ -38,10 +30,8 @@ export default function HeaderProfileNav() {
   const router = useRouter()
 
   const logout = async () => {
-    const res = await axios.post('/api/mock/logout')
-    if (res.status === 200) {
-      router.push('/login')
-    }
+    await Cookies.remove('access-token')
+    router.push('/login')
   }
 
   return (
@@ -62,7 +52,7 @@ export default function HeaderProfileNav() {
           </div>
         </Dropdown.Toggle>
         <Dropdown.Menu className="pt-0">
-          <Dropdown.Header className="bg-light fw-bold rounded-top">Account</Dropdown.Header>
+          {/* <Dropdown.Header className="bg-light fw-bold rounded-top">Account</Dropdown.Header>
           <Link href="#" passHref legacyBehavior>
             <Dropdown.Item>
               <ItemWithIcon icon={faBell}>
@@ -102,7 +92,7 @@ export default function HeaderProfileNav() {
                 </Badge>
               </ItemWithIcon>
             </Dropdown.Item>
-          </Link>
+          </Link> */}
 
           <Dropdown.Header className="bg-light fw-bold">Settings</Dropdown.Header>
 
@@ -129,11 +119,11 @@ export default function HeaderProfileNav() {
 
           <Dropdown.Divider />
 
-          <Link href="#" passHref legacyBehavior>
+          {/* <Link href="#" passHref legacyBehavior>
             <Dropdown.Item>
               <ItemWithIcon icon={faLock}>Lock Account</ItemWithIcon>
             </Dropdown.Item>
-          </Link>
+          </Link> */}
           <Dropdown.Item onClick={logout}>
             <ItemWithIcon icon={faPowerOff}>Logout</ItemWithIcon>
           </Dropdown.Item>

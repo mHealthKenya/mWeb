@@ -71,10 +71,10 @@ export default function SidebarNav() {
       </SidebarNavItem>
 
       <SidebarNavTitle>Coverage</SidebarNavTitle>
-      <SidebarNavItem icon={faLocation} href="/sadmin/facilities">
+      <SidebarNavItem icon={faLocation} href="/admin/facilities">
         Facilities
       </SidebarNavItem>
-      <SidebarNavItem icon={faMap} href="/sadmin/coverage">
+      <SidebarNavItem icon={faMap} href="/admin/coverage">
         Map View
       </SidebarNavItem>
     </ul>

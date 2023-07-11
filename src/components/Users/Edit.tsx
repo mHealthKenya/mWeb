@@ -143,7 +143,12 @@ const EditUserWithRoleComponent: FC<{ user: UserByRole | undefined; handleToggle
           </CardContent>
 
           <CardActions>
-            <Button variant="contained" color="success" type="submit" disabled={isLoading}>
+            <Button
+              variant="contained"
+              color="success"
+              type="submit"
+              disabled={isLoading}
+              data-testid="submit_button">
               {isLoading ? 'Editing...' : 'Edit'}
             </Button>
             <Button variant="contained" color="error" onClick={handleToggle}>

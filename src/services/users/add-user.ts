@@ -1,9 +1,10 @@
 import { AddUserFormProps } from '@components/Users/Add'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import axiosInstance from '../../config/axios'
 import Swal from 'sweetalert2'
+import { axiosConfig } from '../../config/axios'
 
 export const addUser = async (data: AddUserFormProps) => {
+  const axiosInstance = await axiosConfig()
   const newUser = await axiosInstance.post('users/add', data).then((res) => res.data)
 
   return newUser

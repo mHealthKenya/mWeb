@@ -1,6 +1,6 @@
 import { Facility } from '@models/facility'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import axiosInstance from 'src/config/axios'
+import { axiosConfig } from 'src/config/axios'
 import Swal from 'sweetalert2'
 
 interface Results {
@@ -9,6 +9,8 @@ interface Results {
 }
 
 const addFacility = async (name: string) => {
+  const axiosInstance = await axiosConfig()
+
   const newLocation: Results = await axiosInstance
     .post('facilities/add', {
       name

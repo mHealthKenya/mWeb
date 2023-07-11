@@ -1,6 +1,6 @@
 import { Facility } from '@models/facility'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import axiosInstance from 'src/config/axios'
+import { axiosConfig } from 'src/config/axios'
 import Swal from 'sweetalert2'
 
 export interface UpdateFacility {
@@ -8,6 +8,7 @@ export interface UpdateFacility {
   name: string
 }
 const updateFacility = async (locationData: UpdateFacility) => {
+  const axiosInstance = await axiosConfig()
   const update: Facility = await axiosInstance
     .patch('facilities/update', {
       ...locationData

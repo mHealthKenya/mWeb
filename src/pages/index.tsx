@@ -45,10 +45,19 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         }
       }
 
+      case Users.Facility: {
+        return {
+          redirect: {
+            destination: '/facility',
+            permanent: false
+          }
+        }
+      }
+
       default:
         return {
           redirect: {
-            destination: '/mother',
+            destination: '/login',
             permanent: false
           }
         }

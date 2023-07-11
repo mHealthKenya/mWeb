@@ -1,7 +1,9 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, renderHook, screen } from '@testing-library/react'
 import EditUserWithRoleComponent from './Edit'
 import { UserByRole } from '@models/user-by-role'
 import wrapper from '@config/testing'
+import { editUser } from '@services/users/edit-user'
+import { useMutation } from '@tanstack/react-query'
 
 let val = false
 
@@ -80,8 +82,19 @@ describe('Edit User', () => {
     expect(role.value).toEqual('Admin')
   })
 
-  it('should have a working gender radio', () => {
+  it('should make an edit to the user data', () => {
     render(<EditUserWithRoleComponent user={mockUser} handleToggle={handleToggle} />, { wrapper })
+
+
+    
+    const role = screen.getByTestId('role_input') as HTMLInputElement
+    expect(role).toBeInTheDocument()
+    expect(role.value).toEqual(mockUser.role)
+
+    fireEvent.change(role, { target: { value: 'Admin' } })
+    expect(role.value).toEqual('Admin')
+
+    //Gender
     const female = screen.getByLabelText('Female') as HTMLInputElement
     expect(female).toBeInTheDocument()
     const male = screen.getByLabelText('Male') as HTMLInputElement
@@ -96,5 +109,12 @@ describe('Edit User', () => {
     fireEvent.click(female)
     expect(female.checked).toBe(true)
     expect(male.checked).toBe(false)
+
+    const mockEditUser = jest.fn(editUser)
+
+    const { result } = renderHook(() => useMutation(mockEditUser), { wrapper })
+
+    const submitButton = screen.getByTestId('submit_button')
+    expect(submitButton).toBeInTheDocument()
   })
 })
