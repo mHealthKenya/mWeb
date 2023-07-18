@@ -1,6 +1,6 @@
 import BarChart from '@components/Graphs/Barchart'
 // import DoughnutChart from '@components/Graphs/DoughnutChart'
-import PieChart from '@components/Graphs/Piechart'
+// import PieChart from '@components/Graphs/Piechart'
 import RecentActivities from '@components/RecentUpadate/RecentActivities'
 import TopCard from '@components/StatsCard/TopCard'
 // import { Container } from '@mui/material'
@@ -21,7 +21,7 @@ function AdminDashBoard() {
             </Row>
             <Row>
               <Col>
-                <PieChart/>
+                {/* <PieChart/> */}
               </Col>
               <Col>
                 {/* <DoughnutChart/> */}

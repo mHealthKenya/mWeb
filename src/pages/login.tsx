@@ -9,10 +9,15 @@ import Image from 'next/image'
 import Link from 'next/link'
 import nookies from 'nookies'
 import { useState } from 'react'
-import { Card, Col, Row} from 'react-bootstrap'
+import { Card, Col, Row } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import useLogin from 'src/services/auth/login'
 import * as Yup from 'yup'
+
+// Required Logos
+import mLogo from 'public/assets/brand/Logo.png'
+import mhealthLogo from 'public/assets/brand/mhealthlogo.png'
+import AICSLogo from 'public/assets/brand/AICS.png'
 
 export interface LoginCredentials {
   email: string
@@ -46,181 +51,95 @@ const Login: NextPage = () => {
   }
 
   return (
-    <Container>
-    <div className="bg-light min-vh-100 d-flex flex-row align-items-center dark:bg-transparent">
-      {/* <Container>
-        <Row className="justify-content-center align-items-center px-3">
-          <Col lg={7}>
-            <Row>
-              <Col md={12} className="bg-white border p-5">
-                <div className="">
-                  <h1>Login</h1>
-                  <p className="text-black-50">Sign In to your account</p>
-
-                  <form onSubmit={handleSubmit(onSubmit)}>
-                    <Stack spacing={3} sx={{ mb: 3 }}>
-                      <TextField
-                        size="small"
-                        label="Email"
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <EmailIcon />
-                            </InputAdornment>
-                          )
-                        }}
-                        {...register('email')}
-                        error={!!errors?.email?.message}
-                        helperText={errors?.email?.message}
-                      />
-                      <TextField
-                        size="small"
-                        label="Password"
-                        type={see ? 'text' : 'password'}
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <LockIcon />
-                            </InputAdornment>
-                          ),
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <IconButton onClick={toggleSee}>
-                                {see ? <Visibility /> : <VisibilityOff />}
-                              </IconButton>
-                            </InputAdornment>
-                          )
-                        }}
-                        {...register('password')}
-                        error={!!errors?.password?.message}
-                        helperText={errors?.password?.message}
-                      />
-                    </Stack>
-                    <Row>
-                      <Col xs={4}>
-                        <Button
-                          className="px-4"
-                          type="submit"
-                          disabled={isLoading}
-                          variant="contained">
-                          {isLoading ? 'Submitting ' : 'Login'}
-                        </Button>
-                      </Col>
-                      <Col xs={8} className="text-end">
-                        <Link href="/register">Forgot password</Link>
-                      </Col>
-                    </Row>
-                  </form>
-                </div>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Container> */}
-      
-        <Row>
-        <Container className='d-flex align-items-center justify-content-center'>
-        <Card className='text-black m-5' style={{ borderRadius: '25px', width: '500px', margin: '0 auto', justifyContent: 'center'}} >
+    <Container className='d-flex flex-column align-items-center justify-content-center' style={{ minHeight: '100vh' }}>
+      <Card className='text-black m-5' style={{ borderRadius: '25px', width: '500px', justifyContent: 'center', alignItems: 'center' }}>
         <Card.Body>
-          <Row>
-          {/* <Col md='10' lg='4' className='order-1 order-lg-2 d-flex align-items-center'> */}
-              <Card.Img src='https://res.cloudinary.com/dabfdxbfj/image/upload/v1688975254/Logo_M_y6dzkn.png' style={{width: '230px', height: '100px'}}/>
-            {/* </Col>
-            <Col md='10' lg='8' className='order-2 order-lg-1 d-flex flex-column align-items-center'> */}
-            <div className="">
-                  <h1>Login</h1>
-                  <p className="text-black-50">Sign In to your account</p>
+        <div className="square-holder">
+              <Image alt="" src={mLogo} style={{ width: '210px', height: '100px' }} />
+            </div>
+          <div className="">
+            <h1>Login</h1>
+            <p className="text-black-50">Sign In to your account</p>
 
-                  <form onSubmit={handleSubmit(onSubmit)}>
-                    <Stack spacing={3} sx={{ mb: 3 }}>
-                      <TextField
-                        size="small"
-                        label="Email"
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <EmailIcon />
-                            </InputAdornment>
-                          )
-                        }}
-                        {...register('email')}
-                        error={!!errors?.email?.message}
-                        helperText={errors?.email?.message}
-                      />
-                      <TextField
-                        size="small"
-                        label="Password"
-                        type={see ? 'text' : 'password'}
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <LockIcon />
-                            </InputAdornment>
-                          ),
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <IconButton onClick={toggleSee}>
-                                {see ? <Visibility /> : <VisibilityOff />}
-                              </IconButton>
-                            </InputAdornment>
-                          )
-                        }}
-                        {...register('password')}
-                        error={!!errors?.password?.message}
-                        helperText={errors?.password?.message}
-                      />
-                    </Stack>
-                    <Row>
-                      <Col xs={4}>
-                        <Button
-                          className="px-4"
-                          type="submit"
-                          disabled={isLoading}
-                          variant="contained">
-                          {isLoading ? 'Submitting ' : 'Login'}
-                        </Button>
-                      </Col>
-                      <Col xs={8} className="text-end">
-                        <Link href="/register">Forgot password</Link>
-                      </Col>
-                    </Row>
-                  </form>
-                </div>
-            {/* </Col> */}
-            
-          </Row>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Stack spacing={3} sx={{ mb: 3 }}>
+                <TextField
+                  size="small"
+                  label="Email"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <EmailIcon />
+                      </InputAdornment>
+                    )
+                  }}
+                  {...register('email')}
+                  error={!!errors?.email?.message}
+                  helperText={errors?.email?.message}
+                />
+                <TextField
+                  size="small"
+                  label="Password"
+                  type={see ? 'text' : 'password'}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <LockIcon />
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={toggleSee}>
+                          {see ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }}
+                  {...register('password')}
+                  error={!!errors?.password?.message}
+                  helperText={errors?.password?.message}
+                />
+              </Stack>
+              <Row>
+                <Col xs={4}>
+                  <Button
+                    className="px-4"
+                    type="submit"
+                    disabled={isLoading}
+                    variant="contained">
+                    {isLoading ? 'Submitting ' : 'Login'}
+                  </Button>
+                </Col>
+                <Col xs={8} className="text-end">
+                  <Link href="/register">Forgot password</Link>
+                </Col>
+              </Row>
+            </form>
+          </div>
         </Card.Body>
       </Card>
-      </Container>
-        </Row>
-        {/* <Row> */}
-        <section className="section section-default mt-0 mb-0">
-      <Container>
-        <h2 className="mb-sm" style={{textAlign: 'center', justifyContent: 'center'}}>partnership solution by:</h2>
+
+      <section className="section section-default mt-0 mb-0">
+        <h5 className="mb-sm text-sm" style={{ textAlign: 'center', justifyContent: 'center' }}>partnership solution by:</h5>
         <Row>
-          <Col sm={6} md={4} lg={4}>
+          <Col xs={12} sm={6} md={4} lg={4}>
             <div className="square-holder">
-              <Image alt="" src="https://res.cloudinary.com/dabfdxbfj/image/upload/v1688985663/AICS_ENG_V-N_gqf9md.png"  style={{width: '210px', height: '100px'}}/>
+              <Image alt="" src={mhealthLogo} style={{ width: '210px', height: '100px' }} />
             </div>
           </Col>
-          <Col sm={6} md={4} lg={4}>
+          <Col xs={12} sm={6} md={4} lg={4}>
             <div className="square-holder">
-              <Image alt="" src="https://res.cloudinary.com/dabfdxbfj/image/upload/v1688985345/logo_hfqtfr.png"  style={{width: '210px', height: '100px'}}/>
+              <Image alt="" src={AICSLogo} style={{ width: '210px', height: '100px' }} />
             </div>
           </Col>
-          <Col sm={6} md={4} lg={4}>
+          <Col xs={12} sm={6} md={4} lg={4}>
             <div className="square-holder">
-              {/* <img alt="" src="https://res.cloudinary.com/dabfdxbfj/image/upload/v1688985345/logo_hfqtfr.png"  style={{width: '210px', height: '90px'}}/> */}
+              <Image alt="" src={mLogo} style={{ width: '210px', height: '90px' }} />
             </div>
           </Col>
         </Row>
-      </Container>
-    </section>
-        {/* </Row> */}
-    </div>
-    
+      </section>
     </Container>
-    
   )
 }
 

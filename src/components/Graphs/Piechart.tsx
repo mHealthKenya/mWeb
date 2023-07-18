@@ -1,45 +1,36 @@
-import { Chart, initTE } from "tw-elements";
-import React, { useEffect } from "react";
+import React from 'react';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Pie } from 'react-chartjs-2';
 
-initTE({ Chart });
+ChartJS.register(ArcElement, Tooltip, Legend);
 
-
-const PieChart: React.FC = () => {
-  useEffect(() => {
-    // Chart
-    const dataPie = {
-      type: 'pie',
-      data: {
-        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-        datasets: [
-          {
-            label: 'Traffic',
-            data: [2112, 2343, 2545, 3423, 2365, 1985, 987],
-            backgroundColor: [
-              'rgba(63, 81, 181, 0.5)',
-              'rgba(77, 182, 172, 0.5)',
-              'rgba(66, 133, 244, 0.5)',
-              'rgba(156, 39, 176, 0.5)',
-              'rgba(233, 30, 99, 0.5)',
-              'rgba(66, 73, 244, 0.4)',
-              'rgba(66, 133, 244, 0.2)',
-            ],
-          },
-        ],
-      },
-    };
-
-    new Chart(document.getElementById('pie-chart'), dataPie);
-  }, []);
-
-  return <div id="pie-chart"></div>;
+export const data = {
+  labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+  datasets: [
+    {
+      label: '# of Votes',
+      data: [12, 19, 3, 5, 2, 3],
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)',
+      ],
+      borderColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)',
+      ],
+      borderWidth: 1,
+    },
+  ],
 };
 
-
-
-
-
-export default PieChart;
-
-// export default DoughnutChart;
-
+export function App() {
+  return <Pie data={data} />;
+}
