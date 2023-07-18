@@ -5,10 +5,11 @@ import LockIcon from '@mui/icons-material/Lock'
 import { Button, Container, IconButton, InputAdornment, Stack, TextField } from '@mui/material'
 import * as jwt from 'jsonwebtoken'
 import { GetServerSideProps, NextPage } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import nookies from 'nookies'
 import { useState } from 'react'
-import { Col, Row } from 'react-bootstrap'
+import { Card, Col, Row} from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import useLogin from 'src/services/auth/login'
 import * as Yup from 'yup'
@@ -45,8 +46,9 @@ const Login: NextPage = () => {
   }
 
   return (
+    <Container>
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center dark:bg-transparent">
-      <Container>
+      {/* <Container>
         <Row className="justify-content-center align-items-center px-3">
           <Col lg={7}>
             <Row>
@@ -114,8 +116,111 @@ const Login: NextPage = () => {
             </Row>
           </Col>
         </Row>
+      </Container> */}
+      
+        <Row>
+        <Container className='d-flex align-items-center justify-content-center'>
+        <Card className='text-black m-5' style={{ borderRadius: '25px', width: '500px', margin: '0 auto', justifyContent: 'center'}} >
+        <Card.Body>
+          <Row>
+          {/* <Col md='10' lg='4' className='order-1 order-lg-2 d-flex align-items-center'> */}
+              <Card.Img src='https://res.cloudinary.com/dabfdxbfj/image/upload/v1688975254/Logo_M_y6dzkn.png' style={{width: '230px', height: '100px'}}/>
+            {/* </Col>
+            <Col md='10' lg='8' className='order-2 order-lg-1 d-flex flex-column align-items-center'> */}
+            <div className="">
+                  <h1>Login</h1>
+                  <p className="text-black-50">Sign In to your account</p>
+
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    <Stack spacing={3} sx={{ mb: 3 }}>
+                      <TextField
+                        size="small"
+                        label="Email"
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <EmailIcon />
+                            </InputAdornment>
+                          )
+                        }}
+                        {...register('email')}
+                        error={!!errors?.email?.message}
+                        helperText={errors?.email?.message}
+                      />
+                      <TextField
+                        size="small"
+                        label="Password"
+                        type={see ? 'text' : 'password'}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <LockIcon />
+                            </InputAdornment>
+                          ),
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton onClick={toggleSee}>
+                                {see ? <Visibility /> : <VisibilityOff />}
+                              </IconButton>
+                            </InputAdornment>
+                          )
+                        }}
+                        {...register('password')}
+                        error={!!errors?.password?.message}
+                        helperText={errors?.password?.message}
+                      />
+                    </Stack>
+                    <Row>
+                      <Col xs={4}>
+                        <Button
+                          className="px-4"
+                          type="submit"
+                          disabled={isLoading}
+                          variant="contained">
+                          {isLoading ? 'Submitting ' : 'Login'}
+                        </Button>
+                      </Col>
+                      <Col xs={8} className="text-end">
+                        <Link href="/register">Forgot password</Link>
+                      </Col>
+                    </Row>
+                  </form>
+                </div>
+            {/* </Col> */}
+            
+          </Row>
+        </Card.Body>
+      </Card>
       </Container>
+        </Row>
+        {/* <Row> */}
+        <section className="section section-default mt-0 mb-0">
+      <Container>
+        <h2 className="mb-sm" style={{textAlign: 'center', justifyContent: 'center'}}>partnership solution by:</h2>
+        <Row>
+          <Col sm={6} md={4} lg={4}>
+            <div className="square-holder">
+              <Image alt="" src="https://res.cloudinary.com/dabfdxbfj/image/upload/v1688985663/AICS_ENG_V-N_gqf9md.png"  style={{width: '210px', height: '100px'}}/>
+            </div>
+          </Col>
+          <Col sm={6} md={4} lg={4}>
+            <div className="square-holder">
+              <Image alt="" src="https://res.cloudinary.com/dabfdxbfj/image/upload/v1688985345/logo_hfqtfr.png"  style={{width: '210px', height: '100px'}}/>
+            </div>
+          </Col>
+          <Col sm={6} md={4} lg={4}>
+            <div className="square-holder">
+              {/* <img alt="" src="https://res.cloudinary.com/dabfdxbfj/image/upload/v1688985345/logo_hfqtfr.png"  style={{width: '210px', height: '90px'}}/> */}
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    </section>
+        {/* </Row> */}
     </div>
+    
+    </Container>
+    
   )
 }
 
@@ -143,3 +248,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   }
 }
+
+
+

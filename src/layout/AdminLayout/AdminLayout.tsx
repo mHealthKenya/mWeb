@@ -5,6 +5,7 @@ import Header from '@layout/AdminLayout/Header/Header'
 import Footer from '@layout/AdminLayout/Footer/Footer'
 import Container from 'react-bootstrap/Container'
 import { useResizeDetector } from 'react-resize-detector/build'
+import AdminDashBoard from './DashBoard/AdminDashBoard'
 
 export default function AdminLayout({ children }: PropsWithChildren) {
   // Show status for xs screen
@@ -57,6 +58,13 @@ export default function AdminLayout({ children }: PropsWithChildren) {
         <Header toggleSidebar={toggleIsShowSidebar} toggleSidebarMd={toggleIsShowSidebarMd} />
         <div className="body flex-grow-1 px-sm-2 mb-4">
           <Container fluid="lg">{children}</Container>
+          {/* <Admin */}
+          {/* <main className="min-h-screen bg-slate-100">
+          <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-3"> */}
+            <AdminDashBoard />
+          {/* </div>
+          </main> */}
+          
         </div>
         <Footer />
       </div>

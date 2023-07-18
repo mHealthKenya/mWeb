@@ -32,7 +32,7 @@
     "@vespaiach/axios-fetch-adapter": "^0.3.1",
     "axios": "^0.27.2",
     "bootstrap": "^5.3.0",
-    "chart.js": "^3.9.1",
+    "chart.js": "^4.3.0",
     "classnames": "^2.3.2",
     "cookie": "^0.5.0",
     "cookies-next": "^2.1.1",
@@ -43,16 +43,19 @@
     "nprogress": "^0.2.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",
-    "react-chartjs-2": "^4.3.1",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.44.3",
+    "react-icons": "^4.10.1",
     "react-paginate": "^8.2.0",
     "react-redux": "^8.0.7",
     "react-resize-detector": "^7.1.2",
+    "react-scripts": "^5.0.1",
     "sharp": "^0.32.1",
     "styled-components": "6.0.0-rc.3",
     "sweetalert2": "^11.7.12",
     "swr": "^2.1.5",
+    "tw-elements": "^1.0.0-beta2",
     "yup": "^1.2.0"
   },
   "devDependencies": {
@@ -90,6 +93,7 @@
     "msw": "^1.2.2",
     "react-test-renderer": "^18.2.0",
     "sass": "^1.62.1",
+    "serve": "^14.2.0",
     "ts-jest": "^29.1.0",
     "typescript": "^5.1.3"
   }
