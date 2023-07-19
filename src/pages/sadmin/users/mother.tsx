@@ -7,12 +7,12 @@ import nookies from 'nookies'
 import { baseURL } from 'src/config/axios'
 import useUsersByRole from 'src/services/users/by-role'
 
-const MotherUsers = ({ users }: any) => {
+const MotherUsers = ({ users, facilities }: any) => {
   const { data } = useUsersByRole('Mother', users)
 
   return (
     <AdminLayout>
-      <UsersByRoleComponent users={data} facility={true} />
+      <UsersByRoleComponent users={data} facility={true} facilities={facilities} />
     </AdminLayout>
   )
 }
@@ -36,17 +36,22 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       }
     }
 
-    const users = await axios
+    const usersD = axios
       .get(baseURL + 'users/roles?role=Mother', {
         headers: {
           Authorization: `Bearer ${cookie}`
         }
       })
       .then((res) => res.data)
+
+    const facilitiesD = axios.get(baseURL + 'facilities/all').then((res) => res.data)
+
+    const [users, facilities] = await Promise.all([usersD, facilitiesD])
     return {
       props: {
         user,
-        users
+        users,
+        facilities
       }
     }
   } catch (error) {
