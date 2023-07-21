@@ -18,6 +18,9 @@ import * as Yup from 'yup'
 import mLogo from 'public/assets/brand/Logo.png'
 import mhealthLogo from 'public/assets/brand/mhealthlogo.png'
 import AICSLogo from 'public/assets/brand/AICS.png'
+import SharedModal from '@components/Shared/Modal'
+import EmailConfirmation from './passwordreset/otp-request'
+import OtpRequest from './passwordreset/otp-request'
 
 export interface LoginCredentials {
   email: string
@@ -31,6 +34,14 @@ const validationSchema = Yup.object().shape({
 
 const Login: NextPage = () => {
   const [see, setSee] = useState(false)
+  // Modal Toggle state
+  const [open, setOpen] = useState(false)
+
+  const handleToggle = () => {
+    setOpen((open) => !open)
+  }
+
+  
 
   const toggleSee = () => {
     setSee(() => !see)
@@ -111,7 +122,7 @@ const Login: NextPage = () => {
                   </Button>
                 </Col>
                 <Col xs={8} className="text-end">
-                  <Link href="/register">Forgot password</Link>
+                  <Link href="" onClick={handleToggle}>Forgot password</Link>
                 </Col>
               </Row>
             </form>
@@ -139,6 +150,12 @@ const Login: NextPage = () => {
           </Col>
         </Row>
       </section>
+      <SharedModal items={{
+                open,
+                handleToggle,
+      }}>
+        <OtpRequest handleToggle={handleToggle}/>
+      </SharedModal>
     </Container>
   )
 }

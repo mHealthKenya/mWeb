@@ -13,12 +13,14 @@ import {
 } from 'src/data/users-by-role'
 import EditUserWithRoleComponent from './Edit'
 import Swal from 'sweetalert2'
+import { Facility } from '@models/facility'
 
 const UsersByRoleComponent: React.FC<{
   users: UserByRole[]
   facility?: boolean
   isFacility?: boolean
-}> = ({ users, facility, isFacility }) => {
+  facilities?: Facility[]
+}> = ({ users, facility, isFacility, facilities }) => {
   const [open, setOpen] = useState(false)
   const [user, setUser] = useState<UserByRole>()
 
@@ -179,7 +181,11 @@ const UsersByRoleComponent: React.FC<{
           open,
           handleToggle
         }}>
-        <EditUserWithRoleComponent user={user} handleToggle={handleToggle} />
+        <EditUserWithRoleComponent
+          user={user}
+          handleToggle={handleToggle}
+          facilities={facilities}
+        />
       </SharedModal>
     </>
   )
