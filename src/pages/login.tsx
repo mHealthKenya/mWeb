@@ -19,7 +19,7 @@ import mLogo from 'public/assets/brand/Logo.png'
 import mhealthLogo from 'public/assets/brand/mhealthlogo.png'
 import AICSLogo from 'public/assets/brand/AICS.png'
 import SharedModal from '@components/Shared/Modal'
-import EmailConfirmation from './passwordreset/otp-request'
+// import EmailConfirmation from './passwordreset/otp-request'
 import OtpRequest from './passwordreset/otp-request'
 
 export interface LoginCredentials {

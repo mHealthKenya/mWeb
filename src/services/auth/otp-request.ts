@@ -1,17 +1,22 @@
-import { axiosConfig, baseURL } from "@config/axios"
+import { baseURL } from "@config/axios"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { OTP } from "../../pages/passwordreset/otp-request"
 import Swal from "sweetalert2"
 import axios from "axios"
 import { useRouter } from "next/router"
+import Cookies from "js-cookie"
 // import { baseURL } from "src/config/axios"
 
 export const otpRequest =async ({email}: OTP) => {
   console.log('Email HERE')
   console.log(email)
   // const axiosInstance = await axiosConfig()
-  const otpRequestD = await axios.post(baseURL +'users/passwordrequest', {email}).then((res) => res.data)
+  const otpRequestD = await axios.post(baseURL +'users/passwordrequest', {email}).then(async (res) => 
+    // Cookies.set('otp_email', email),
+    res.data)
+
   console.log(otpRequestD)
+  Cookies.set('otp_email', email)
   return otpRequestD
 }
 

@@ -1,6 +1,4 @@
-import { useEffect } from 'react'; // Add this import if you need to use useEffect
 import CenterComponent from '@components/Shared/Center';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Button,
@@ -8,15 +6,7 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  FormControl,
-  FormControlLabel,
   InputAdornment,
-  InputLabel,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  Select,
-  Stack,
   TextField,
   Typography
 } from '@mui/material'
@@ -25,30 +15,35 @@ import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import React from 'react';
-import { Col, Container, Form, InputGroup, Row } from 'react-bootstrap';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/router'
 
 export interface Passrest {
   code: string;
   email: string;
   password: string;
-  pass2: string; // Add the confirm password field
+  pass2?: string; // Add the confirm password field
 }
 
 
 
-const passwordreset = () => {
+const PasswordReset = () => {
+
+  const router = useRouter()
   
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email('Must be a valid email').required('Email is required'),
+    code: Yup.string().required('OTP is required'),
+    // email: Yup.string().email('Must be a valid email').required('Email is required'),
     password: Yup.string()
       .min(6, 'Password must be at least 6 characters')
-      // .matches(/^[a-zA-Z0-9]+$/, 'Password must be alphanumeric')
       .required('Password is required'),
     pass2: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Passwords must match') // Validate if the confirm password matches the password
-      .required('Confirm Password is required'),
+      .test('password-match', 'Passwords must match', function (value) {
+        const { password } = this.parent; // Access the 'password' field value
+        return value === password || !password; // Return true if 'pass2' matches 'password' or if 'password' is empty
+      }),
   });
   
   
@@ -57,8 +52,22 @@ const passwordreset = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Passrest>({
-    resolver: yupResolver(validationSchema),
+    // Update the yupResolver type to any temporarily
+    resolver: yupResolver<any>(validationSchema),
+    defaultValues: {
+      email: Cookies.get('otp_email'), // Set the default value of the 'email' field from the cookie
+    },
   });
+  
+  
+  
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   formState: { errors },
+  // } = useForm<Passrest>({
+  //   resolver: yupResolver(validationSchema),
+  // });
   
   const { mutate: newPassword, isLoading } = usePasswordReset();
   
@@ -90,18 +99,6 @@ const passwordreset = () => {
               helperText={errors?.code?.message}
             />
               <br /><br />
-            <TextField
-              size="small"
-              label="Email"
-              InputProps={{
-                startAdornment: <InputAdornment position="start"><EmailIcon /></InputAdornment>,
-              }}
-              {...register('email')}
-              error={!!errors?.email?.message}
-              helperText={errors?.email?.message}
-            />
-            <br />
-            <br />
             <TextField
               size="small"
               label="Password"
@@ -138,7 +135,7 @@ const passwordreset = () => {
               data-testid="submit_button">
               {isLoading ? 'Submitting ' : 'Submit'}
             </Button>
-            <Button variant="contained" color="error" >
+            <Button variant="contained" color="error" onClick={() => router.push('/login')}>
               Cancel
             </Button>
           </CardActions>
@@ -148,4 +145,4 @@ const passwordreset = () => {
   );
 };
 
-export default passwordreset;
+export default PasswordReset;
