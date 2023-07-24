@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import Swal from "sweetalert2"
 import { Passrest } from "src/pages/passwordreset/passwordreset";
+import { useRouter } from "next/router";
 
 
 export const passwordReset =async ({code, email, password}:Passrest) => {

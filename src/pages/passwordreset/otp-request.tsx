@@ -43,6 +43,7 @@ const OtpRequest: FC<{
     console.log(data)
     console.log('************************')
     otpRequest(data)
+    handleToggle()
   }
 
   return (
