@@ -81,14 +81,15 @@ const PasswordReset = () => {
     <CenterComponent>
       {/* <h1>Hello Next</h1> */}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Card sx={{ minWidth: '480px' }}>
+        <Card sx={{ minWidth: '480px', display: 'flex', flexDirection: 'column', alignItems: 'center'  }}>
           <CardHeader title="Reset Password" />
-          <CardContent>
+          <CardContent sx={{ width: '90%', alignItems: 'center' }}>
             <Typography variant="body2" color="text.secondary" component="p">
               Please enter all fields <span style={{color: 'red'}}>*</span>.
             </Typography>
             <br />
             <TextField
+            style={{alignItems: 'center'}}
               size="small"
               label="OTP"
               InputProps={{
@@ -126,7 +127,7 @@ const PasswordReset = () => {
 
           </CardContent>
 
-          <CardActions>
+          <CardActions sx={{ width: '50%', justifyContent: 'space-between' }}>
             <Button
               variant="contained"
               color="success"
