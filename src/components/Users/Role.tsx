@@ -1,7 +1,7 @@
 import SharedModal from '@components/Shared/Modal'
 import { UserByRole } from '@models/user-by-role'
-import { Delete, Edit, Visibility } from '@mui/icons-material'
-import { Button } from '@mui/material'
+import { Add, Delete, Edit, Visibility } from '@mui/icons-material'
+import { Button, LinearProgress } from '@mui/material'
 import Box from '@mui/material/Box'
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid'
 import { useMemo, useState } from 'react'
@@ -12,7 +12,9 @@ import {
   rowsWithoutFacility
 } from 'src/data/users-by-role'
 import EditUserWithRoleComponent from './Edit'
-import Swal from 'sweetalert2'
+import { UserBioData } from '@models/bio-data'
+import { getBiodata } from '@services/users/biodata'
+import ViewBioDataComponent from './view'
 
 const UsersByRoleComponent: React.FC<{
   users: UserByRole[]
@@ -20,16 +22,28 @@ const UsersByRoleComponent: React.FC<{
   isFacility?: boolean
 }> = ({ users, facility, isFacility }) => {
   const [open, setOpen] = useState(false)
+  const [show, setShow] = useState(false)
   const [user, setUser] = useState<UserByRole>()
+  const [data, setData] = useState<UserBioData>();
+  const [ isLoading, setIsLoading] = useState(true);
+  const [ error, setError ] = useState<string | null>(null);
 
   const handleToggle = () => {
     setOpen((open) => !open)
   }
 
+  const toggleView = () => {
+    setShow((show) => !show)
+  }
+
+  // const toggleAdd = () => {
+  //   setAdd((add) => !add)
+  // }
+
   const rows = useMemo(() => {
     if (facility) {
       return rowsWithFacility(users)
-    }
+    }3
 
     return rowsWithoutFacility(users)
   }, [users, facility])
@@ -39,14 +53,25 @@ const UsersByRoleComponent: React.FC<{
     setUser(user)
   }
 
-  const handleComingSoon = () => {
-    Swal.fire({
-      title: 'Coming soon!',
-      text: 'The requested feature is still in development and will be available soon',
-      icon: 'info',
-      confirmButtonText: 'OK'
-    })
-  }
+  // const handleViewDetails = async (bio: UserBioData) => {
+  //   setShow(true)
+  //   setData(bio)
+  // }
+
+  const handleViewDetails = async (bio: UserBioData) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const biodata = await getBiodata(bio.id); // Fetch the biodata based on the user ID
+      setData(biodata);
+      setShow(true); // Open the modal after data is fetched successfully
+    } catch (error) {
+      setError('Error fetching biodata' + error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
 
   const columnTypes = useMemo(() => {
     if (facility) {
@@ -63,8 +88,8 @@ const UsersByRoleComponent: React.FC<{
           return {
             field: col.field,
             headerName: col.headerName,
-            width: 200,
-            renderCell: () => {
+            width: 500,
+            renderCell: (params) => {
               return (
                 <Box
                   sx={{
@@ -76,9 +101,21 @@ const UsersByRoleComponent: React.FC<{
                     sx={{ mr: 1 }}
                     startIcon={<Visibility />}
                     size="small"
-                    onClick={() => handleComingSoon()}>
+                    onClick={() => handleViewDetails(params.value)}
+                    >
                     View Details
                   </Button>
+
+                  <Button
+                    variant="contained"
+                    color="success"
+                    sx={{ mr: 1 }}
+                    startIcon={<Add />}
+                    size="small"
+                    onClick={() => console.log(params.value)}>
+                    Add
+                  </Button>
+                  
                 </Box>
               )
             }
@@ -181,6 +218,24 @@ const UsersByRoleComponent: React.FC<{
         }}>
         <EditUserWithRoleComponent user={user} handleToggle={handleToggle} />
       </SharedModal>
+
+      <SharedModal
+        items={{
+          open: show,
+          handleToggle : toggleView
+        }}>
+          {isLoading ? <LinearProgress />  :
+        <ViewBioDataComponent bio={data} handleToggle={toggleView} />}
+      </SharedModal>
+
+
+      {/* <SharedModal
+        items={{
+          open: add,
+          handleToggle : toggleAdd
+        }}>
+        <AddBioDataComponent addBio={addBio} handleToggle={toggleAdd} />
+      </SharedModal> */}
     </>
   )
 }
