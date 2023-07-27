@@ -11,7 +11,7 @@ import {
   Typography
 } from '@mui/material'
 import usePasswordReset from '@services/auth/password-reset';
-import EmailIcon from '@mui/icons-material/Email';
+// import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import React from 'react';
