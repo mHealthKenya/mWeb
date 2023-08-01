@@ -1,7 +1,7 @@
 import SharedModal from '@components/Shared/Modal'
 import { UserByRole } from '@models/user-by-role'
 import { Add, Delete, Edit, Visibility } from '@mui/icons-material'
-import { Button, LinearProgress } from '@mui/material'
+import { Button } from '@mui/material'
 import Box from '@mui/material/Box'
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid'
 import { useMemo, useState } from 'react'
@@ -12,9 +12,9 @@ import {
   rowsWithoutFacility
 } from 'src/data/users-by-role'
 import EditUserWithRoleComponent from './Edit'
-import { UserBioData } from '@models/bio-data'
-import { getBiodata } from '@services/users/biodata'
 import ViewBioDataComponent from './view'
+import AddBioDataComponent from '@components/Biodata/AddBioData'
+import { AddBioData } from '@models/add-bio-data'
 
 const UsersByRoleComponent: React.FC<{
   users: UserByRole[]
@@ -23,8 +23,10 @@ const UsersByRoleComponent: React.FC<{
 }> = ({ users, facility, isFacility }) => {
   const [open, setOpen] = useState(false)
   const [show, setShow] = useState(false)
+  const [add, setAdd] = useState(false)
   const [user, setUser] = useState<UserByRole>()
-  const [data, setData] = useState<UserBioData>();
+  const [data, setData] = useState<UserByRole>();
+  const [addBio, setAddBio] = useState<AddBioData>();
   const [ isLoading, setIsLoading] = useState(true);
   const [ error, setError ] = useState<string | null>(null);
 
@@ -36,9 +38,9 @@ const UsersByRoleComponent: React.FC<{
     setShow((show) => !show)
   }
 
-  // const toggleAdd = () => {
-  //   setAdd((add) => !add)
-  // }
+  const toggleAdd = () => {
+    setAdd((add) => !add)
+  }
 
   const rows = useMemo(() => {
     if (facility) {
@@ -53,17 +55,11 @@ const UsersByRoleComponent: React.FC<{
     setUser(user)
   }
 
-  // const handleViewDetails = async (bio: UserBioData) => {
-  //   setShow(true)
-  //   setData(bio)
-  // }
-
-  const handleViewDetails = async (bio: UserBioData) => {
+  const handleViewDetails = async (bio: UserByRole) => {
     try {
-      setIsLoading(true);
-      setError(null);
-      const biodata = await getBiodata(bio.id); // Fetch the biodata based on the user ID
-      setData(biodata);
+      // console.log(bio)
+      
+      setData(bio);
       setShow(true); // Open the modal after data is fetched successfully
     } catch (error) {
       setError('Error fetching biodata' + error);
@@ -71,6 +67,11 @@ const UsersByRoleComponent: React.FC<{
       setIsLoading(false);
     }
   };
+
+  const handleAdd =  ( ) => {
+    setAdd(true)
+    setAddBio(addBio)
+  }
 
 
   const columnTypes = useMemo(() => {
@@ -95,6 +96,8 @@ const UsersByRoleComponent: React.FC<{
                   sx={{
                     display: 'flex'
                   }}>
+
+                    { params.value?.BioData?.length > 0 ?
                   <Button
                     variant="contained"
                     color="info"
@@ -103,18 +106,20 @@ const UsersByRoleComponent: React.FC<{
                     size="small"
                     onClick={() => handleViewDetails(params.value)}
                     >
-                    View Details
-                  </Button>
+                      View Details
+                  </Button> 
+                  :
 
-                  <Button
+                   <Button
                     variant="contained"
-                    color="success"
+                    color="success" 
                     sx={{ mr: 1 }}
                     startIcon={<Add />}
                     size="small"
-                    onClick={() => console.log(params.value)}>
+                    onClick={() => handleAdd()}>
                     Add
-                  </Button>
+                  </Button> 
+                  }
                   
                 </Box>
               )
@@ -211,6 +216,7 @@ const UsersByRoleComponent: React.FC<{
           density="comfortable"
         />
       </Box>
+      {}
       <SharedModal
         items={{
           open,
@@ -224,18 +230,18 @@ const UsersByRoleComponent: React.FC<{
           open: show,
           handleToggle : toggleView
         }}>
-          {isLoading ? <LinearProgress />  :
-        <ViewBioDataComponent bio={data} handleToggle={toggleView} />}
+          
+        <ViewBioDataComponent bio={data} handleToggle={toggleView} /> 
       </SharedModal>
 
 
-      {/* <SharedModal
+      <SharedModal
         items={{
           open: add,
           handleToggle : toggleAdd
         }}>
-        <AddBioDataComponent addBio={addBio} handleToggle={toggleAdd} />
-      </SharedModal> */}
+        <AddBioDataComponent bioData={addBio} handleToggle={toggleAdd} />
+      </SharedModal>
     </>
   )
 }
