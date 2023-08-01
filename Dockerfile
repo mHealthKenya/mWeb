@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 FROM node:16-alpine AS base
 
 # Install dependencies only when needed
@@ -58,3 +59,20 @@ ENV PORT 3100
 
 CMD ["node", ".next/standalone/server.js"]
 
+=======
+FROM node:18-alpine
+
+WORKDIR /mweb
+
+COPY package.json yarn.lock ./
+
+RUN yarn install
+
+COPY . .
+
+EXPOSE 3000
+
+RUN ["yarn", "run", "build"]
+
+CMD ["yarn", "start"]
+>>>>>>> origin/main
