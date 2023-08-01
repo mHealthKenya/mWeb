@@ -1,5 +1,6 @@
 import UsersByRoleComponent from '@components/Users/Role'
 import NAdminLayout from '@layout/NAdminLayout/NAdminLayout'
+import { allFacilities } from '@services/locations/all'
 import axios from 'axios'
 import * as jwt from 'jsonwebtoken'
 import { GetServerSideProps } from 'next'
@@ -8,12 +9,12 @@ import { baseURL } from 'src/config/axios'
 import { Users } from 'src/helpers/enums/users.enum'
 import useUsersByRole from 'src/services/users/by-role'
 
-const MotherUsers = ({ users }: any) => {
+const MotherUsers = ({ users, facilities }: any) => {
   const { data } = useUsersByRole('Mother', users)
 
   return (
     <NAdminLayout>
-      <UsersByRoleComponent users={data} facility={true} />
+      <UsersByRoleComponent users={data} facility={true} facilities={facilities}/>
     </NAdminLayout>
   )
 }
@@ -44,10 +45,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         }
       })
       .then((res) => res.data)
+
+      const facilities = await allFacilities()
+
     return {
       props: {
         user,
-        users
+        users,
+        facilities
       }
     }
   } catch (error) {

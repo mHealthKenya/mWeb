@@ -1,16 +1,17 @@
 import UsersByRoleComponent from '@components/Users/Role'
 import { baseURL } from '@config/axios'
 import FacilityLayout from '@layout/FacilityLayout/FacilityLayout'
+import { allFacilities } from '@services/locations/all'
 import axios from 'axios'
 import * as jwt from 'jsonwebtoken'
 import { GetServerSideProps } from 'next'
 import nookies from 'nookies'
 import { Users } from 'src/helpers/enums/users.enum'
 
-const MothersPage = ({ mothers }: any) => {
+const MothersPage = ({ mothers, facilities }: any) => {
   return (
     <FacilityLayout>
-      <UsersByRoleComponent users={mothers} facility={true} isFacility={true} />{' '}
+      <UsersByRoleComponent users={mothers} facility={true} isFacility={true} facilities={facilities}/>{' '}
     </FacilityLayout>
   )
 }
@@ -58,10 +59,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         return res.data
       })
 
+      const facilities = await allFacilities()
+
     return {
       props: {
         user,
-        mothers
+        mothers,
+        facilities
       }
     }
   } catch (error) {
