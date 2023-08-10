@@ -1,16 +1,15 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import Swal from "sweetalert2"
-import { AddBioDataProps } from "@components/Biodata/AddBioData"
+import { AddBioDataFormProps } from "@components/Biodata/AddBioData"
 import { axiosConfig } from "@config/axios"
+import Swal from "sweetalert2"
 
-interface AddBio extends AddBioDataProps {
-    id?: string
+interface AddBio extends AddBioDataFormProps {
+    userId: string
   }
 
 export const addBioData = async (data: AddBio) => {
     const axiosInstance = await axiosConfig()
-    const bioData = await axiosInstance.post('biodata/add', data)
-    .then((res) => res.data)
+    const bioData = await axiosInstance.post('biodata/add', data).then((res) => res.data)
 
     return bioData
 }
@@ -27,13 +26,13 @@ const useAddBioData = (completeFn: () => void) => {
                 icon: 'success',
                 confirmButtonText: 'OK'
             })
-            // .then(() => {
-            //     completeFn()
-            // })
+            .then(() => {
+                completeFn()
+            })
         },
 
         onError: (error: any) => {
-            completeFn()
+            // completeFn()
             Swal.fire({
                 title: 'Error',
                 text: error?.response?.data?.message || 'An error occurred',

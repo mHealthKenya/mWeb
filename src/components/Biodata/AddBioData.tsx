@@ -9,8 +9,7 @@ import React, { FC, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
-
-export interface AddBioDataProps {
+export interface AddBioDataFormProps {
   height: string
   weight: string
   active: boolean
@@ -19,55 +18,63 @@ export interface AddBioDataProps {
   last_monthly_period: Date
   expected_delivery_date: Date
   pregnancy_period: string
-  facilityId: string
+  // facilityId: string
   previous_pregnancies: string
 }
 
-const bioDateSchema = Yup.object().shape({
+const schema = Yup.object().shape({
   height: Yup.string().required(),
   weight: Yup.string().required(),
   active: Yup.boolean().required(),
-  age:Yup.string().required(),
+  age: Yup.string().required(),
   last_clinic_visit: Yup.date().required('Clinic Visit is required'),
   last_monthly_period: Yup.date().required('Last Moontthly period is required'),
   expected_delivery_date: Yup.date().required('Expected Delivery is required'),
-  pregnancy_period: Yup.string().required('Pregnancy period is reqiured'),
-  facilityId: Yup.string().optional(),
-  previous_pregnancies: Yup.string().required('Previous pregnancies is required')
+  pregnancy_period: Yup.string().required('Pregnancy Period is reqiured'),
+  // facilityId: Yup.string().optional(),
+  previous_pregnancies: Yup.string().required('Previous Pregnancies is required')
 })
 
-const AddBioDataComponent : FC<{ bioData: AddBioData | undefined; handleToggle: () => void }> = ({ bioData, handleToggle}) =>  {
+const AddBioDataComponent : FC<{ bioData: AddBioData | undefined; handleToggle: ()  => void }> = ({ 
+  bioData, 
+  handleToggle
+}) =>  {
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    // reset
-  } = useForm<AddBioDataProps>({ 
-    resolver: yupResolver(bioDateSchema)
+    reset
+  } = useForm<AddBioDataFormProps>({ 
+    resolver: yupResolver(schema)
   })
 
-  const { mutate, isLoading } = useAddBioData(handleToggle)
+  const [selectedMonthlyPeriod, setSelectedMonthlyPeriod] = useState<Date | null>(null)
+  const [selectedDeliveryDate, setSelectedDeliveryDate] = useState<Date | null>(null)
+  const [selectedClinicVisit, setSelectedClinicVisit] = useState<Date | null>(null)
 
-  const onSubmit = (data: AddBioDataProps) => {
-    // mutate({
-    //   id: '' + bioData?.id,
-    //   ...data
-    // })
+  const { mutate, isLoading } = useAddBioData(reset)
 
-    const item = {
-      ...data,
-      facilityId: data.facilityId === 'Mother' ? 'Mother' : data.facilityId
-    }
+  const onSubmit = (data: AddBioDataFormProps) => {
+    mutate({
+      userId: '' +  bioData?.userId,
+      ...data
+      
+    })
 
-    mutate(item)
+    // const item = {
+    //   userId: data. || '' +  bioData?.userId,
+    //   ...data,
+    // }
+
+    // mutate(item)
+    console.log("Data Submitted", bioData);
   }
-  
-  const [selectedDate, setSelectedDate ] = useState(null)
-  const [selectedDeliveryDate, setSelectedDeliveryDate ] = useState(null)
-  const [selectedClinicVisit, setSelectedClinicVisit ] = useState(null)
-  
-  
+
+  function handleButtonClick() {
+    console.log('Button clicked');
+  }
+
   return (
     <CenterComponent>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -79,7 +86,7 @@ const AddBioDataComponent : FC<{ bioData: AddBioData | undefined; handleToggle: 
     <Box
       component="form"
       sx={{
-        '& .MuiTextField-root': { m: 1, width: '25ch' },
+        '& .MuiTextField-root': { m: 2, width: '30ch' },
       }}
       noValidate
       autoComplete="off"
@@ -89,6 +96,7 @@ const AddBioDataComponent : FC<{ bioData: AddBioData | undefined; handleToggle: 
           label="Height"
           id="outlined-size-small"
           placeholder='height'
+          type='number'
           // size="small"
           {...register('height')}
           required
@@ -100,6 +108,7 @@ const AddBioDataComponent : FC<{ bioData: AddBioData | undefined; handleToggle: 
           label="Weight"
           id="outlined-size-small"
           placeholder='Weight'
+          type='number'
           // size="small"
           {...register('weight')}
           required
@@ -109,7 +118,7 @@ const AddBioDataComponent : FC<{ bioData: AddBioData | undefined; handleToggle: 
         />
       </div>
       <div>
-      <TextField
+      {/* <TextField
           label="Active"
           id="outlined-size-small"
           placeholder='Active'
@@ -119,7 +128,7 @@ const AddBioDataComponent : FC<{ bioData: AddBioData | undefined; handleToggle: 
           helperText={errors?.active?.message}
           error={!!errors.active?.message}
           inputProps={{ 'data-testid': 'active_input' }}
-        />
+        /> */}
          <TextField
           label="Age"
           id="outlined-size-small"
@@ -138,27 +147,10 @@ const AddBioDataComponent : FC<{ bioData: AddBioData | undefined; handleToggle: 
       
       <DatePicker
           label="Last Monthly Period"
-          value={selectedDate}
-          onChange={(last_monthly_period) => setSelectedDate(last_monthly_period)}
+          value={selectedMonthlyPeriod}
+          onChange={(last_monthly_period) => setSelectedMonthlyPeriod(last_monthly_period)}
           
         />
-      
-      {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DatePicker
-        label="Last Monthly Period"
-        value={selectedDate}
-        onChange={(newValue) => setSelectedDate(newValue)}
-        renderInput={(props) =>  
-          <TextField
-            {...props}
-            required
-            helperText={errors?.last_monthly_period?.message}
-            error={!!errors.last_monthly_period?.message}
-            inputProps={{ 'data-testid': 'last_monthly_period_input' }}
-          />
-        }
-      />
-    </LocalizationProvider> */}
 
 <       DatePicker
           label="Expected Delivery date"
@@ -167,17 +159,6 @@ const AddBioDataComponent : FC<{ bioData: AddBioData | undefined; handleToggle: 
           
         />
 
-        {/* <TextField
-          label="Expected Delivery date"
-          id="outlined-size-small"
-          placeholder='Delivery date'
-          // size="small"
-          {...register('expected_delivery_date')}
-          required
-          helperText={errors?.expected_delivery_date?.message}
-          error={!!errors.expected_delivery_date?.message}
-          inputProps={{ 'data-testid': 'expected_delivery_date_input' }}
-        /> */}
       </div>
       <div>
       <TextField
@@ -200,21 +181,9 @@ const AddBioDataComponent : FC<{ bioData: AddBioData | undefined; handleToggle: 
           
         />
 
-
-        {/* <TextField
-          label="Last Clinic Visit"
-          id="outlined-size-small"
-          placeholder='Last Clinic Visit'
-          // size="small"
-          {...register('last_clinic_visit')}
-          required
-          helperText={errors?.last_clinic_visit?.message}
-          error={!!errors.last_clinic_visit?.message}
-          inputProps={{ 'data-testid': 'last_clinic_visit_input' }}
-        /> */}
       </div>
       <div>
-      <TextField
+      {/* <TextField
           label="Facility"
           id="outlined-size-small"
           placeholder='Facility'
@@ -224,7 +193,7 @@ const AddBioDataComponent : FC<{ bioData: AddBioData | undefined; handleToggle: 
           helperText={errors?.facilityId?.message}
           error={!!errors.facilityId?.message}
           inputProps={{ 'data-testid': 'facilityId_input' }}
-        />
+        /> */}
         <TextField
           label="Previous Pregnancies"
           id="outlined-size-small"
@@ -239,15 +208,17 @@ const AddBioDataComponent : FC<{ bioData: AddBioData | undefined; handleToggle: 
         />
       </div>
     </Box>
+   
 
     <CardActions>
-      <Button
+    <Button
       variant="contained"
       color="success"
       type="submit"
       startIcon={<Add />}
       disabled={isLoading}
-      data-testid="submit_button">
+      data-testid="submit_button"
+      onClick={handleButtonClick}>
       {isLoading ? 'Adding...' : 'Add'}
     </Button>
 
@@ -255,7 +226,7 @@ const AddBioDataComponent : FC<{ bioData: AddBioData | undefined; handleToggle: 
          Close
       </Button>
 
-      </CardActions>
+          </CardActions>
       </CardContent>
       </Card>
       </form>

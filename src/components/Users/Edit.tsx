@@ -58,6 +58,7 @@ const EditUserWithRoleComponent: FC<{ user: UserByRole | undefined; handleToggle
   user,
   handleToggle
 }) => {
+  
   const {
     register,
     handleSubmit,

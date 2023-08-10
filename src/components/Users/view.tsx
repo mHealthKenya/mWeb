@@ -17,7 +17,7 @@ import CenterComponent from '@components/Shared/Center';
 import { Edit } from '@mui/icons-material';
 import { UserByRole } from '@models/user-by-role';
 import SharedModal from '@components/Shared/Modal';
-import EditUserWithRoleComponent from './Edit';
+import EditBioDataComponent from '@components/Biodata/editBioData';
 
 interface ViewBioDataComponentProps {
   bio: UserByRole | undefined;
@@ -42,6 +42,7 @@ const ViewBioDataComponent: FC<ViewBioDataComponentProps> = ({
 
 const [open, setOpen] = useState(false)
 const [user, setUser] = useState<UserByRole | undefined>()
+// const [user, setUser] = useState<UserByRole>()
 
 const handleEdit = (user: UserByRole) => {
   setOpen(true)
@@ -127,7 +128,7 @@ const handleEdit = (user: UserByRole) => {
           handleToggle: () => setOpen(!open),
         }}
       >
-        {open && <EditUserWithRoleComponent user={user!} handleToggle={() => setOpen(false)} />}
+        {open && <EditBioDataComponent bioDataUpdate={user!} handleToggle={() => setOpen(false)} />}
       </SharedModal>
 
     </CenterComponent>

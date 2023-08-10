@@ -27,7 +27,9 @@ const mockUser: UserByRole = {
   Facility: {
     name: 'Test Facility',
     id: 'facilityid'
-  }
+  },
+  // password: '',
+  // BioData: []
 }
 
 describe('Edit User', () => {
