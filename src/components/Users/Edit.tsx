@@ -42,7 +42,7 @@ export interface EditForm {
   email: string
   role: string
   gender: string
-  facilityId?: string | undefined
+  facilityId: string | undefined
 }
 
 const roles = [Roles.ADMIN, Roles.FACILITY, Roles.CHV, Roles.MOTHER]

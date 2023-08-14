@@ -6,7 +6,8 @@ import {
   faMap,
   faUserAlt,
   faUserCheck,
-  faUserNurse
+  faUserNurse,
+  faCalendar
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
@@ -68,6 +69,9 @@ export default function SidebarNav() {
       </SidebarNavItem>
       <SidebarNavItem icon={faUserCheck} href="/admin/users/mother">
         Mothers
+      </SidebarNavItem>
+      <SidebarNavItem icon={faCalendar} href="/admin/users/schedule">
+        Schedules
       </SidebarNavItem>
 
       <SidebarNavTitle>Coverage</SidebarNavTitle>

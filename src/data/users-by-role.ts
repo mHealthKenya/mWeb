@@ -1,3 +1,4 @@
+// import { Schedule } from '@models/schedule'
 import { UserByRole } from '@models/user-by-role'
 
 export interface Col {
