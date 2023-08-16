@@ -1,8 +1,16 @@
 import { Box, Button, List, ListSubheader } from "@mui/material";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { FC, useMemo, useState } from "react";
-import useAllSchedules from "@services/schedules/allschedules";
+import useAllSchedules, { formatDateTime } from "@services/schedules/allschedules";
 import { Col } from "@data/users-by-role";
+import { Delete, Edit } from "@mui/icons-material";
+import SharedModal from "@components/Shared/Modal";
+import useAllFacilities from "@services/locations/all";
+import AddSchedule from "@components/Schedule/add";
+import EditScheduleComponent from "./Edit";
+import AddSchedule1 from "./AddSchedule";
+import { UserByRole } from "@models/user-by-role";
+import AddScheduleComponent from "@components/Schedule/add";
 
 export const scheduleColumn: Col[] = [
   {
@@ -27,13 +35,26 @@ export const scheduleColumn: Col[] = [
   },
 ];
 
-const AllSchedulesComponent: FC = (data: any) => {
-  const [open, setOpen] = useState(false);
+const AllSchedulesComponent: FC<{mothers: UserByRole[], facilityAdmin: UserByRole, data: any}> = ({mothers,  facilityAdmin, data}) => {
+  
+  // const [open, setOpen] = useState(false);
+  const [addTg, setAddTg] = useState(false)
+  const [editTg, setEditTg] = useState(false)
+  const [open, setOpen] = useState(false)
   const schedules: any = useAllSchedules(data);
 
+  const handleEdit = () => {
+    setEditTg((editTg) => !editTg)
+  }
+
   const handleToggle = () => {
-    setOpen((open) => !open);
-  };
+    setOpen((open) => !open)
+  }
+
+  const handleAdd = () => {
+    // setAddTg((addTg) => !addTg)
+    setOpen((open) => !open)
+  }
 
   const rows = useMemo(() => {
     if (schedules && schedules.data) {
@@ -43,23 +64,56 @@ const AllSchedulesComponent: FC = (data: any) => {
         facilityId: schedule.facilityId,
         motherId: schedule.motherId,
         status: schedule.status,
-        date: schedule.date,
+        date: formatDateTime(schedule.date),
       }));
     }
     return [];
   }, [schedules.data]);
 
   const columns: GridColDef[] = useMemo(() => {
-    return scheduleColumn.map(col => ({
+    const actionCol: GridColDef = {
+      field: 'actions',
+      headerName: 'Actions',
+      renderCell: (params) => {
+        return (
+          <Box
+            sx={{
+              display: 'flex'
+            }}>
+            <Button
+              variant="contained"
+              color="info"
+              sx={{ mr: 1 }}
+              startIcon={<Edit />}
+              size="small"
+              onClick={() => handleToggle()}>
+              Edit
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => console.log(params.value)}
+              startIcon={<Delete />}
+              size="small">
+              Delete
+            </Button>
+          </Box>
+        )
+      }
+    }
+    return [...scheduleColumn.map(col => ({
       field: col.field,
       headerName: col.headerName,
       flex: 1,
-    }));
+    })), actionCol];
   }, []);
+
+  
 
   return (
     <>
       <Box sx={{ height: 400, width: '100%' }}>
+        <Button onClick={() => handleToggle()}>Create a Schedule</Button>
       <DataGrid
           rows={rows}
           slots={{ toolbar: GridToolbar }}
@@ -76,7 +130,11 @@ const AllSchedulesComponent: FC = (data: any) => {
           density="comfortable"
         />
       </Box>
-      {/* SharedModal and other components */}
+      <SharedModal items={{open, handleToggle}}>
+        <AddScheduleComponent mothers={mothers} facilityID={facilityAdmin.facilityId || ''} handleToggle={handleToggle}/>
+        {/* <EditScheduleComponent facilities={facilities} mothers={mothers} /> */}
+      </SharedModal>
+      
     </>
   );
 };

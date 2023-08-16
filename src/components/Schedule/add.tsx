@@ -1,6 +1,7 @@
 
 import React, { FC } from 'react'
 import {
+  Autocomplete,
   Button,
   Card,
   CardActions,
@@ -23,6 +24,9 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import useAddSchedule from '@services/schedules/addschedules'
 import { Facility, UserByRole } from '@models/user-by-role'
+import CenterComponent from '@components/Shared/Center'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import useAllFacilities from '@services/locations/all'
 
 
 export interface AddScheduleForm {
@@ -44,34 +48,49 @@ const schema = Yup.object().shape({
   status: Yup.string().required()
 })
 
-const AddScheduleComponent: FC<{facilities: Facility[],mothers: UserByRole }> = ({facilities, mothers}) => {
+const AddScheduleComponent: FC<{mothers: UserByRole[], facilityID: string, handleToggle: () => void}> = ({mothers, facilityID, handleToggle}) => {
 
-  const { register, handleSubmit, formState: {errors}, reset} = useForm<AddScheduleForm>({
+  const { register, handleSubmit, formState: {errors}} = useForm<AddScheduleForm>({
     resolver: yupResolver(schema)
   })
 
-  const {mutate, isLoading} = useAddSchedule(reset)
+  const {mutate, isLoading} = useAddSchedule(handleToggle)
 
 
   const onSubmit = (data: AddScheduleForm) => {
+    console.log('Test')
     const item = {
+      facilityID,
       ...data
     }
     mutate(item)
   }
 
+  const motherName = mothers.map((mother) => {
+    const fName = mother.f_name
+    const lName = mother.l_name
+    return fName + ' ' + lName
+  })
 
 
   return (
+    <CenterComponent>
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Card>
+      <Card style={{width: '600px'}}>
         
         <CardHeader title="Schedule Visit" subheader="All fields marked with * are required fields" />
         <CardContent>
           <Stack spacing={1}>
-          <FormControl fullWidth size="small">
-              <InputLabel id="mother">Mother</InputLabel>
-              <Select
+          {/* <FormControl fullWidth size="small"> */}
+              {/* <InputLabel id="mother">Mother</InputLabel> */}
+              <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                options={motherName}
+                sx={{ width: 300 }}
+                renderInput={(params) => <TextField {...params} label="Mothers" />}
+    />
+              {/* <Select
                 labelId="facility-label"
                 id="mother"
                 label="Mother"
@@ -79,14 +98,14 @@ const AddScheduleComponent: FC<{facilities: Facility[],mothers: UserByRole }> = 
                 error={!!errors?.motherId?.message}
                 defaultValue=""
                 inputProps={{ 'data-testid': 'mother_input' }}>
-                {/* {mothers.map((mother: any) => (
+                {mothers.map((mother: any) => (
                   <MenuItem value={mother.id} key={mother.id}>
-                    {mother.name}
+                    {mother.f_name} {mother.l_name}
                   </MenuItem>
                 ))} */}
-              </Select>
+              {/* </Select> */}
               <FormHelperText>{errors?.motherId?.message}</FormHelperText>
-            </FormControl>
+            
             <TextField
               size="small"
               fullWidth
@@ -107,24 +126,6 @@ const AddScheduleComponent: FC<{facilities: Facility[],mothers: UserByRole }> = 
               error={!!errors?.description?.message}
               inputProps={{ 'data-testid': 'description_input' }}
             />
-            <FormControl fullWidth size="small">
-              <InputLabel id="facility">Facility</InputLabel>
-              <Select
-                labelId="facility-label"
-                id="facility"
-                label="Facility"
-                {...register('facilityId')}
-                error={!!errors?.facilityId?.message}
-                defaultValue=""
-                inputProps={{ 'data-testid': 'mother_input' }}>
-                {facilities.map((facility: any) => (
-                  <MenuItem value={facility.id} key={facility.id}>
-                    {facility.name}
-                  </MenuItem>
-                ))}
-              </Select>
-              <FormHelperText>{errors?.facilityId?.message}</FormHelperText>
-            </FormControl>
             <TextField
               size="small"
               fullWidth
@@ -165,15 +166,19 @@ const AddScheduleComponent: FC<{facilities: Facility[],mothers: UserByRole }> = 
             variant="contained"
             color="error"
             size="small"
-            type="submit"
             fullWidth
-            disabled={isLoading}>
+            disabled={isLoading} onClick={handleToggle}>
             Cancel
           </Button>
         </CardActions>
       </Card>
     </form>
+    </CenterComponent>
   )
 }
 
 export default AddScheduleComponent
+
+// function handleToggle(): void {
+//   throw new Error('Function not implemented.')
+// }

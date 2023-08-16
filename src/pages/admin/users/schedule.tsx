@@ -1,6 +1,6 @@
 // import AllSchedulesComponent from "@components/Schedule/all";
 // import UsersByRoleComponent from "@components/Users/Role";
-import AddSchedule from "@components/Schedule/add";
+
 import AllSchedulesComponent from "@components/Schedule/all";
 import UsersByRoleComponent from "@components/Users/Role";
 import { baseURL } from "@config/axios";
@@ -22,18 +22,19 @@ import { Users } from "src/helpers/enums/users.enum";
 // export default Schedule
 
 
-const ScheduleUsers = ({ facilities, mothers}: any) => {
-  const {data} = useUsersByRole('Mother', mothers)
-  console.log('Mother Data Here: ', data)
-  // const {facilities } = useAllFacilities(facilities)
-  // const mothers = useAllSchedules( mothers)
+const ScheduleUsers = ({ user,
+  users,
+  data}: any) => {
+  const {data: data1} = useUsersByRole('Mother', users)
+  console.log('Mother Data Here: ', data1)
+  
   
 
   return (
     <NAdminLayout>
       
-        <AddSchedule facilities={facilities} mothers={data}/>
-        <AllSchedulesComponent data={data}/>
+        {/* <AddSchedule facilities={facilities} mothers={data}/> */}
+        <AllSchedulesComponent data={data} mothers={users} facilityAdmin={user}/>
         
         
     </NAdminLayout>

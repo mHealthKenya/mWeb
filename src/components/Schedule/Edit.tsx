@@ -7,13 +7,9 @@ import {
   CardContent,
   CardHeader,
   FormControl,
-  FormControlLabel,
   FormHelperText,
-  FormLabel,
   InputLabel,
   MenuItem,
-  Radio,
-  RadioGroup,
   Select,
   Stack,
   TextField
@@ -21,8 +17,9 @@ import {
 import * as Yup from 'yup'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import useAddSchedule from '@services/schedules/addschedules'
 import useUpdateSchedule from '@services/schedules/editschedule'
+import { Facility, UserByRole } from '@models/user-by-role'
+import CenterComponent from '@components/Shared/Center'
 
 
 export interface EditScheduleForm {
@@ -44,9 +41,11 @@ const schema = Yup.object().shape({
   status: Yup.string().required()
 })
 
-const EditScheduleComponent: FC<{handleToggle: () => void}> = ({facilities, mothers, handleToggle}) => {
+const EditScheduleComponent: FC<{mother:UserByRole
+  handleToggle: () => void
+  facilityID: string,}> = ({mother, handleToggle, facilityID}) => {
 
-  const { register, handleSubmit, formState: {errors}, reset} = useForm<EditScheduleForm>({
+  const { register, handleSubmit, formState: {errors}} = useForm<EditScheduleForm>({
     resolver: yupResolver(schema)
   })
 
@@ -55,6 +54,7 @@ const EditScheduleComponent: FC<{handleToggle: () => void}> = ({facilities, moth
 
   const onSubmit = (data: EditScheduleForm) => {
     const item = {
+      facilityID,
       ...data
     }
     mutate(item)
@@ -63,9 +63,10 @@ const EditScheduleComponent: FC<{handleToggle: () => void}> = ({facilities, moth
 
 
   return (
+    <CenterComponent>
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card>
-        <CardHeader title="Add a user" subheader="All fields marked with * are required fields" />
+        <CardHeader title="Update Schedule" subheader="All fields marked with * are required fields" />
         <CardContent>
           <Stack spacing={1}>
           <FormControl fullWidth size="small">
@@ -78,11 +79,11 @@ const EditScheduleComponent: FC<{handleToggle: () => void}> = ({facilities, moth
                 error={!!errors?.motherId?.message}
                 defaultValue=""
                 inputProps={{ 'data-testid': 'mother_input' }}>
-                {mothers.map((mother: any) => (
+                {/* {mothers.map((mother: any) => (
                   <MenuItem value={mother.id} key={mother.id}>
                     {mother.name}
                   </MenuItem>
-                ))}
+                ))} */}
               </Select>
               <FormHelperText>{errors?.motherId?.message}</FormHelperText>
             </FormControl>
@@ -116,11 +117,11 @@ const EditScheduleComponent: FC<{handleToggle: () => void}> = ({facilities, moth
                 error={!!errors?.facilityId?.message}
                 defaultValue=""
                 inputProps={{ 'data-testid': 'mother_input' }}>
-                {facilities.map((facility: any) => (
+                {/* {facilities.map((facility: any) => (
                   <MenuItem value={facility.id} key={facility.id}>
                     {facility.name}
                   </MenuItem>
-                ))}
+                ))} */}
               </Select>
               <FormHelperText>{errors?.facilityId?.message}</FormHelperText>
             </FormControl>
@@ -156,11 +157,22 @@ const EditScheduleComponent: FC<{handleToggle: () => void}> = ({facilities, moth
             type="submit"
             fullWidth
             disabled={isLoading}>
-            {isLoading ? 'Adding Schedule' : 'Set Schedule'}
+            {isLoading ? 'Updating Schedule' : 'Update Schedule'}
+          </Button>
+          <Button
+          style={{width: '200px'}}
+            variant="contained"
+            color="error"
+            size="small"
+            type="submit"
+            fullWidth
+            disabled={isLoading} onClick={handleToggle}>
+            Cancel
           </Button>
         </CardActions>
       </Card>
     </form>
+    </CenterComponent>
   )
 }
 
