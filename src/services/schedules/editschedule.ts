@@ -17,7 +17,7 @@ const useUpdateSchedule = (completeFn: () => void) =>{
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: updateSchedule,
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       await Promise.all([
         queryClient.invalidateQueries(['allSchedules'])
       ])
@@ -26,6 +26,8 @@ const useUpdateSchedule = (completeFn: () => void) =>{
         text: 'Schedule Updated Successful',
         icon: 'success',
         confirmButtonText: 'OK'
+      }).then(() =>{
+        completeFn()
       })
     },
 

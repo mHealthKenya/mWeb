@@ -7,15 +7,7 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  FormControl,
-  FormControlLabel,
   FormHelperText,
-  FormLabel,
-  InputLabel,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  Select,
   Stack,
   TextField
 } from '@mui/material'
@@ -23,17 +15,16 @@ import * as Yup from 'yup'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import useAddSchedule from '@services/schedules/addschedules'
-import { Facility, UserByRole } from '@models/user-by-role'
+import {  UserByRole } from '@models/user-by-role'
 import CenterComponent from '@components/Shared/Center'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import useAllFacilities from '@services/locations/all'
+import { Schedule } from '@models/schedule'
+
 
 
 export interface AddScheduleForm {
   motherId: string
   title: string
   description: string
-  facilityId: string
   date: Date
   status: string
 
@@ -43,8 +34,7 @@ const schema = Yup.object().shape({
   motherId: Yup.string().required(),
   title: Yup.string().required(),
   description: Yup.string().required(),
-  facilityId: Yup.string().required(),
-  date: Yup.string().required(),
+  date: Yup.date().required(),
   status: Yup.string().required()
 })
 
@@ -56,14 +46,21 @@ const AddScheduleComponent: FC<{mothers: UserByRole[], facilityID: string, handl
 
   const {mutate, isLoading} = useAddSchedule(handleToggle)
 
+  console.log('Add Schedule here: ', errors)
 
   const onSubmit = (data: AddScheduleForm) => {
     console.log('Test')
-    const item = {
-      facilityID,
-      ...data
-    }
+    const item: Schedule = {
+      id: '',
+      facilityId: facilityID,
+      motherId: data.motherId,
+      title: data.title,
+      description: data.description,
+      date: data.date,
+      status: data.status,
+    };
     mutate(item)
+    handleToggle();
   }
 
   const motherName = mothers.map((mother) => {
@@ -81,29 +78,16 @@ const AddScheduleComponent: FC<{mothers: UserByRole[], facilityID: string, handl
         <CardHeader title="Schedule Visit" subheader="All fields marked with * are required fields" />
         <CardContent>
           <Stack spacing={1}>
-          {/* <FormControl fullWidth size="small"> */}
-              {/* <InputLabel id="mother">Mother</InputLabel> */}
               <Autocomplete
                 disablePortal
                 id="combo-box-demo"
                 options={motherName}
                 sx={{ width: 300 }}
-                renderInput={(params) => <TextField {...params} label="Mothers" />}
-    />
-              {/* <Select
-                labelId="facility-label"
-                id="mother"
-                label="Mother"
+                renderInput={(params) => <TextField {...params} label="Mothers" 
                 {...register('motherId')}
-                error={!!errors?.motherId?.message}
-                defaultValue=""
-                inputProps={{ 'data-testid': 'mother_input' }}>
-                {mothers.map((mother: any) => (
-                  <MenuItem value={mother.id} key={mother.id}>
-                    {mother.f_name} {mother.l_name}
-                  </MenuItem>
-                ))} */}
-              {/* </Select> */}
+                helperText={errors?.motherId?.message}
+                error={!!errors?.motherId?.message}/>
+              }/>
               <FormHelperText>{errors?.motherId?.message}</FormHelperText>
             
             <TextField
@@ -137,6 +121,12 @@ const AddScheduleComponent: FC<{mothers: UserByRole[], facilityID: string, handl
               error={!!errors?.date?.message}
               inputProps={{ 'data-testid': 'date_input' }}
             />
+            {/* <DateTimePicker 
+               label="Date"
+               value={scheduleDate}
+               onChange={(e) => setScheduleDate(e.target.value)}
+               /> */}
+               <FormHelperText>{errors?.date?.message}</FormHelperText>
             <TextField
               size="small"
               fullWidth
@@ -178,7 +168,3 @@ const AddScheduleComponent: FC<{mothers: UserByRole[], facilityID: string, handl
 }
 
 export default AddScheduleComponent
-
-// function handleToggle(): void {
-//   throw new Error('Function not implemented.')
-// }

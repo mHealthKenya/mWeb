@@ -12,7 +12,7 @@ interface Results {
 const addSchedule = async (data: Schedule) => {
   const axiosInstance = await axiosConfig()
 
-  const newSchedule: Results = await axiosInstance.post('', {data}).then((res) => res.data)
+  const newSchedule: Results = await axiosInstance.post('schedules/create', {data}).then((res) => res.data)
   .catch((error) => console.log(error))
 
   return newSchedule
@@ -22,7 +22,7 @@ const useAddSchedule = (completeFn: () => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: addSchedule,
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       await Promise.all([
         queryClient.invalidateQueries(['allSchedules'])
       ])
@@ -31,6 +31,8 @@ const useAddSchedule = (completeFn: () => void) => {
         text: 'Schedule Created Successful',
         icon: 'success',
         confirmButtonText: 'OK'
+      }).then(() => {
+        completeFn()
       })
     },
 

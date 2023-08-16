@@ -1,13 +1,27 @@
+// import AllSchedulesComponent from "@components/Schedule/all";
+// import UsersByRoleComponent from "@components/Users/Role";
+
 import AllSchedulesComponent from "@components/Schedule/all";
+// import UsersByRoleComponent from "@components/Users/Role";
 import { baseURL } from "@config/axios";
-import NAdminLayout from "@layout/NAdminLayout/NAdminLayout";
+import FacilityLayout from "@layout/FacilityLayout/FacilityLayout";
+// import NAdminLayout from "@layout/NAdminLayout/NAdminLayout";
 import { allFacilities } from "@services/locations/all";
+
+// import useAllSchedules from "@services/schedules/allschedules";
+// import useAllSchedules, { allSchedules } from "@services/schedules/allschedules";
 import useUsersByRole from "@services/users/by-role";
 import axios from "axios";
 import * as jwt from 'jsonwebtoken'
 import { GetServerSideProps } from "next";
 import nookies from 'nookies'
 import { Users } from "src/helpers/enums/users.enum";
+// const Schedule = ({}) => {
+//   return <div>Schedule</div>;
+// }
+
+// export default Schedule
+
 
 const ScheduleUsers = ({ user,
   users,
@@ -18,12 +32,13 @@ const ScheduleUsers = ({ user,
   
 
   return (
-    <NAdminLayout>
+    <FacilityLayout>
       
+        {/* <AddSchedule facilities={facilities} mothers={data}/> */}
         <AllSchedulesComponent data={data} mothers={users} facilityAdmin={user}/>
         
         
-    </NAdminLayout>
+    </FacilityLayout>
   )
 }
 
@@ -37,7 +52,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
     const user: any = await jwt.verify(cookie, `${process.env.NEXT_PUBLIC_JWT_SECRET}`)
 
-    if (user.role !== Users.Admin) {
+    if (user.role !== Users.Facility) {
       return {
         redirect: {
           destination: '/login',

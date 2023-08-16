@@ -6,7 +6,8 @@ import {
   faMap,
   faPencil,
   faPerson,
-  faPersonPregnant
+  faPersonPregnant,
+  faCalendar
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
@@ -134,6 +135,10 @@ export default function SidebarNav() {
       <SidebarNavItem icon={faPencil} href="#">
         Books
       </SidebarNavItem>
+      <SidebarNavItem icon={faCalendar} href="/facility/schedule">
+        Schedules
+      </SidebarNavItem>
+
       {/* <SidebarNavTitle>Components</SidebarNavTitle>
 
       <SidebarNavGroup toggleIcon={faPuzzlePiece} toggleText="Base">

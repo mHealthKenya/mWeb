@@ -33,9 +33,9 @@ export const formatDateTime = (dateString: string): string  => {
   return `${formattedTime} ${formattedDate}`;
 }
 
-const inputDate = '2023-08-01T16:23:00.000Z';
-const formatted = formatDateTime(inputDate);
-console.log(formatted); // Output: "16:23 01-08-2023"
+// const inputDate = '2023-08-01T16:23:00.000Z';
+// const formatted = formatDateTime(inputDate);
+// console.log(formatted); // Output: "16:23 01-08-2023"
 
 
 export default useAllSchedules;

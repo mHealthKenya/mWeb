@@ -1,5 +1,5 @@
 import { axiosConfig } from "@config/axios"
-import { useQuery } from "@tanstack/react-query"
+// import { useQuery } from "@tanstack/react-query"
 
 
 const scheduleByFacility = async (facilityId: string) =>{
@@ -11,11 +11,13 @@ const scheduleByFacility = async (facilityId: string) =>{
   return updatedSchedule
 }
 
-const useScheduleByFacility = (data: string) => {
-  useQuery({
-    queryKey: ['scheduleByFacility', data],
-    queryFn: scheduleByFacility,
-  })
-}
+export default scheduleByFacility
 
-export default useScheduleByFacility
+// const useScheduleByFacility = (data: string) => {
+//   useQuery({
+//     queryKey: ['scheduleByFacility', data],
+//     queryFn: scheduleByFacility,
+//   })
+// }
+
+// export default useScheduleByFacility

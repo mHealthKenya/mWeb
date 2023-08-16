@@ -1,16 +1,13 @@
-import { Box, Button, List, ListSubheader } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { FC, useMemo, useState } from "react";
 import useAllSchedules, { formatDateTime } from "@services/schedules/allschedules";
 import { Col } from "@data/users-by-role";
 import { Delete, Edit } from "@mui/icons-material";
 import SharedModal from "@components/Shared/Modal";
-import useAllFacilities from "@services/locations/all";
-import AddSchedule from "@components/Schedule/add";
-import EditScheduleComponent from "./Edit";
-import AddSchedule1 from "./AddSchedule";
 import { UserByRole } from "@models/user-by-role";
 import AddScheduleComponent from "@components/Schedule/add";
+import EditScheduleComponent from "./Edit";
 
 export const scheduleColumn: Col[] = [
   {
@@ -37,24 +34,20 @@ export const scheduleColumn: Col[] = [
 
 const AllSchedulesComponent: FC<{mothers: UserByRole[], facilityAdmin: UserByRole, data: any}> = ({mothers,  facilityAdmin, data}) => {
   
-  // const [open, setOpen] = useState(false);
-  const [addTg, setAddTg] = useState(false)
-  const [editTg, setEditTg] = useState(false)
   const [open, setOpen] = useState(false)
+  const [openEdit, setOpenEdit] = useState(false)
   const schedules: any = useAllSchedules(data);
-
-  const handleEdit = () => {
-    setEditTg((editTg) => !editTg)
-  }
 
   const handleToggle = () => {
     setOpen((open) => !open)
+    // setEdit(false)
   }
 
-  const handleAdd = () => {
-    // setAddTg((addTg) => !addTg)
-    setOpen((open) => !open)
+  const handleToggleEdit = () => {
+    console.log('edit')
+    setOpenEdit((openEdit) => !openEdit)
   }
+
 
   const rows = useMemo(() => {
     if (schedules && schedules.data) {
@@ -86,7 +79,7 @@ const AllSchedulesComponent: FC<{mothers: UserByRole[], facilityAdmin: UserByRol
               sx={{ mr: 1 }}
               startIcon={<Edit />}
               size="small"
-              onClick={() => handleToggle()}>
+              onClick={() => handleToggleEdit()}>
               Edit
             </Button>
             <Button
@@ -131,8 +124,13 @@ const AllSchedulesComponent: FC<{mothers: UserByRole[], facilityAdmin: UserByRol
         />
       </Box>
       <SharedModal items={{open, handleToggle}}>
-        <AddScheduleComponent mothers={mothers} facilityID={facilityAdmin.facilityId || ''} handleToggle={handleToggle}/>
+        <AddScheduleComponent mothers={mothers} facilityID={facilityAdmin.facilityId || ''} handleToggle={() => handleToggle()}/>
         {/* <EditScheduleComponent facilities={facilities} mothers={mothers} /> */}
+      </SharedModal>
+
+      <SharedModal items={{openEdit, handleToggle}}>
+        {/* <AddScheduleComponent mothers={mothers} facilityID={facilityAdmin.facilityId || ''} handleToggle={() => handleToggle()}/> */}
+        <EditScheduleComponent facilityID={facilityAdmin.facilityId || ''}  handleToggle={() => handleToggleEdit()}/>
       </SharedModal>
       
     </>

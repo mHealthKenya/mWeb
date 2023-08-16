@@ -5,7 +5,7 @@ import { useResizeDetector } from 'react-resize-detector/build'
 import Sidebar, { SidebarOverlay } from './Sidebar/Sidebar'
 import Header from './Header/Header'
 import Footer from './Footer/Footer'
-import FacilityDashBoard from './DashBoard/FacilityDashBoard'
+// import FacilityDashBoard from './DashBoard/FacilityDashBoard'
 
 export default function FacilityLayout({ children }: PropsWithChildren) {
   // Show status for xs screen
@@ -58,7 +58,7 @@ export default function FacilityLayout({ children }: PropsWithChildren) {
         <Header toggleSidebar={toggleIsShowSidebar} toggleSidebarMd={toggleIsShowSidebarMd} />
         <div className="body flex-grow-1 px-sm-2 mb-4">
           <Container fluid="lg">{children}</Container>
-          <FacilityDashBoard />
+          {/* <FacilityDashBoard /> */}
         </div>
         <Footer />
       </div>

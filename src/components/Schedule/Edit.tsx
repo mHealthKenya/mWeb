@@ -9,7 +9,6 @@ import {
   FormControl,
   FormHelperText,
   InputLabel,
-  MenuItem,
   Select,
   Stack,
   TextField
@@ -18,7 +17,6 @@ import * as Yup from 'yup'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import useUpdateSchedule from '@services/schedules/editschedule'
-import { Facility, UserByRole } from '@models/user-by-role'
 import CenterComponent from '@components/Shared/Center'
 
 
@@ -37,13 +35,13 @@ const schema = Yup.object().shape({
   title: Yup.string().required(),
   description: Yup.string().required(),
   facilityId: Yup.string().required(),
-  date: Yup.string().required(),
+  date: Yup.date().required(),
   status: Yup.string().required()
 })
 
-const EditScheduleComponent: FC<{mother:UserByRole
+const EditScheduleComponent: FC<{
   handleToggle: () => void
-  facilityID: string,}> = ({mother, handleToggle, facilityID}) => {
+  facilityID: string,}> = ({ handleToggle, facilityID}) => {
 
   const { register, handleSubmit, formState: {errors}} = useForm<EditScheduleForm>({
     resolver: yupResolver(schema)
@@ -54,6 +52,7 @@ const EditScheduleComponent: FC<{mother:UserByRole
 
   const onSubmit = (data: EditScheduleForm) => {
     const item = {
+      id: '',
       facilityID,
       ...data
     }
@@ -79,11 +78,6 @@ const EditScheduleComponent: FC<{mother:UserByRole
                 error={!!errors?.motherId?.message}
                 defaultValue=""
                 inputProps={{ 'data-testid': 'mother_input' }}>
-                {/* {mothers.map((mother: any) => (
-                  <MenuItem value={mother.id} key={mother.id}>
-                    {mother.name}
-                  </MenuItem>
-                ))} */}
               </Select>
               <FormHelperText>{errors?.motherId?.message}</FormHelperText>
             </FormControl>
@@ -117,11 +111,6 @@ const EditScheduleComponent: FC<{mother:UserByRole
                 error={!!errors?.facilityId?.message}
                 defaultValue=""
                 inputProps={{ 'data-testid': 'mother_input' }}>
-                {/* {facilities.map((facility: any) => (
-                  <MenuItem value={facility.id} key={facility.id}>
-                    {facility.name}
-                  </MenuItem>
-                ))} */}
               </Select>
               <FormHelperText>{errors?.facilityId?.message}</FormHelperText>
             </FormControl>
