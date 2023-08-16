@@ -125,11 +125,9 @@ const AllSchedulesComponent: FC<{mothers: UserByRole[], facilityAdmin: UserByRol
       </Box>
       <SharedModal items={{open, handleToggle}}>
         <AddScheduleComponent mothers={mothers} facilityID={facilityAdmin.facilityId || ''} handleToggle={() => handleToggle()}/>
-        {/* <EditScheduleComponent facilities={facilities} mothers={mothers} /> */}
       </SharedModal>
 
-      <SharedModal items={{openEdit, handleToggle}}>
-        {/* <AddScheduleComponent mothers={mothers} facilityID={facilityAdmin.facilityId || ''} handleToggle={() => handleToggle()}/> */}
+      <SharedModal items={{open:openEdit, handleToggle:handleToggleEdit}}>
         <EditScheduleComponent facilityID={facilityAdmin.facilityId || ''}  handleToggle={() => handleToggleEdit()}/>
       </SharedModal>
       

@@ -7,7 +7,7 @@ interface ModalProps {
 }
 
 const SharedModal: FC<{ items: ModalProps; children: ReactNode }> = ({ items, children }) => {
-  const { open, handleToggle } = items
+  const { open,  handleToggle } = items
 
   return (
     <div>
