@@ -1,6 +1,6 @@
 import SharedModal from '@components/Shared/Modal'
 import { UserByRole } from '@models/user-by-role'
-import { Delete, Edit, Visibility } from '@mui/icons-material'
+import { Add, Delete, Edit, Visibility } from '@mui/icons-material'
 import { Button } from '@mui/material'
 import Box from '@mui/material/Box'
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid'
@@ -14,13 +14,17 @@ import {
 import EditUserWithRoleComponent from './Edit'
 import Swal from 'sweetalert2'
 import { Facility } from '@models/facility'
+import { useRouter } from 'next/router'
 
 const UsersByRoleComponent: React.FC<{
   users: UserByRole[]
   facility?: boolean
   isFacility?: boolean
   facilities?: Facility[]
-}> = ({ users, facility, isFacility, facilities }) => {
+  visit?: boolean
+  sadmin?: boolean
+}> = ({ users, facility, isFacility, facilities, visit, sadmin }) => {
+  const router = useRouter()
   const [open, setOpen] = useState(false)
   const [user, setUser] = useState<UserByRole>()
 
@@ -48,6 +52,14 @@ const UsersByRoleComponent: React.FC<{
       icon: 'info',
       confirmButtonText: 'OK'
     })
+  }
+
+  const handleRecord = (id: string) => {
+    router.push('/facility/visit/' + id)
+  }
+
+  const handleRecordAdmin = (id: string) => {
+    router.push('/sadmin/visit/' + id)
   }
 
   const columnTypes = useMemo(() => {
@@ -86,6 +98,37 @@ const UsersByRoleComponent: React.FC<{
             }
           }
         }
+
+        if (facility && visit) {
+          return {
+            field: col.field,
+            headerName: col.headerName,
+            width: 200,
+            renderCell: (params) => {
+              return (
+                <Box
+                  sx={{
+                    display: 'flex'
+                  }}>
+                  <Button
+                    variant="contained"
+                    color="info"
+                    sx={{ mr: 1 }}
+                    startIcon={<Add />}
+                    size="small"
+                    onClick={
+                      sadmin
+                        ? () => handleRecordAdmin(params.value.id)
+                        : () => handleRecord(params.value.id)
+                    }>
+                    Record Visit
+                  </Button>
+                </Box>
+              )
+            }
+          }
+        }
+
         return {
           field: col.field,
           headerName: col.headerName,
@@ -159,7 +202,7 @@ const UsersByRoleComponent: React.FC<{
 
   return (
     <>
-      <Box sx={{ height: 400, width: '100%' }}>
+      <Box sx={{ height: 450, width: '100%' }}>
         <DataGrid
           rows={rows}
           slots={{ toolbar: GridToolbar }}
@@ -167,7 +210,7 @@ const UsersByRoleComponent: React.FC<{
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 5
+                pageSize: 25
               }
             }
           }}
