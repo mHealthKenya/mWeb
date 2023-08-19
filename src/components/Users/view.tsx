@@ -108,7 +108,8 @@ const handleEdit = (user: UserByRole) => {
                 color="info"
                 startIcon={<Edit />}
                 size="small"
-                onClick={() => {handleEdit(bio!)}}
+                onClick={() => {handleEdit(bio!);
+                }} 
               >
                 Edit
               </Button>

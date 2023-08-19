@@ -4,13 +4,13 @@ import { axiosConfig } from "@config/axios"
 import Swal from "sweetalert2"
 
 interface AddBio extends AddBioDataFormProps {
-    userId: string
+    facilityId?: string,
   }
 
 export const addBioData = async (data: AddBio) => {
     const axiosInstance = await axiosConfig()
-    const bioData = await axiosInstance.post('biodata/add', data).then((res) => res.data)
-
+    const bioData = await axiosInstance.post('biodata/add', data)
+    .then((res) => res.data)
     return bioData
 }
 
@@ -19,20 +19,21 @@ const useAddBioData = (completeFn: () => void) => {
     return useMutation ({
         mutationFn: addBioData,
         onSuccess: async () => {
-            await Promise.all([queryClient.invalidateQueries(['user-bio-data'])])
+            await Promise.all([queryClient.invalidateQueries(['users-by-role'])])
+            completeFn()
             Swal.fire({
                 title: 'Success!',
                 text: 'Bio Data Added',
                 icon: 'success',
                 confirmButtonText: 'OK'
             })
-            .then(() => {
-                completeFn()
-            })
+            // .then(() => {
+            //     completeFn()
+            // })
         },
 
         onError: (error: any) => {
-            // completeFn()
+            completeFn() 
             Swal.fire({
                 title: 'Error',
                 text: error?.response?.data?.message || 'An error occurred',

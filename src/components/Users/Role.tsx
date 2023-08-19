@@ -14,21 +14,26 @@ import {
 import EditUserWithRoleComponent from './Edit'
 import ViewBioDataComponent from './view'
 import AddBioDataComponent from '@components/Biodata/AddBioData'
-import { AddBioData } from '@models/add-bio-data'
+
 
 const UsersByRoleComponent: React.FC<{
+  user?: UserByRole
   users: UserByRole[]
   facility?: boolean
   isFacility?: boolean
-}> = ({ users, facility, isFacility }) => {
+}> = ({ users, facility, isFacility, user}) => {
   const [open, setOpen] = useState(false)
   const [show, setShow] = useState(false)
   const [add, setAdd] = useState(false)
-  const [user, setUser] = useState<UserByRole>()
+  const [, setEditUser] = useState<UserByRole>()
   const [data, setData] = useState<UserByRole>();
-  const [addBio, setAddBio] = useState<AddBioData>();
-  const [ isLoading, setIsLoading] = useState(true);
-  const [ error, setError ] = useState<string | null>(null);
+  const [addBio, setAddBio] = useState<UserByRole>();
+  const [ , setIsLoading] = useState(true);
+  const [ , setError ] = useState<string | null>(null);
+
+  const [mother, setMother] = useState<UserByRole>()
+
+//  const {bioData} = useAddBioData({facilityId : })
 
   const handleToggle = () => {
     setOpen((open) => !open)
@@ -45,14 +50,14 @@ const UsersByRoleComponent: React.FC<{
   const rows = useMemo(() => {
     if (facility) {
       return rowsWithFacility(users)
-    }3
+    }
 
     return rowsWithoutFacility(users)
   }, [users, facility])
 
-  const handleEdit = (user: UserByRole) => {
+  const handleEdit = (editUser: UserByRole) => {
     setOpen(true)
-    setUser(user)
+    setEditUser(editUser)
   }
 
   const handleViewDetails = async (bio: UserByRole) => {
@@ -60,7 +65,7 @@ const UsersByRoleComponent: React.FC<{
       // console.log(bio)
       
       setData(bio);
-      setShow(true); // Open the modal after data is fetched successfully
+      setShow(true); 
     } catch (error) {
       setError('Error fetching biodata' + error);
     } finally {
@@ -68,9 +73,10 @@ const UsersByRoleComponent: React.FC<{
     }
   };
 
-  const handleAdd =  ( ) => {
+  const handleAdd =  (data: UserByRole ) => {
     setAdd(true)
     setAddBio(addBio)
+    setMother(data)
   }
 
 
@@ -116,7 +122,7 @@ const UsersByRoleComponent: React.FC<{
                     sx={{ mr: 1 }}
                     startIcon={<Add />}
                     size="small"
-                    onClick={() => handleAdd()}>
+                    onClick={() => handleAdd(params.value)}>
                     Add
                   </Button> 
                   }
@@ -240,7 +246,7 @@ const UsersByRoleComponent: React.FC<{
           open: add,
           handleToggle : toggleAdd
         }}>
-        <AddBioDataComponent bioData={addBio} handleToggle={toggleAdd} />
+        <AddBioDataComponent  handleToggle={toggleAdd} user={user} mother={mother} />
       </SharedModal>
     </>
   )

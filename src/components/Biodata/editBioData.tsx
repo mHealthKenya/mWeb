@@ -1,10 +1,11 @@
 import CenterComponent from '@components/Shared/Center'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { UserByRole } from '@models/user-by-role'
-import { Add } from '@mui/icons-material'
+import { Edit } from '@mui/icons-material'
 import { Box, Button, Card, CardActions, CardContent, CardHeader, TextField } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import useAddBioData from '@services/users/addBioData'
+import useEditUserBioData from '@services/users/editBioData'
+import dayjs, { Dayjs } from 'dayjs'
 import React, { FC, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
@@ -15,28 +16,25 @@ export interface EditBioDataProps {
   weight: string
   active: boolean
   age: string
-  last_clinic_visit: Date
-  last_monthly_period: Date
-  expected_delivery_date: Date
   pregnancy_period: string
   facilityId: string
   previous_pregnancies: string
 }
-
+  
 const bioDataUpdateSchema = Yup.object().shape({
   height: Yup.string().required(),
   weight: Yup.string().required(),
   active: Yup.boolean().required(),
   age: Yup.string().required(),
-  last_clinic_visit: Yup.date().required('Clinic Visit is required'),
-  last_monthly_period: Yup.date().required('Last Moontthly period is required'),
-  expected_delivery_date: Yup.date().required('Expected Delivery is required'),
   pregnancy_period: Yup.string().required('Pregnancy Period is reqiured'),
   facilityId: Yup.string().optional(),
   previous_pregnancies: Yup.string().required('Previous Pregnancies is required')
 })
 
-const EditBioDataComponent : FC<{ bioDataUpdate: UserByRole | undefined; handleToggle: () => void }> = ({ bioDataUpdate, handleToggle}) =>  {
+const EditBioDataComponent : FC<{ bioDataUpdate: UserByRole | undefined; handleToggle: () => void }> = ({ 
+  bioDataUpdate, 
+  handleToggle
+}) =>  {
 
   const {
     register,
@@ -47,26 +45,18 @@ const EditBioDataComponent : FC<{ bioDataUpdate: UserByRole | undefined; handleT
     resolver: yupResolver(bioDataUpdateSchema)
   })
 
-  const [selectedMonthlyPeriod, setSelectedDMonthlyPeriod ] = useState(null)
-  const [selectedDeliveryDate, setSelectedDeliveryDate ] = useState(null)
-  const [selectedClinicVisit, setSelectedClinicVisit ] = useState(null)
+  const [selectedMonthlyPeriod, setSelectedMonthlyPeriod ] = useState<Dayjs | null> (dayjs(bioDataUpdate!.BioData[0].last_monthly_period))
+  const [selectedDeliveryDate, setSelectedDeliveryDate ] = useState<Dayjs | null> (dayjs(bioDataUpdate!.BioData[0].expected_delivery_date))
+  const [selectedClinicVisit, setSelectedClinicVisit ] = useState<Dayjs | null> (dayjs(bioDataUpdate!.BioData[0].last_clinic_visit))
 
-  const { mutate, isLoading } = useAddBioData(handleToggle)
+  const { mutate, isLoading } = useEditUserBioData(handleToggle)
 
   const onSubmit = (data: EditBioDataProps) => {
+
     mutate({
       userId: bioDataUpdate?.id || '',
       ...data
     })
-
-    console.log("Data Submitted", bioDataUpdate);
-
-    // const item = {
-    //   ...data,
-    //   id: bioData?.id ? bioData.id.toString() : '',
-    // }
-
-    // mutate(item)
 
   }
   
@@ -75,7 +65,7 @@ const EditBioDataComponent : FC<{ bioDataUpdate: UserByRole | undefined; handleT
       <form onSubmit={handleSubmit(onSubmit)}>
 
        <Card sx={{minWidth: 700}}>
-      <CardHeader title={`Edit Bio Data`} />
+          <CardHeader title={`Edit Bio Data`} />
         <CardContent>
           
     <Box
@@ -89,10 +79,8 @@ const EditBioDataComponent : FC<{ bioDataUpdate: UserByRole | undefined; handleT
       <div>
         <TextField
           label="Height"
-          id="outlined-size-small"
-          placeholder='height'
           type='number'
-          // size="small"
+          defaultValue={bioDataUpdate?.BioData[0].height}
           {...register('height')}
           required
           helperText={errors?.height?.message}
@@ -101,10 +89,8 @@ const EditBioDataComponent : FC<{ bioDataUpdate: UserByRole | undefined; handleT
         />
         <TextField
           label="Weight"
-          id="outlined-size-small"
-          placeholder='Weight'
           type='number'
-          // size="small"
+          defaultValue={bioDataUpdate?.BioData[0].weight}
           {...register('weight')}
           required
           helperText={errors?.weight?.message}
@@ -115,9 +101,7 @@ const EditBioDataComponent : FC<{ bioDataUpdate: UserByRole | undefined; handleT
       <div>
       <TextField
           label="Active"
-          id="outlined-size-small"
-          placeholder='Active'
-          // size="small"
+          defaultValue={bioDataUpdate?.BioData[0].active}
           {...register('active')}
           required
           helperText={errors?.active?.message}
@@ -126,9 +110,7 @@ const EditBioDataComponent : FC<{ bioDataUpdate: UserByRole | undefined; handleT
         />
          <TextField
           label="Age"
-          id="outlined-size-small"
-          placeholder='Age'
-          // size="small"
+          defaultValue={bioDataUpdate?.BioData[0].age}
           type='number'
           {...register('age')}
           required
@@ -139,17 +121,18 @@ const EditBioDataComponent : FC<{ bioDataUpdate: UserByRole | undefined; handleT
       </div>
       <div>
 
-      
       <DatePicker
           label="Last Monthly Period"
           value={selectedMonthlyPeriod}
-          onChange={(last_monthly_period) => setSelectedDMonthlyPeriod(last_monthly_period)}
+          defaultValue={dayjs(bioDataUpdate?.BioData[0].last_monthly_period)}
+          onChange={(last_monthly_period) => setSelectedMonthlyPeriod(last_monthly_period?last_monthly_period : null)}
           
         />
 
 <       DatePicker
           label="Expected Delivery date"
           value={selectedDeliveryDate}
+          defaultValue={dayjs(bioDataUpdate?.BioData[0].expected_delivery_date)}
           onChange={(expected_delivery_date) => setSelectedDeliveryDate(expected_delivery_date)}
           
         />
@@ -158,9 +141,7 @@ const EditBioDataComponent : FC<{ bioDataUpdate: UserByRole | undefined; handleT
       <div>
       <TextField
           label="Pregnancy Period"
-          id="outlined-size-small"
-          placeholder='Pregnancy Period'
-          // size="small"
+          defaultValue={bioDataUpdate?.BioData[0].pregnancy_period}
           type='number'
           {...register('pregnancy_period')}
           required
@@ -172,6 +153,7 @@ const EditBioDataComponent : FC<{ bioDataUpdate: UserByRole | undefined; handleT
         <DatePicker
           label="Last Clinic Visit"
           value={selectedClinicVisit}
+          defaultValue={dayjs(bioDataUpdate?.BioData[0].last_clinic_visit)}
           onChange={(last_clinic_visit) => setSelectedClinicVisit(last_clinic_visit)}
           
         />
@@ -180,9 +162,7 @@ const EditBioDataComponent : FC<{ bioDataUpdate: UserByRole | undefined; handleT
       <div>
       <TextField
           label="Facility"
-          id="outlined-size-small"
-          placeholder='Facility'
-          // size="small"
+          defaultValue={bioDataUpdate?.BioData[0].facilityId}
           {...register('facilityId')}
           required
           helperText={errors?.facilityId?.message}
@@ -191,10 +171,8 @@ const EditBioDataComponent : FC<{ bioDataUpdate: UserByRole | undefined; handleT
         />
         <TextField
           label="Previous Pregnancies"
-          id="outlined-size-small"
           type='number'
-          placeholder='Previous Pregancies'
-          // size="small"
+          defaultValue={bioDataUpdate?.BioData[0].previous_pregnancies}
           {...register('previous_pregnancies')}
           required
           helperText={errors?.previous_pregnancies?.message}
@@ -203,14 +181,13 @@ const EditBioDataComponent : FC<{ bioDataUpdate: UserByRole | undefined; handleT
         />
       </div>
     </Box>
-   
 
     <CardActions>
     <Button
       variant="contained"
-      color="success" // Corrected color prop
+      color="success" 
       type="submit"
-      startIcon={<Add />}
+      startIcon={<Edit />}
       disabled={isLoading}
       data-testid="submit_button"
     >

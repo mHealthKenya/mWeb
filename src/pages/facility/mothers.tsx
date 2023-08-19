@@ -1,16 +1,20 @@
 import UsersByRoleComponent from '@components/Users/Role'
 import { baseURL } from '@config/axios'
 import FacilityLayout from '@layout/FacilityLayout/FacilityLayout'
+import useUsersByRoleAndFacility from '@services/users/by-role-and-facility'
 import axios from 'axios'
 import * as jwt from 'jsonwebtoken'
 import { GetServerSideProps } from 'next'
 import nookies from 'nookies'
 import { Users } from 'src/helpers/enums/users.enum'
 
-const MothersPage = ({ mothers }: any) => {
+const MothersPage = ({userDetails, mothers,  }: any) => {
+
+
+  const {data} = useUsersByRoleAndFacility({role : 'Mother', facilityId : userDetails.facilityId}, mothers)
   return (
     <FacilityLayout>
-      <UsersByRoleComponent users={mothers} facility={true} isFacility={true} />{' '}
+      <UsersByRoleComponent users={data} facility={true} isFacility={true} user={userDetails} />{' '}
     </FacilityLayout>
   )
 }
@@ -42,6 +46,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       })
 
     const mothers = await axios
+
       .get(
         baseURL +
           'users/roleandfacility?facilityId=' +
@@ -61,7 +66,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
       props: {
         user,
-        mothers
+        mothers,
+        userDetails,
+        
       }
     }
   } catch (error) {

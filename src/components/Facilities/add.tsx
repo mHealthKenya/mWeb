@@ -26,6 +26,7 @@ const NewFacilityComponent = () => {
   const cookies = parseCookies()
 
   console.log('cookies', cookies['access-token'])
+  
   const {
     register,
     handleSubmit,
