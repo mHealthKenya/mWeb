@@ -1,11 +1,12 @@
-import UsersByRoleComponent from '@components/Users/Role'
+import { FacilityBioData } from '@models/biodata'
 import { ClinicalVisit } from '@models/clinicvisits'
-import { UserByRole } from '@models/user-by-role'
+import { Alert } from '@mui/material'
 import Box from '@mui/material/Box'
 import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
 import Typography from '@mui/material/Typography'
 import * as React from 'react'
+import BioDataByFacility from './facility-biodata'
 import ClinicalVisitsComponent, { VisitMessage } from './visits'
 
 interface TabPanelProps {
@@ -42,13 +43,18 @@ function a11yProps(index: number) {
 
 const VisitTabs: React.FC<{
   visits: ClinicalVisit[]
-  mothers: UserByRole[]
+  bioData: FacilityBioData[]
   admin: boolean
-}> = ({ visits, mothers, admin }) => {
+}> = ({ visits, bioData, admin }) => {
   const [value, setValue] = React.useState(0)
+  const [open, setOpen] = React.useState(true)
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
+  }
+
+  const handleClose = () => {
+    setOpen((open) => !open)
   }
 
   return (
@@ -61,7 +67,12 @@ const VisitTabs: React.FC<{
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <UsersByRoleComponent users={mothers} visit={true} facility={true} sadmin={admin} />{' '}
+        {open && (
+          <Alert severity="info" sx={{ mt: 1, mb: 1 }} onClose={handleClose}>
+            Clinic visits can only be recorded for patients with an existing bio data profile
+          </Alert>
+        )}
+        <BioDataByFacility bioData={bioData} admin={admin}/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <ClinicalVisitsComponent visits={visits} admin={admin} message={VisitMessage.View} />

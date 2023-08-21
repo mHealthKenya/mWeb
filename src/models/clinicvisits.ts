@@ -1,37 +1,26 @@
 export interface ClinicalVisit {
   id: string
-  motherId: string
+  bioDataId: string
   facilityId: string
-  bloodGroup: string
-  weight: number
+  weight: string
   hiv: string
-  hbLevel: number
+  hbLevel: string
   rhesusFactor: string
+  bloodGroup: string
   urinalysis: string
   vdrl: string
   bloodRBS: string
-  TB: null
-  syphilis: string
+  TB: string
   hepatitisB: string
   notes: null
   createdAt: Date
   updatedAt: Date
   facility: Facility
-  mother: Mother
+  bioData: BioData
 }
 
-export interface Facility {
-  name: string
-}
-
-export interface Mother {
-  f_name: string
-  l_name: string
-  phone_number: string
-  BioData: BioDatum[]
-}
-
-export interface BioDatum {
+export interface BioData {
+  user: User
   height: number
   weight: number
   active: boolean
@@ -41,4 +30,14 @@ export interface BioDatum {
   pregnancy_period: number
   last_clinic_visit: Date
   previous_pregnancies: number
+}
+
+export interface User {
+  f_name: string
+  l_name: string
+  phone_number: string
+}
+
+export interface Facility {
+  name: string
 }

@@ -6,14 +6,14 @@ import * as jwt from 'jsonwebtoken'
 import { GetServerSideProps } from 'next'
 import nookies from 'nookies'
 
-const AddVisitPage = ({ lastVisit, userDetails, mother }: any) => {
+const AddVisitPage = ({ lastVisit, userDetails, bioDataId }: any) => {
   return (
     <FacilityLayout>
       <AddVisitComponent
         clinicVisit={lastVisit}
         facilityAdmin={userDetails}
-        mother={mother}
         admin={false}
+        bioDataId={bioDataId}
       />
     </FacilityLayout>
   )
@@ -40,16 +40,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       }
     }
 
-    const mthr = axios
-      .get(baseURL + 'users/user?id=' + params?.add, {
-        headers: {
-          Authorization: `Bearer ${cookie}`
-        }
-      })
-      .then((res) => {
-        return res.data
-      })
-
     const userD = axios
       .get(baseURL + 'users/user?id=' + user.id, {
         headers: {
@@ -61,21 +51,21 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       })
 
     const lastV = axios
-      .get(baseURL + 'clinicvisit/latest?motherId=' + params?.add, {
+      .get(baseURL + 'clinicvisit/latest?bioDataId=' + params?.add, {
         headers: {
           Authorization: `Bearer ${cookie}`
         }
       })
       .then((res) => res.data)
 
-    const [userDetails, lastVisit, mother] = await Promise.all([userD, lastV, mthr])
+    const [userDetails, lastVisit] = await Promise.all([userD, lastV])
 
     return {
       props: {
         user,
         userDetails,
         lastVisit,
-        mother
+        bioDataId: params?.add
       }
     }
   } catch (error) {

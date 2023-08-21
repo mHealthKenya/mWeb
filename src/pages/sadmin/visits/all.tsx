@@ -7,12 +7,12 @@ import * as jwt from 'jsonwebtoken'
 import { GetServerSideProps } from 'next'
 import nookies from 'nookies'
 
-const AllVisits = ({ clinicalVisits, mothers, userDetails }: any) => {
+const AllVisits = ({ clinicalVisits, bioData, userDetails }: any) => {
   const { data: visits } = useVisitsByFacility(userDetails.facilityId, clinicalVisits)
 
   return (
     <AdminLayout>
-      <VisitTabs visits={visits} mothers={mothers} admin={true} />
+      <VisitTabs visits={visits} bioData={bioData} admin={true} />
     </AdminLayout>
   )
 }
@@ -46,19 +46,16 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         return res.data
       })
 
-    const mothers = await axios
-      .get(
-        baseURL + 'users/roleandfacility?facilityId=' + userDetails.facilityId + '&role=Mother',
-        {
-          headers: {
-            Authorization: `Bearer ${cookie}`
-          }
+    const bioData = await axios
+      .get(baseURL + 'biodata/facility?facilityId=' + userDetails.facilityId, {
+        headers: {
+          Authorization: `Bearer ${cookie}`
         }
-      )
+      })
       .then((res) => res.data)
 
     const clinicalVisits = await axios
-      .get(baseURL + 'clinicvisit/facility?id=' + userDetails.facilityId, {
+      .get(baseURL + 'clinicvisit/facility?facilityId=' + userDetails.facilityId, {
         headers: {
           Authorization: `Bearer ${cookie}`
         }
@@ -70,7 +67,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         user,
         userDetails,
         clinicalVisits,
-        mothers
+        bioData
       }
     }
   } catch (error) {

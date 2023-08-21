@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import Swal from 'sweetalert2'
 
 interface Visit {
-  motherId: string
+  bioDataId: string
   facilityId: string
   weight: string
   hiv: string

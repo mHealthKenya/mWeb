@@ -34,11 +34,11 @@ const ClinicalVisitsComponent: FC<{
     setVisit(data)
   }
   const handleRedirect = (data: ClinicalVisit) => {
-    router.push(`/facility/visit/graph/${data.motherId}`)
+    router.push(`/facility/visit/graph/${data.bioDataId}`)
   }
 
   const handleRedirectAdmin = (data: ClinicalVisit) => {
-    router.push(`/sadmin/visit/graph/${data.motherId}`)
+    router.push(`/sadmin/visit/graph/${data.bioDataId}`)
   }
 
   const columns: GridColDef[] = columnsI.map((item) => {
@@ -110,9 +110,9 @@ const ClinicalVisitsComponent: FC<{
 
   const rows = visits.map((visit) => ({
     id: visit.id,
-    Name: visit.mother.f_name + ' ' + visit.mother.l_name,
-    Phone: visit.mother.phone_number,
-    Age: visit.mother?.BioData[0]?.age,
+    Name: visit.bioData.user.f_name + ' ' + visit.bioData.user.l_name,
+    Phone: visit.bioData.user.phone_number,
+    Age: visit.bioData.age,
     Date: dayjs(new Date(visit.createdAt)).format('YYYY-MM-DD HH:mm'),
     Action: visit,
     visit

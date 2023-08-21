@@ -54,9 +54,9 @@ const groups = ['A', 'B', 'AB', 'Ø']
 const AddVisitComponent: FC<{
   facilityAdmin: UserByRole
   clinicVisit: ClinicalVisit | null
-  mother: UserByRole
   admin: boolean
-}> = ({ facilityAdmin, clinicVisit, mother, admin }) => {
+  bioDataId: string
+}> = ({ facilityAdmin, clinicVisit, admin, bioDataId }) => {
   const {
     register,
     handleSubmit,
@@ -72,204 +72,206 @@ const AddVisitComponent: FC<{
   const onSubmit = (data: FormProps) => {
     mutate({
       ...data,
-      motherId: mother.id,
+      bioDataId,
       facilityId: facilityAdmin.facilityId || ''
     })
   }
 
-  const titleString = `Record clinic visit for ${mother?.f_name} ${mother?.l_name}`
+  const titleString = `Record clinic visit for ${clinicVisit?.bioData?.user.f_name} ${clinicVisit?.bioData?.user.f_name}`
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Card>
-        <CardHeader title={titleString} />
-        <CardContent>
-          <Stack spacing={1}>
-            <TextField
-              fullWidth
-              size="small"
-              label="Weight"
-              required
-              {...register('weight')}
-              defaultValue={clinicVisit?.weight}
-            />
-            <Controller
-              rules={{ required: 'Please select an option' }}
-              name="hiv"
-              control={control}
-              defaultValue={clinicVisit?.hiv || ''}
-              render={({ field }) => (
-                <>
-                  <FormLabel required error={!!errors?.hiv?.message}>
-                    HIV status
-                  </FormLabel>
-                  <RadioGroup {...field} row>
-                    {status.map((state, index) => (
-                      <FormControlLabel
-                        value={state}
-                        control={<Radio />}
-                        label={state}
-                        key={index}
-                      />
-                    ))}
-                  </RadioGroup>
-                </>
-              )}
-            />
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Card>
+          <CardHeader title={titleString} />
+          <CardContent>
+            <Stack spacing={1}>
+              <TextField
+                fullWidth
+                size="small"
+                label="Weight"
+                required
+                {...register('weight')}
+                defaultValue={clinicVisit?.weight}
+              />
+              <Controller
+                rules={{ required: 'Please select an option' }}
+                name="hiv"
+                control={control}
+                defaultValue={clinicVisit?.hiv || ''}
+                render={({ field }) => (
+                  <>
+                    <FormLabel required error={!!errors?.hiv?.message}>
+                      HIV status
+                    </FormLabel>
+                    <RadioGroup {...field} row>
+                      {status.map((state, index) => (
+                        <FormControlLabel
+                          value={state}
+                          control={<Radio />}
+                          label={state}
+                          key={index}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </>
+                )}
+              />
 
-            <TextField
-              fullWidth
-              size="small"
-              label="HB Level"
-              {...register('hbLevel')}
-              defaultValue={clinicVisit?.hbLevel}
-              error={!!errors?.hbLevel?.message}
-              helperText={errors?.hbLevel?.message}
-            />
+              <TextField
+                fullWidth
+                size="small"
+                label="HB Level"
+                {...register('hbLevel')}
+                defaultValue={clinicVisit?.hbLevel}
+                error={!!errors?.hbLevel?.message}
+                helperText={errors?.hbLevel?.message}
+              />
 
-            <Controller
-              name="bloodGroup"
-              control={control}
-              defaultValue={clinicVisit?.bloodGroup}
-              render={({ field }) => (
-                <>
-                  <FormLabel required error={!!errors?.bloodGroup?.message}>
-                    Blood Group
-                  </FormLabel>
-                  <RadioGroup {...field} row>
-                    {groups.map((state, index) => (
-                      <FormControlLabel
-                        value={state}
-                        control={<Radio />}
-                        label={state}
-                        key={index}
-                      />
-                    ))}
-                  </RadioGroup>
-                </>
-              )}
-            />
+              <Controller
+                name="bloodGroup"
+                control={control}
+                defaultValue={clinicVisit?.bloodGroup}
+                render={({ field }) => (
+                  <>
+                    <FormLabel required error={!!errors?.bloodGroup?.message}>
+                      Blood Group
+                    </FormLabel>
+                    <RadioGroup {...field} row>
+                      {groups.map((state, index) => (
+                        <FormControlLabel
+                          value={state}
+                          control={<Radio />}
+                          label={state}
+                          key={index}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </>
+                )}
+              />
 
-            <Controller
-              name="rhesusFactor"
-              control={control}
-              defaultValue={clinicVisit?.rhesusFactor}
-              render={({ field }) => (
-                <>
-                  <FormLabel required error={!!errors?.rhesusFactor?.message}>
-                    Rhesus Factor
-                  </FormLabel>
-                  <RadioGroup {...field} row>
-                    {status.map((state, index) => (
-                      <FormControlLabel
-                        value={state}
-                        control={<Radio />}
-                        label={state}
-                        key={index}
-                      />
-                    ))}
-                  </RadioGroup>
-                </>
-              )}
-            />
+              <Controller
+                name="rhesusFactor"
+                control={control}
+                defaultValue={clinicVisit?.rhesusFactor}
+                render={({ field }) => (
+                  <>
+                    <FormLabel required error={!!errors?.rhesusFactor?.message}>
+                      Rhesus Factor
+                    </FormLabel>
+                    <RadioGroup {...field} row>
+                      {status.map((state, index) => (
+                        <FormControlLabel
+                          value={state}
+                          control={<Radio />}
+                          label={state}
+                          key={index}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </>
+                )}
+              />
 
-            <TextField
-              fullWidth
-              size="small"
-              label="Urinalysis"
-              rows={4}
-              multiline
-              defaultValue={clinicVisit?.urinalysis}
-              error={!!errors?.urinalysis?.message}
-              helperText={errors?.urinalysis?.message}
-              {...register('urinalysis')}
-            />
-            <TextField
-              fullWidth
-              size="small"
-              label="VDRL"
-              {...register('vdrl')}
-              defaultValue={clinicVisit?.vdrl}
-              error={!!errors?.vdrl?.message}
-              helperText={errors?.vdrl?.message}
-            />
-            <TextField
-              fullWidth
-              size="small"
-              label="Blood RBS"
-              {...register('bloodRBS')}
-              defaultValue={clinicVisit?.bloodRBS}
-              error={!!errors?.bloodRBS?.message}
-              helperText={errors?.bloodRBS?.message}
-            />
-            <Controller
-              name="hepatitisB"
-              control={control}
-              defaultValue={clinicVisit?.hepatitisB}
-              render={({ field }) => (
-                <>
-                  <FormLabel required error={!!errors?.hepatitisB?.message}>
-                    Hepatitis B
-                  </FormLabel>
-                  <RadioGroup {...field} row>
-                    {[...status, 'Not tested'].map((state, index) => (
-                      <FormControlLabel
-                        value={state}
-                        control={<Radio />}
-                        label={state}
-                        key={index}
-                      />
-                    ))}
-                  </RadioGroup>
-                </>
-              )}
-            />
+              <TextField
+                fullWidth
+                size="small"
+                label="Urinalysis"
+                rows={4}
+                multiline
+                defaultValue={clinicVisit?.urinalysis}
+                error={!!errors?.urinalysis?.message}
+                helperText={errors?.urinalysis?.message}
+                {...register('urinalysis')}
+              />
+              <TextField
+                fullWidth
+                size="small"
+                label="VDRL"
+                {...register('vdrl')}
+                defaultValue={clinicVisit?.vdrl}
+                error={!!errors?.vdrl?.message}
+                helperText={errors?.vdrl?.message}
+              />
+              <TextField
+                fullWidth
+                size="small"
+                label="Blood RBS"
+                {...register('bloodRBS')}
+                defaultValue={clinicVisit?.bloodRBS}
+                error={!!errors?.bloodRBS?.message}
+                helperText={errors?.bloodRBS?.message}
+              />
+              <Controller
+                name="hepatitisB"
+                control={control}
+                defaultValue={clinicVisit?.hepatitisB}
+                render={({ field }) => (
+                  <>
+                    <FormLabel required error={!!errors?.hepatitisB?.message}>
+                      Hepatitis B
+                    </FormLabel>
+                    <RadioGroup {...field} row>
+                      {[...status, 'Not tested'].map((state, index) => (
+                        <FormControlLabel
+                          value={state}
+                          control={<Radio />}
+                          label={state}
+                          key={index}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </>
+                )}
+              />
 
-            <Controller
-              name="TB"
-              control={control}
-              defaultValue={clinicVisit?.TB || ''}
-              render={({ field }) => (
-                <>
-                  <FormLabel required error={!!errors?.TB?.message}>
-                    TB
-                  </FormLabel>
-                  <RadioGroup {...field} row>
-                    {[...status, 'Not tested'].map((state, index) => (
-                      <FormControlLabel
-                        value={state}
-                        control={<Radio />}
-                        label={state}
-                        key={index}
-                      />
-                    ))}
-                  </RadioGroup>
-                </>
-              )}
-            />
+              <Controller
+                name="TB"
+                control={control}
+                defaultValue={clinicVisit?.TB || ''}
+                render={({ field }) => (
+                  <>
+                    <FormLabel required error={!!errors?.TB?.message}>
+                      TB
+                    </FormLabel>
+                    <RadioGroup {...field} row>
+                      {[...status, 'Not tested'].map((state, index) => (
+                        <FormControlLabel
+                          value={state}
+                          control={<Radio />}
+                          label={state}
+                          key={index}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </>
+                )}
+              />
 
-            <TextField
-              fullWidth
-              size="small"
-              label="Notes"
-              rows={4}
-              multiline
-              defaultValue={clinicVisit?.notes}
-              error={!!errors?.notes?.message}
-              helperText={errors?.notes?.message}
-              {...register('notes')}
-            />
-          </Stack>
-        </CardContent>
-        <CardActionArea>
-          <CardActions>
-            <Button variant="contained" color="success" type="submit">
-              {isLoading ? 'Recording' : 'Record'}
-            </Button>
-          </CardActions>
-        </CardActionArea>
-      </Card>
-    </form>
+              <TextField
+                fullWidth
+                size="small"
+                label="Notes"
+                rows={4}
+                multiline
+                defaultValue={clinicVisit?.notes}
+                error={!!errors?.notes?.message}
+                helperText={errors?.notes?.message}
+                {...register('notes')}
+              />
+            </Stack>
+          </CardContent>
+          <CardActionArea>
+            <CardActions>
+              <Button variant="contained" color="success" type="submit">
+                {isLoading ? 'Recording' : 'Record'}
+              </Button>
+            </CardActions>
+          </CardActionArea>
+        </Card>
+      </form>
+    </>
   )
 }
 

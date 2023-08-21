@@ -38,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
 
     const mthr = axios
-      .get(baseURL + 'clinicvisit/mother?motherId=' + mother, {
+      .get(baseURL + 'clinicvisit/bio?bioDataId=' + mother, {
         headers: {
           Authorization: `Bearer ${cookie}`
         }
