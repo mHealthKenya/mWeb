@@ -1,24 +1,23 @@
-import UsersByRoleComponent from '@components/Users/Role'
+import VisitTabs from '@components/Facilities/visittab'
 import { baseURL } from '@config/axios'
 import FacilityLayout from '@layout/FacilityLayout/FacilityLayout'
-import useUsersByRoleAndFacility from '@services/users/by-role-and-facility'
+import useVisitsByFacility from '@services/visits/byfacility'
 import axios from 'axios'
 import * as jwt from 'jsonwebtoken'
 import { GetServerSideProps } from 'next'
 import nookies from 'nookies'
-import { Users } from 'src/helpers/enums/users.enum'
 
-const MothersPage = ({ userDetails, mothers }: any) => {
-  const { data } = useUsersByRoleAndFacility(
-    { role: 'Mother', facilityId: userDetails.facilityId },
-    mothers
-  )
+const AllVisits = ({ clinicalVisits, bioData, userDetails }: any) => {
+  const { data: visits } = useVisitsByFacility(userDetails.facilityId, clinicalVisits)
+
   return (
     <FacilityLayout>
-      <UsersByRoleComponent users={data} facility={true} isFacility={true} user={userDetails} />{' '}
+      <VisitTabs visits={visits} bioData={bioData} admin={false} />
     </FacilityLayout>
   )
 }
+
+export default AllVisits
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookies = nookies.get(ctx)
@@ -27,10 +26,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   try {
     const user: any = await jwt.verify(cookie, `${process.env.NEXT_PUBLIC_JWT_SECRET}`)
-    if (user?.role !== Users.Facility) {
+
+    if (user.role !== 'Facility') {
       return {
         redirect: {
-          destination: '/',
+          destination: '/login',
           permanent: false
         }
       }
@@ -46,29 +46,28 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         return res.data
       })
 
-    const mothers = await axios
-
-      .get(
-        baseURL +
-          'users/roleandfacility?facilityId=' +
-          userDetails?.facilityId +
-          '&role=' +
-          Users.Mother,
-        {
-          headers: {
-            Authorization: `Bearer ${cookie}`
-          }
+    const bioData = await axios
+      .get(baseURL + 'biodata/facility?facilityId=' + userDetails.facilityId, {
+        headers: {
+          Authorization: `Bearer ${cookie}`
         }
-      )
-      .then((res) => {
-        return res.data
       })
+      .then((res) => res.data)
+
+    const clinicalVisits = await axios
+      .get(baseURL + 'clinicvisit/facility?facilityId=' + userDetails.facilityId, {
+        headers: {
+          Authorization: `Bearer ${cookie}`
+        }
+      })
+      .then((res) => res.data)
 
     return {
       props: {
         user,
-        mothers,
-        userDetails
+        userDetails,
+        clinicalVisits,
+        bioData
       }
     }
   } catch (error) {
@@ -80,5 +79,3 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   }
 }
-
-export default MothersPage

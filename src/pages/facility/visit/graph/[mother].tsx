@@ -1,42 +1,53 @@
-import UsersByRoleComponent from '@components/Users/Role'
+import WeightChart from '@components/Facilities/weightchart'
 import { baseURL } from '@config/axios'
 import FacilityLayout from '@layout/FacilityLayout/FacilityLayout'
-import useUsersByRoleAndFacility from '@services/users/by-role-and-facility'
 import axios from 'axios'
 import * as jwt from 'jsonwebtoken'
 import { GetServerSideProps } from 'next'
 import nookies from 'nookies'
-import { Users } from 'src/helpers/enums/users.enum'
 
-const MothersPage = ({ userDetails, mothers }: any) => {
-  const { data } = useUsersByRoleAndFacility(
-    { role: 'Mother', facilityId: userDetails.facilityId },
-    mothers
-  )
+const MotherWeightGraph = ({ mother }: any) => {
   return (
     <FacilityLayout>
-      <UsersByRoleComponent users={data} facility={true} isFacility={true} user={userDetails} />{' '}
+      <WeightChart visits={mother} />
     </FacilityLayout>
   )
 }
 
+export default MotherWeightGraph
+
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { params } = ctx
+
+  const mother = params?.mother
+
   const cookies = nookies.get(ctx)
 
   const cookie = cookies['access-token']
 
   try {
     const user: any = await jwt.verify(cookie, `${process.env.NEXT_PUBLIC_JWT_SECRET}`)
-    if (user?.role !== Users.Facility) {
+
+    if (user.role !== 'Facility') {
       return {
         redirect: {
-          destination: '/',
+          destination: '/login',
           permanent: false
         }
       }
     }
 
-    const userDetails = await axios
+    const mthr = axios
+      .get(baseURL + 'clinicvisit/bio?bioDataId=' + mother, {
+        headers: {
+          Authorization: `Bearer ${cookie}`
+        }
+      })
+      .then((res) => {
+        return res.data
+      })
+
+    const userD = axios
       .get(baseURL + 'users/user?id=' + user.id, {
         headers: {
           Authorization: `Bearer ${cookie}`
@@ -46,29 +57,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         return res.data
       })
 
-    const mothers = await axios
+    const [userDetails, motherV] = await Promise.all([userD, mthr])
 
-      .get(
-        baseURL +
-          'users/roleandfacility?facilityId=' +
-          userDetails?.facilityId +
-          '&role=' +
-          Users.Mother,
-        {
-          headers: {
-            Authorization: `Bearer ${cookie}`
-          }
-        }
-      )
-      .then((res) => {
-        return res.data
-      })
+    const reversed = motherV.reverse()
 
     return {
       props: {
         user,
-        mothers,
-        userDetails
+        userDetails,
+        mother: reversed
       }
     }
   } catch (error) {
@@ -80,5 +77,3 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   }
 }
-
-export default MothersPage

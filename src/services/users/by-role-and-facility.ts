@@ -1,5 +1,4 @@
 import { axiosConfig } from '@config/axios'
-import { UserByRole } from '@models/user-by-role'
 import { useQuery } from '@tanstack/react-query'
 
 export interface RoleAndFacility {
@@ -16,11 +15,10 @@ export const getUsersByRoleAndFacility = async (data: RoleAndFacility) => {
   return response
 }
 
-const useUsersByRoleAndFacility = (roleAndFacility: RoleAndFacility, initialData: UserByRole[]) =>
+const useUsersByRoleAndFacility = (data: RoleAndFacility, initialData: RoleAndFacility[]) =>
   useQuery({
-    queryKey: ['users-by-role-and-facility'],
-    queryFn: () => getUsersByRoleAndFacility(roleAndFacility),
-    enabled: !!roleAndFacility,
+    queryFn: () => getUsersByRoleAndFacility(data),
+    queryKey: ['RoleAndFacility' + data.facilityId + data.role],
     initialData
   })
 

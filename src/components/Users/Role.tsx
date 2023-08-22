@@ -1,10 +1,12 @@
 import AddBioDataComponent from '@components/Biodata/AddBioData'
 import SharedModal from '@components/Shared/Modal'
+import { Facility } from '@models/facility'
 import { UserByRole } from '@models/user-by-role'
 import { Add, Delete, Edit, Visibility } from '@mui/icons-material'
 import { Button } from '@mui/material'
 import Box from '@mui/material/Box'
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid'
+import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import {
   colsWithFacilityCol,
@@ -20,7 +22,11 @@ const UsersByRoleComponent: React.FC<{
   users: UserByRole[]
   facility?: boolean
   isFacility?: boolean
-}> = ({ users, facility, isFacility, user }) => {
+  facilities?: Facility[]
+  visit?: boolean
+  sadmin?: boolean
+}> = ({ users, facility, isFacility, facilities, visit, sadmin, user }) => {
+  const router = useRouter()
   const [open, setOpen] = useState(false)
   const [show, setShow] = useState(false)
   const [add, setAdd] = useState(false)
@@ -78,6 +84,14 @@ const UsersByRoleComponent: React.FC<{
     setMother(data)
   }
 
+  const handleRecord = (id: string) => {
+    router.push('/facility/visit/' + id)
+  }
+
+  const handleRecordAdmin = (id: string) => {
+    router.push('/sadmin/visit/' + id)
+  }
+
   const columnTypes = useMemo(() => {
     if (facility) {
       return colsWithFacilityCol
@@ -126,6 +140,37 @@ const UsersByRoleComponent: React.FC<{
             }
           }
         }
+
+        if (facility && visit) {
+          return {
+            field: col.field,
+            headerName: col.headerName,
+            width: 200,
+            renderCell: (params) => {
+              return (
+                <Box
+                  sx={{
+                    display: 'flex'
+                  }}>
+                  <Button
+                    variant="contained"
+                    color="info"
+                    sx={{ mr: 1 }}
+                    startIcon={<Add />}
+                    size="small"
+                    onClick={
+                      sadmin
+                        ? () => handleRecordAdmin(params.value.id)
+                        : () => handleRecord(params.value.id)
+                    }>
+                    Record Visit
+                  </Button>
+                </Box>
+              )
+            }
+          }
+        }
+
         return {
           field: col.field,
           headerName: col.headerName,
@@ -199,7 +244,7 @@ const UsersByRoleComponent: React.FC<{
 
   return (
     <>
-      <Box sx={{ height: 500, width: '100%' }}>
+      <Box sx={{ height: 450, width: '100%' }}>
         <DataGrid
           rows={rows}
           slots={{ toolbar: GridToolbar }}
@@ -222,7 +267,11 @@ const UsersByRoleComponent: React.FC<{
           open,
           handleToggle
         }}>
-        <EditUserWithRoleComponent user={user} handleToggle={handleToggle} />
+        <EditUserWithRoleComponent
+          user={user}
+          handleToggle={handleToggle}
+          facilities={facilities}
+        />
       </SharedModal>
 
       <SharedModal

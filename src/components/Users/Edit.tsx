@@ -1,7 +1,7 @@
 import CenterComponent from '@components/Shared/Center'
 import { gender } from '@data/gender'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { UserByRole } from '@models/user-by-role'
+import { Facility, UserByRole } from '@models/user-by-role'
 import {
   Button,
   Card,
@@ -42,23 +42,25 @@ export interface EditForm {
   email: string
   role: string
   gender: string
+  facilityId?: string
 }
 
 const roles = [Roles.ADMIN, Roles.FACILITY, Roles.CHV, Roles.MOTHER]
 
-const validationSchema = Yup.object().shape({
+const validationSchema: any = Yup.object().shape({
   f_name: Yup.string().required('First name is required'),
   l_name: Yup.string().required('Last name is required'),
   email: Yup.string().email('Invalid email address').required('Email is required'),
   role: Yup.string().required('Role is required'),
-  gender: Yup.string().required('Gender is required')
+  gender: Yup.string().required('Gender is required'),
+  facilityId: Yup.string().optional()
 })
 
-const EditUserWithRoleComponent: FC<{ user: UserByRole | undefined; handleToggle: () => void }> = ({
-  user,
-  handleToggle
-}) => {
-  
+const EditUserWithRoleComponent: FC<{
+  user: UserByRole | undefined
+  handleToggle: () => void
+  facilities?: Facility[]
+}> = ({ user, handleToggle, facilities }) => {
   const {
     register,
     handleSubmit,
@@ -132,6 +134,26 @@ const EditUserWithRoleComponent: FC<{ user: UserByRole | undefined; handleToggle
                   ))}
                 </Select>
               </FormControl>
+              {facilities ? (
+                <FormControl fullWidth size="small">
+                  <InputLabel id="demo-simple-select-facility">Facility</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-facility"
+                    id="demo-simple-select-facility"
+                    label="Facility"
+                    size="small"
+                    defaultValue={user?.facilityId || ''}
+                    {...register('facilityId')}
+                    error={!!errors.facilityId?.message}
+                    inputProps={{ 'data-testid': 'facility_input' }}>
+                    {facilities?.map((item) => (
+                      <MenuItem key={item.id} value={item.id}>
+                        {item.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              ) : null}
               <FormControl required>
                 <FormLabel id="gender-radio">Gender</FormLabel>
                 <RadioGroup aria-labelledby="gender" defaultValue="Female" {...register('gender')}>

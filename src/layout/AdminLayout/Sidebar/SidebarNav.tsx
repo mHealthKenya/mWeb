@@ -2,6 +2,7 @@ import { IconDefinition } from '@fortawesome/free-regular-svg-icons'
 import {
   faAdd,
   faGauge,
+  faHospital,
   faLocation,
   faMap,
   faUserAlt,
@@ -130,6 +131,10 @@ export default function SidebarNav() {
       </SidebarNavItem>
       <SidebarNavItem icon={faUserCheck} href="/sadmin/users/mother">
         Mothers
+      </SidebarNavItem>
+
+      <SidebarNavItem icon={faHospital} href="/sadmin/visits/all">
+        Visits
       </SidebarNavItem>
 
       <SidebarNavTitle>Coverage</SidebarNavTitle>
