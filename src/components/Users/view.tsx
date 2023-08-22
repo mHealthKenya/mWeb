@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState } from 'react'
 import {
   Table,
   TableContainer,
@@ -11,49 +11,45 @@ import {
   CardContent,
   CardHeader,
   CardActionArea,
-  CardActions,
-} from '@mui/material';
-import CenterComponent from '@components/Shared/Center';
-import { Edit } from '@mui/icons-material';
-import { UserByRole } from '@models/user-by-role';
-import SharedModal from '@components/Shared/Modal';
-import EditBioDataComponent from '@components/Biodata/editBioData';
+  CardActions
+} from '@mui/material'
+import CenterComponent from '@components/Shared/Center'
+import { Edit } from '@mui/icons-material'
+import { UserByRole } from '@models/user-by-role'
+import SharedModal from '@components/Shared/Modal'
+import EditBioDataComponent from '@components/Biodata/editBioData'
 
 interface ViewBioDataComponentProps {
-  bio: UserByRole | undefined;
-  handleToggle: () => void;
+  bio: UserByRole | undefined
+  handleToggle: () => void
 }
 
 const formatDate = (dateString: string | Date) => {
-  const date = dateString instanceof Date ? dateString : new Date(dateString);
+  const date = dateString instanceof Date ? dateString : new Date(dateString)
   const formattedDate = new Intl.DateTimeFormat('en-US', {
     month: '2-digit',
     day: '2-digit',
-    year: 'numeric',
-  }).format(date);
+    year: 'numeric'
+  }).format(date)
 
-  return formattedDate;
-};
-
-const ViewBioDataComponent: FC<ViewBioDataComponentProps> = ({
-  bio,
-  handleToggle
-}) => {
-
-const [open, setOpen] = useState(false)
-const [user, setUser] = useState<UserByRole | undefined>()
-// const [user, setUser] = useState<UserByRole>()
-
-const handleEdit = (user: UserByRole) => {
-  setOpen(true)
-  setUser(user)
+  return formattedDate
 }
 
+const ViewBioDataComponent: FC<ViewBioDataComponentProps> = ({ bio, handleToggle }) => {
+  const [open, setOpen] = useState(false)
+
+  const [user, setUser] = useState<UserByRole | undefined>()
+  // const [user, setUser] = useState<UserByRole>()
+
+  const handleEdit = (user: UserByRole) => {
+    setOpen(true)
+    setUser(user)
+  }
 
   return (
     <CenterComponent>
-      <Card sx={{minWidth: 700}}>
-      <CardHeader title={`${bio?.f_name} - Bio Data`} />
+      <Card sx={{ minWidth: 700 }}>
+        <CardHeader title={`${bio?.f_name} - Bio Data`} />
         <CardContent>
           <TableContainer>
             <Table>
@@ -100,41 +96,36 @@ const handleEdit = (user: UserByRole) => {
               </TableBody>
             </Table>
           </TableContainer>
-         <CardActionArea>
-          <CardActions>
-         
+          <CardActionArea>
+            <CardActions>
               <Button
                 variant="contained"
                 color="info"
                 startIcon={<Edit />}
                 size="small"
-                onClick={() => {handleEdit(bio!);
-                }} 
-              >
+                onClick={() => {
+                  handleEdit(bio!)
+                }}>
                 Edit
               </Button>
 
-              <Button variant="contained" color="error"  size="small" onClick={handleToggle}>
+              <Button variant="contained" color="error" size="small" onClick={handleToggle}>
                 Close
               </Button>
-
-          </CardActions>
-         </CardActionArea>
+            </CardActions>
+          </CardActionArea>
         </CardContent>
       </Card>
 
       <SharedModal
         items={{
           open,
-          handleToggle: () => setOpen(!open),
-        }}
-      >
-        {open && <EditBioDataComponent bioDataUpdate={user!} handleToggle={() => setOpen(false)} />}
+          handleToggle
+        }}>
+        <EditBioDataComponent bioDataUpdate={user!} handleToggle={handleToggle} />
       </SharedModal>
-
     </CenterComponent>
-  );
+  )
+}
 
-};
-
-export default ViewBioDataComponent;
+export default ViewBioDataComponent

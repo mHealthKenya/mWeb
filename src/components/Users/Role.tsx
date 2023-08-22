@@ -1,3 +1,4 @@
+import AddBioDataComponent from '@components/Biodata/AddBioData'
 import SharedModal from '@components/Shared/Modal'
 import { UserByRole } from '@models/user-by-role'
 import { Add, Delete, Edit, Visibility } from '@mui/icons-material'
@@ -13,27 +14,25 @@ import {
 } from 'src/data/users-by-role'
 import EditUserWithRoleComponent from './Edit'
 import ViewBioDataComponent from './view'
-import AddBioDataComponent from '@components/Biodata/AddBioData'
-
 
 const UsersByRoleComponent: React.FC<{
   user?: UserByRole
   users: UserByRole[]
   facility?: boolean
   isFacility?: boolean
-}> = ({ users, facility, isFacility, user}) => {
+}> = ({ users, facility, isFacility, user }) => {
   const [open, setOpen] = useState(false)
   const [show, setShow] = useState(false)
   const [add, setAdd] = useState(false)
   const [, setEditUser] = useState<UserByRole>()
-  const [data, setData] = useState<UserByRole>();
-  const [addBio, setAddBio] = useState<UserByRole>();
-  const [ , setIsLoading] = useState(true);
-  const [ , setError ] = useState<string | null>(null);
+  const [data, setData] = useState<UserByRole>()
+  const [addBio, setAddBio] = useState<UserByRole>()
+  const [, setIsLoading] = useState(true)
+  const [, setError] = useState<string | null>(null)
 
   const [mother, setMother] = useState<UserByRole>()
 
-//  const {bioData} = useAddBioData({facilityId : })
+  //  const {bioData} = useAddBioData({facilityId : })
 
   const handleToggle = () => {
     setOpen((open) => !open)
@@ -63,22 +62,21 @@ const UsersByRoleComponent: React.FC<{
   const handleViewDetails = async (bio: UserByRole) => {
     try {
       // console.log(bio)
-      
-      setData(bio);
-      setShow(true); 
-    } catch (error) {
-      setError('Error fetching biodata' + error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
-  const handleAdd =  (data: UserByRole ) => {
+      setData(bio)
+      setShow(true)
+    } catch (error) {
+      setError('Error fetching biodata' + error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleAdd = (data: UserByRole) => {
     setAdd(true)
     setAddBio(addBio)
     setMother(data)
   }
-
 
   const columnTypes = useMemo(() => {
     if (facility) {
@@ -102,31 +100,27 @@ const UsersByRoleComponent: React.FC<{
                   sx={{
                     display: 'flex'
                   }}>
-
-                    { params.value?.BioData?.length > 0 ?
-                  <Button
-                    variant="contained"
-                    color="info"
-                    sx={{ mr: 1 }}
-                    startIcon={<Visibility />}
-                    size="small"
-                    onClick={() => handleViewDetails(params.value)}
-                    >
+                  {params.value?.BioData?.length > 0 ? (
+                    <Button
+                      variant="contained"
+                      color="info"
+                      sx={{ mr: 1 }}
+                      startIcon={<Visibility />}
+                      size="small"
+                      onClick={() => handleViewDetails(params.value)}>
                       View Details
-                  </Button> 
-                  :
-
-                   <Button
-                    variant="contained"
-                    color="success" 
-                    sx={{ mr: 1 }}
-                    startIcon={<Add />}
-                    size="small"
-                    onClick={() => handleAdd(params.value)}>
-                    Add
-                  </Button> 
-                  }
-                  
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="success"
+                      sx={{ mr: 1 }}
+                      startIcon={<Add />}
+                      size="small"
+                      onClick={() => handleAdd(params.value)}>
+                      Add
+                    </Button>
+                  )}
                 </Box>
               )
             }
@@ -205,7 +199,7 @@ const UsersByRoleComponent: React.FC<{
 
   return (
     <>
-      <Box sx={{ height: 400, width: '100%' }}>
+      <Box sx={{ height: 500, width: '100%' }}>
         <DataGrid
           rows={rows}
           slots={{ toolbar: GridToolbar }}
@@ -213,7 +207,7 @@ const UsersByRoleComponent: React.FC<{
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 5
+                pageSize: 25
               }
             }
           }}
@@ -234,19 +228,25 @@ const UsersByRoleComponent: React.FC<{
       <SharedModal
         items={{
           open: show,
-          handleToggle : toggleView
+          handleToggle: toggleView
         }}>
-          
-        <ViewBioDataComponent bio={data} handleToggle={toggleView} /> 
+        <ViewBioDataComponent bio={data} handleToggle={toggleView} />
       </SharedModal>
 
+      {/* <SharedModal
+        items={{
+          open: openEdit,
+          handleToggle: handleEditComp
+        }}>
+        <EditBioDataComponent bioDataUpdate={user!} handleToggle={handleEditComp} />
+      </SharedModal> */}
 
       <SharedModal
         items={{
           open: add,
-          handleToggle : toggleAdd
+          handleToggle: toggleAdd
         }}>
-        <AddBioDataComponent  handleToggle={toggleAdd} user={user} mother={mother} />
+        <AddBioDataComponent handleToggle={toggleAdd} user={user} mother={mother} />
       </SharedModal>
     </>
   )
