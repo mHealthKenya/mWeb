@@ -1,7 +1,7 @@
 import AddBioDataComponent from '@components/Biodata/AddBioData'
 import SharedModal from '@components/Shared/Modal'
 import { UserByRole } from '@models/user-by-role'
-import { Add, Delete, Edit, Visibility } from '@mui/icons-material'
+import { Add, Create, Delete, Edit, Visibility } from '@mui/icons-material'
 import { Button } from '@mui/material'
 import Box from '@mui/material/Box'
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid'
@@ -14,6 +14,8 @@ import {
 } from 'src/data/users-by-role'
 import EditUserWithRoleComponent from './Edit'
 import ViewBioDataComponent from './view'
+import CreateFollowUpComponent from '@components/Followup/Createfollowup'
+import { Schedule } from '@models/followup'
 
 const UsersByRoleComponent: React.FC<{
   user?: UserByRole
@@ -27,10 +29,12 @@ const UsersByRoleComponent: React.FC<{
   const [, setEditUser] = useState<UserByRole>()
   const [data, setData] = useState<UserByRole>()
   const [addBio, setAddBio] = useState<UserByRole>()
+  const [followUp, setFollowUp] = useState(false)
   const [, setIsLoading] = useState(true)
   const [, setError] = useState<string | null>(null)
 
   const [mother, setMother] = useState<UserByRole>()
+  const [followUpCreate, setFollowUpCreate] = useState<Schedule>()
 
   //  const {bioData} = useAddBioData({facilityId : })
 
@@ -44,6 +48,10 @@ const UsersByRoleComponent: React.FC<{
 
   const toggleAdd = () => {
     setAdd((add) => !add)
+  }
+
+  const toggleFollowUp = () => {
+    setFollowUp((followUp) => !followUp)
   }
 
   const rows = useMemo(() => {
@@ -76,6 +84,12 @@ const UsersByRoleComponent: React.FC<{
     setAdd(true)
     setAddBio(addBio)
     setMother(data)
+  }
+
+  const handleFollowUp = (followUpCreate: Schedule) => {
+    setFollowUp(true)
+    // setAddBio(addBio)
+    setFollowUpCreate(followUpCreate)
   }
 
   const columnTypes = useMemo(() => {
@@ -121,6 +135,15 @@ const UsersByRoleComponent: React.FC<{
                       Add
                     </Button>
                   )}
+                  <Button
+                      variant="contained"
+                      color="success"
+                      sx={{ mr: 1 }}
+                      startIcon={<Create />}
+                      size="small"
+                      onClick={() => handleFollowUp(params.value)}>
+                      Create Follow-Up
+                    </Button>
                 </Box>
               )
             }
@@ -247,6 +270,14 @@ const UsersByRoleComponent: React.FC<{
           handleToggle: toggleAdd
         }}>
         <AddBioDataComponent handleToggle={toggleAdd} user={user} mother={mother} />
+      </SharedModal>
+
+      <SharedModal
+        items={{
+          open: followUp,
+          handleToggle: toggleFollowUp
+        }}>
+        <CreateFollowUpComponent handleToggle={toggleFollowUp} schedule={followUpCreate}/>
       </SharedModal>
     </>
   )
