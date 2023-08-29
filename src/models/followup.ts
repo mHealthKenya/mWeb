@@ -1,6 +1,8 @@
 export interface FollowUp {
-    scheduleId: Schedule;
-    chvId:      User;
+    scheduleId: string;
+    chvId:      string;
+    Schedule: Schedule
+    User: User
 }
 
 export interface User {
@@ -10,9 +12,10 @@ export interface User {
     phone_number: string
   }
 
-  export interface Schedule {
+export interface Schedule {
+    id: string;
     title: string
     description: string
     date: Date
-
+    status: string
   }

@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { axiosConfig } from "@config/axios"
 import Swal from 'sweetalert2';
 
-interface FollowUp {
+interface FollowUp{
     scheduleId: string
     chvId: string
 }

@@ -85,7 +85,7 @@ const ViewBioDataComponent: FC<ViewBioDataComponentProps> = ({ bio, handleToggle
                   <TableCell>{bio?.BioData[0].pregnancy_period}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>Last Clinic Visit:</TableCell>
+                  <TableCell>Last Clinic Visit:</TableCell>I 
                   <TableCell>{formatDate(bio!.BioData[0].last_clinic_visit)}</TableCell>
                 </TableRow>
                 <TableRow>

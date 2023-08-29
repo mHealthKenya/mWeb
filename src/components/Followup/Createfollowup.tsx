@@ -1,25 +1,64 @@
 import CenterComponent from '@components/Shared/Center'
-import { Schedule } from '@models/followup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { FollowUp, Schedule } from '@models/followup'
+import { UserByRole } from '@models/user-by-role'
 import { FollowTheSignsOutlined } from '@mui/icons-material'
 import { Box, Button, Card, CardActions, CardContent, CardHeader, TextField } from '@mui/material'
+import useFollowUp from '@services/followup/createfollowup'
 import React, { FC } from 'react'
+import { useForm } from 'react-hook-form'
+import * as Yup from 'yup'
 
+interface FollowUpData {
+  scheduleId: string,
+  chvId: string
+}
+
+const schema = Yup.object().shape({
+  scheduleId: Yup.string().required('Schedule is required'),
+  chvId: Yup.string().required('CHV is required')
+})
 
 const CreateFollowUpComponent : FC<{
-  schedule: Schedule | undefined
-   handleToggle: () => void
+   followUpCreate: FollowUp | undefined
+   handleToggle: () => void;
+   schedule?: Schedule
+   chv: UserByRole | undefined
    }> = ({
     handleToggle,
-    schedule
+    followUpCreate,
+    schedule,
+    chv
 }) => {
+  const {
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FollowUpData>({
+    resolver: yupResolver(schema)
+  })
+
+  console.log("errors", errors)
+
+  console.log("data", chv)
+
+
+
+  const { mutate, isLoading } = useFollowUp(reset)
+
+  const onSubmit = (data: FollowUpData) => {
+    mutate({
+      // scheduleId: followUpCreate?.scheduleId,
+      ...data
+    })
+  }
   
   return (
     <CenterComponent>
-        <form action="submit">
+       <form onSubmit={handleSubmit(onSubmit)}>
         <Card sx={{minWidth: 700}}>
           <CardHeader title={`Follow up`} />
         <CardContent>
-
         <Box
       component="form"
       sx={{
@@ -27,7 +66,7 @@ const CreateFollowUpComponent : FC<{
       }}
       noValidate
       autoComplete="off"
-    >
+      >
       <div>
       <TextField
         id="outlined-multiline-static"
@@ -47,6 +86,16 @@ const CreateFollowUpComponent : FC<{
       </div>
       <div>
       <TextField
+        id="outlined-multiline-static"
+        label="Schedule"
+        multiline
+        defaultValue={schedule?.id}
+        disabled
+        rows={3}
+      />
+      </div>
+      <div>
+      <TextField
           id="outlined-multiline-static"
           label="Date"
           multiline
@@ -57,7 +106,7 @@ const CreateFollowUpComponent : FC<{
         id="outlined-multiline-static"
         label="CHV"
         multiline
-        defaultValue="Default Value"
+        defaultValue={chv?.id}        
         disabled
       />
       </div>
@@ -69,11 +118,12 @@ const CreateFollowUpComponent : FC<{
         color="success"
         type="submit"
         startIcon={<FollowTheSignsOutlined />}
-        // disabled={isLoading}
+        disabled={isLoading}
         data-testid="submit_button"
         >
             Follow Up
         </Button>
+
         <Button variant="contained" color="error" onClick={handleToggle}>
               Cancel
             </Button>

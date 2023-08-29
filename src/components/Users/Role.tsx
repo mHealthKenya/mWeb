@@ -15,7 +15,7 @@ import {
 import EditUserWithRoleComponent from './Edit'
 import ViewBioDataComponent from './view'
 import CreateFollowUpComponent from '@components/Followup/Createfollowup'
-import { Schedule } from '@models/followup'
+import { FollowUp, Schedule } from '@models/followup'
 
 const UsersByRoleComponent: React.FC<{
   user?: UserByRole
@@ -26,15 +26,17 @@ const UsersByRoleComponent: React.FC<{
   const [open, setOpen] = useState(false)
   const [show, setShow] = useState(false)
   const [add, setAdd] = useState(false)
+  const [followUp, setFollowUp] = useState(false)
   const [, setEditUser] = useState<UserByRole>()
   const [data, setData] = useState<UserByRole>()
   const [addBio, setAddBio] = useState<UserByRole>()
-  const [followUp, setFollowUp] = useState(false)
   const [, setIsLoading] = useState(true)
   const [, setError] = useState<string | null>(null)
 
   const [mother, setMother] = useState<UserByRole>()
-  const [followUpCreate, setFollowUpCreate] = useState<Schedule>()
+  const [chv, setChv] = useState<UserByRole>()
+  const [followUpCreate, setFollowUpCreate] = useState<FollowUp>()
+  const [schedule, setSchedule] = useState<Schedule>()
 
   //  const {bioData} = useAddBioData({facilityId : })
 
@@ -86,10 +88,11 @@ const UsersByRoleComponent: React.FC<{
     setMother(data)
   }
 
-  const handleFollowUp = (followUpCreate: Schedule) => {
+  const handleFollowUp = (followUpCreate: FollowUp)=> {
     setFollowUp(true)
-    // setAddBio(addBio)
     setFollowUpCreate(followUpCreate)
+    setSchedule(schedule)
+    setChv(chv)
   }
 
   const columnTypes = useMemo(() => {
@@ -141,7 +144,9 @@ const UsersByRoleComponent: React.FC<{
                       sx={{ mr: 1 }}
                       startIcon={<Create />}
                       size="small"
-                      onClick={() => handleFollowUp(params.value)}>
+                      onClick={() =>  {
+                        handleFollowUp(params.value)
+                      }}>
                       Create Follow-Up
                     </Button>
                 </Box>
@@ -277,7 +282,7 @@ const UsersByRoleComponent: React.FC<{
           open: followUp,
           handleToggle: toggleFollowUp
         }}>
-        <CreateFollowUpComponent handleToggle={toggleFollowUp} schedule={followUpCreate}/>
+        <CreateFollowUpComponent handleToggle={toggleFollowUp} followUpCreate={followUpCreate} schedule={schedule} chv={chv}/>
       </SharedModal>
     </>
   )
