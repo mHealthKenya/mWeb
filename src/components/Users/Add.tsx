@@ -28,11 +28,11 @@ import useAddUser from '../../services/users/add-user'
 export interface AddUserFormProps {
   f_name: string
   l_name: string
-  email: string
+  email?: string
   national_id: string
   gender: string
   phone_number: string
-  facilityId: string
+  facilityId?: string
   role: string
 }
 
@@ -55,7 +55,7 @@ const AddUserComponent: FC<{ facilities: Facility[] }> = ({ facilities }) => {
     handleSubmit,
     formState: { errors },
     reset
-  } = useForm<AddUserFormProps>({
+  } = useForm({
     resolver: yupResolver(schema)
   })
 

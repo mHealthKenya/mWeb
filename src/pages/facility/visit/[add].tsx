@@ -6,7 +6,7 @@ import * as jwt from 'jsonwebtoken'
 import { GetServerSideProps } from 'next'
 import nookies from 'nookies'
 
-const AddVisitPage = ({ lastVisit, userDetails, bioDataId }: any) => {
+const AddVisitPage = ({ lastVisit, userDetails, bioDataId, userDetailsBio }: any) => {
   return (
     <FacilityLayout>
       <AddVisitComponent
@@ -14,6 +14,7 @@ const AddVisitPage = ({ lastVisit, userDetails, bioDataId }: any) => {
         facilityAdmin={userDetails}
         admin={false}
         bioDataId={bioDataId}
+        userDetails={userDetailsBio}
       />
     </FacilityLayout>
   )
@@ -58,14 +59,23 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       })
       .then((res) => res.data)
 
-    const [userDetails, lastVisit] = await Promise.all([userD, lastV])
+    const userDBio = axios
+      .get(baseURL + 'biodata/byid?id=' + params?.add, {
+        headers: {
+          Authorization: `Bearer ${cookie}`
+        }
+      })
+      .then((res) => res.data)
+
+    const [userDetails, lastVisit, userDetailsBio] = await Promise.all([userD, lastV, userDBio])
 
     return {
       props: {
         user,
         userDetails,
         lastVisit,
-        bioDataId: params?.add
+        bioDataId: params?.add,
+        userDetailsBio
       }
     }
   } catch (error) {

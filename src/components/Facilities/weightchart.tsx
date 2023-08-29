@@ -20,7 +20,8 @@ const WeightChart: FC<{ visits: ClinicalVisit[] }> = ({ visits }) => {
     () =>
       visits.map((visit) => ({
         Date: dayjs(new Date(visit.createdAt)).format('YY-MM-DD'),
-        Weight: +visit.weight
+        Weight: +visit.weight,
+        BMI: +visit.weight / (((+visit.bioData.height / 100) * +visit.bioData.height) / 100)
       })),
     [visits]
   )
@@ -49,6 +50,7 @@ const WeightChart: FC<{ visits: ClinicalVisit[] }> = ({ visits }) => {
               <Tooltip />
               <Legend />
               <Line type="monotone" dataKey="Weight" stroke="#82ca9d" />
+              <Line type="monotone" dataKey="BMI" stroke="#d8392b" />
             </LineChart>
           </ResponsiveContainer>
         </CardContent>

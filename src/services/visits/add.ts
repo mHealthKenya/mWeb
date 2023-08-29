@@ -17,6 +17,7 @@ interface Visit {
   hepatitisB: string
   notes: string
   TB: string
+  date: string
 }
 const addVisit = async (data: Visit) => {
   const axiosInstance = await axiosConfig()

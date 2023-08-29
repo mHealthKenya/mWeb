@@ -16,9 +16,14 @@ import {
   TextField
 } from '@mui/material'
 import useAddVisit from '@services/visits/add'
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import * as Yup from 'yup'
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import dayjs, { Dayjs } from 'dayjs'
+import { BiodataUser } from '@models/biodatauser'
 
 interface FormProps {
   weight: string
@@ -56,7 +61,16 @@ const AddVisitComponent: FC<{
   clinicVisit: ClinicalVisit | null
   admin: boolean
   bioDataId: string
-}> = ({ facilityAdmin, clinicVisit, admin, bioDataId }) => {
+  userDetails: BiodataUser
+}> = ({ facilityAdmin, clinicVisit, admin, bioDataId, userDetails }) => {
+  const now = dayjs(new Date()).format('YYYY-MM-DDTHH:mm')
+
+  const [date, setDate] = useState(dayjs(now))
+
+  const handleDateChange = (value: Dayjs) => {
+    setDate(value)
+  }
+
   const {
     register,
     handleSubmit,
@@ -73,14 +87,15 @@ const AddVisitComponent: FC<{
     mutate({
       ...data,
       bioDataId,
-      facilityId: facilityAdmin.facilityId || ''
+      facilityId: facilityAdmin.facilityId || '',
+      date: date.toISOString()
     })
   }
 
-  const titleString = `Record clinic visit for ${clinicVisit?.bioData?.user.f_name} ${clinicVisit?.bioData?.user.f_name}`
+  const titleString = `Record clinic visit for ${userDetails?.user.f_name} ${userDetails?.user.l_name}`
 
   return (
-    <>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Card>
           <CardHeader title={titleString} />
@@ -249,6 +264,13 @@ const AddVisitComponent: FC<{
                 )}
               />
 
+              <DateTimePicker
+                label="Date and Time of Visit"
+                onChange={(i) => handleDateChange(i!)}
+                slotProps={{ textField: { size: 'small' } }}
+                value={date}
+              />
+
               <TextField
                 fullWidth
                 size="small"
@@ -271,7 +293,7 @@ const AddVisitComponent: FC<{
           </CardActionArea>
         </Card>
       </form>
-    </>
+    </LocalizationProvider>
   )
 }
 
