@@ -55,7 +55,7 @@ const AddBioDataComponent : FC<{ handleToggle: ()  => void; user?: UserByRole, m
    
     console.log('called', {...user, 
       last_clinic_visit: selectedClinicVisit, 
-      last_monthly_period: selectedMonthlyPeriod, 
+      last_monthly_period: selectedMonthlyPeriod,
       expected_delivery_date: selectedDeliveryDate, facilityId: user?.facilityId })
 
     const item = {

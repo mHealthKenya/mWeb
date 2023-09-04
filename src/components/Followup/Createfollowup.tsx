@@ -9,24 +9,26 @@ import React, { FC } from 'react'
 import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
-interface FollowUpData {
-  scheduleId: string,
-  chvId: string
+export interface FollowUpProps {
+  description: string,
+  // scheduleId: string,
+  // chvId: string
 }
 
 const schema = Yup.object().shape({
-  scheduleId: Yup.string().required('Schedule is required'),
-  chvId: Yup.string().required('CHV is required')
+  description: Yup.string().optional(),
+  // scheduleId: Yup.string().required('Schedule is required'),
+  // chvId: Yup.string().required('CHV is required')
 })
 
 const CreateFollowUpComponent : FC<{
-   followUpCreate: FollowUp | undefined
+   followUpCreate?: FollowUp
    handleToggle: () => void;
    schedule?: Schedule
-   chv: UserByRole | undefined
+   chv?: UserByRole
    }> = ({
     handleToggle,
-    followUpCreate,
+    // followUpCreate,
     schedule,
     chv
 }) => {
@@ -34,23 +36,30 @@ const CreateFollowUpComponent : FC<{
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FollowUpData>({
+  } = useForm<FollowUpProps>({
     resolver: yupResolver(schema)
   })
 
   console.log("errors", errors)
 
-  console.log("data", chv)
-
-
+  console.log("data", schedule)
 
   const { mutate, isLoading } = useFollowUp(reset)
 
-  const onSubmit = (data: FollowUpData) => {
-    mutate({
-      // scheduleId: followUpCreate?.scheduleId,
-      ...data
-    })
+  const onSubmit = (data: FollowUpProps) => {
+
+    console.log("called",{...schedule, id: chv?.id})
+
+    const item = {
+      ...data,
+      id: chv?.id || '',
+      scheduleId: schedule?.id || ''
+    }
+
+    mutate(item);
+
+    handleToggle();
+  
   }
   
   return (

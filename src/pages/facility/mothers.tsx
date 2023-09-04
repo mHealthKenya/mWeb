@@ -11,7 +11,7 @@ import { Users } from 'src/helpers/enums/users.enum'
 const MothersPage = ({userDetails, mothers,  }: any) => {
 
 
-  const {data} = useUsersByRoleAndFacility({role : 'Mother', facilityId : userDetails.facilityId}, mothers)
+  const {data} = useUsersByRoleAndFacility({role : 'Mother', facilityId : userDetails.facilityId}, mothers, )
   return (
     <FacilityLayout>
       <UsersByRoleComponent users={data} facility={true} isFacility={true} user={userDetails} />{' '}

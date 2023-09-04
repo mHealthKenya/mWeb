@@ -92,7 +92,7 @@ const UsersByRoleComponent: React.FC<{
     setFollowUp(true)
     setFollowUpCreate(followUpCreate)
     setSchedule(schedule)
-    setChv(chv)
+    setChv(data)
   }
 
   const columnTypes = useMemo(() => {
