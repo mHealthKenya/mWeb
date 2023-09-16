@@ -22,7 +22,7 @@ const useFollowUp = (completeFn: () => void) => {
         onSuccess: async (data) => {
             await Promise.all([
                 // queryClient.invalidateQueries(['followup', data.scheduleId]),
-                queryClient.invalidateQueries(['users-by-role', data.chvId])
+                queryClient.invalidateQueries(['users-by-role',     data.chvId])
             ])
             Swal.fire({
                 title: 'Success!',

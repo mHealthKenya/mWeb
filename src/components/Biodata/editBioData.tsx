@@ -16,7 +16,7 @@ export interface EditBioDataProps {
   active: boolean
   age: string
   pregnancy_period: string
-  facilityId: string
+  facilityId: string  
   previous_pregnancies: string
 }
 
@@ -33,7 +33,10 @@ const bioDataUpdateSchema = Yup.object().shape({
 const EditBioDataComponent: FC<{
   bioDataUpdate: UserByRole | undefined
   handleToggle: () => void
-}> = ({ bioDataUpdate, handleToggle }) => {
+}> = ({
+  bioDataUpdate,
+  handleToggle
+ }) => {
   const {
     register,
     handleSubmit,

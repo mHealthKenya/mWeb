@@ -13,32 +13,35 @@ import {
   rowsWithoutFacility
 } from 'src/data/users-by-role'
 import EditUserWithRoleComponent from './Edit'
-import ViewBioDataComponent from './view'
+import ViewBioDataComponent from '../Biodata/view'
 import CreateFollowUpComponent from '@components/Followup/Createfollowup'
 import { FollowUp, Schedule } from '@models/followup'
+import AddBirthPlanComponent from '@components/Birthplan/Create'
 
 const UsersByRoleComponent: React.FC<{
+  chv?: UserByRole
+  schedule?: Schedule
   user?: UserByRole
   users: UserByRole[]
   facility?: boolean
   isFacility?: boolean
-}> = ({ users, facility, isFacility, user }) => {
+}> = ({ users, facility, isFacility, user, chv, schedule }) => {
   const [open, setOpen] = useState(false)
   const [show, setShow] = useState(false)
   const [add, setAdd] = useState(false)
   const [followUp, setFollowUp] = useState(false)
+  const [addBirthPlan, setAddBirthPlan] = useState(false)
   const [, setEditUser] = useState<UserByRole>()
   const [data, setData] = useState<UserByRole>()
   const [addBio, setAddBio] = useState<UserByRole>()
+  const [birthPlan, setBirthPlan] = useState<UserByRole>()
   const [, setIsLoading] = useState(true)
   const [, setError] = useState<string | null>(null)
 
   const [mother, setMother] = useState<UserByRole>()
-  const [chv, setChv] = useState<UserByRole>()
+  // const [chv, setChv] = useState<UserByRole>()
   const [followUpCreate, setFollowUpCreate] = useState<FollowUp>()
-  const [schedule, setSchedule] = useState<Schedule>()
-
-  //  const {bioData} = useAddBioData({facilityId : })
+  // const [schedule, setSchedule] = useState<Schedule>()
 
   const handleToggle = () => {
     setOpen((open) => !open)
@@ -56,6 +59,10 @@ const UsersByRoleComponent: React.FC<{
     setFollowUp((followUp) => !followUp)
   }
 
+  const toggleAddBirthPlan = () => {
+    setAddBirthPlan((addBirthPlan) => !addBirthPlan)
+  }
+
   const rows = useMemo(() => {
     if (facility) {
       return rowsWithFacility(users)
@@ -71,8 +78,6 @@ const UsersByRoleComponent: React.FC<{
 
   const handleViewDetails = async (bio: UserByRole) => {
     try {
-      // console.log(bio)
-
       setData(bio)
       setShow(true)
     } catch (error) {
@@ -88,11 +93,17 @@ const UsersByRoleComponent: React.FC<{
     setMother(data)
   }
 
-  const handleFollowUp = (followUpCreate: FollowUp)=> {
+  const handleFollowUp = (followUpCreate: FollowUp) => {
     setFollowUp(true)
     setFollowUpCreate(followUpCreate)
-    setSchedule(schedule)
-    setChv(data)
+    // setSchedule(schedule)
+    // setChv(data)
+  }
+
+  const handlAddBirthPlan = (data: UserByRole) => {
+    setAddBirthPlan(true)
+    setBirthPlan(birthPlan)
+    setMother(data)
   }
 
   const columnTypes = useMemo(() => {
@@ -139,16 +150,27 @@ const UsersByRoleComponent: React.FC<{
                     </Button>
                   )}
                   <Button
-                      variant="contained"
-                      color="success"
-                      sx={{ mr: 1 }}
-                      startIcon={<Create />}
-                      size="small"
-                      onClick={() =>  {
-                        handleFollowUp(params.value)
-                      }}>
-                      Create Follow-Up
-                    </Button>
+                    variant="contained"
+                    color="success"
+                    sx={{ mr: 1 }}
+                    startIcon={<Create />}
+                    size="small"
+                    onClick={() => {
+                      handleFollowUp(params.value)
+                    }}>
+                    Follow-Up
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    sx={{ mr: 1 }}
+                    startIcon={<Add />}
+                    size="small"
+                    onClick={() => {
+                      handlAddBirthPlan(params.value)
+                    }}>
+                    Birth plan
+                  </Button>
                 </Box>
               )
             }
@@ -282,7 +304,20 @@ const UsersByRoleComponent: React.FC<{
           open: followUp,
           handleToggle: toggleFollowUp
         }}>
-        <CreateFollowUpComponent handleToggle={toggleFollowUp} followUpCreate={followUpCreate} schedule={schedule} chv={chv}/>
+        <CreateFollowUpComponent
+          handleToggle={toggleFollowUp}
+          followUpCreate={followUpCreate}
+          schedule={schedule}
+          chv={chv}
+        />
+      </SharedModal>
+
+      <SharedModal
+        items={{
+          open: addBirthPlan,
+          handleToggle: toggleAddBirthPlan
+        }}>
+        <AddBirthPlanComponent handleToggle={toggleAddBirthPlan} user={user}  mother={mother}/>
       </SharedModal>
     </>
   )

@@ -10,22 +10,22 @@ import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
 export interface FollowUpProps {
-  description: string,
+  // description: string,
   // scheduleId: string,
-  // chvId: string
+  chvId: string
 }
 
 const schema = Yup.object().shape({
-  description: Yup.string().optional(),
-  // scheduleId: Yup.string().required('Schedule is required'),
-  // chvId: Yup.string().required('CHV is required')
+  // description: Yup.string().optional(),
+// scheduleId: Yup.string().required('Schedule is required'),
+  chvId: Yup.string().required('CHV is required')
 })
 
 const CreateFollowUpComponent : FC<{
    followUpCreate?: FollowUp
-   handleToggle: () => void;
    schedule?: Schedule
    chv?: UserByRole
+   handleToggle: () => void;
    }> = ({
     handleToggle,
     // followUpCreate,
@@ -34,6 +34,7 @@ const CreateFollowUpComponent : FC<{
 }) => {
   const {
     handleSubmit,
+    register,
     reset,
     formState: { errors },
   } = useForm<FollowUpProps>({
@@ -42,24 +43,21 @@ const CreateFollowUpComponent : FC<{
 
   console.log("errors", errors)
 
-  console.log("data", schedule)
+  // console.log("data", schedule)
 
   const { mutate, isLoading } = useFollowUp(reset)
 
   const onSubmit = (data: FollowUpProps) => {
 
-    console.log("called",{...schedule, id: chv?.id})
+    console.log("called",{...chv, chvId: chv?.id})
 
     const item = {
       ...data,
-      id: chv?.id || '',
-      scheduleId: schedule?.id || ''
+      chvId: chv?.id || '',
+      scheduleId: schedule?.id || '',
     }
-
     mutate(item);
-
     handleToggle();
-  
   }
   
   return (
@@ -100,6 +98,8 @@ const CreateFollowUpComponent : FC<{
         multiline
         defaultValue={schedule?.id}
         disabled
+        // error={!!errors.scheduleId}
+        // helperText={errors.scheduleId?.message}
         rows={3}
       />
       </div>
@@ -110,14 +110,39 @@ const CreateFollowUpComponent : FC<{
           multiline
           defaultValue="Default Value"
         /> 
-        
-        <TextField
-        id="outlined-multiline-static"
+             
+      <TextField
+        // id="outlined-multiline-static"
         label="CHV"
-        multiline
-        defaultValue={chv?.id}        
-        disabled
+        // multiline
+        defaultValue={chv?.id}
+        {...register('chvId')}
+        helperText={errors.chvId?.message}  
+        error={!!errors.chvId?.message}   
+        // disabled
+        inputProps={{ 'data-testid': 'chvId_input' }}
       />
+
+          {/* <FormControl fullWidth size="small" required>
+              <InputLabel id="role">CHV</InputLabel>
+              <Select
+                labelId="role-label"
+                id="role"
+                label="Role"
+                {...register('chvId')}
+                required
+                error={!!errors?.chvId?.message}
+                defaultValue={chv?.id}
+                inputProps={{ 'data-testid': 'chvId_input' }}>
+                {rolesChv.map((chvId, index) => (
+                  <MenuItem value={chvId} key={index}>
+                    {chvId}
+                  </MenuItem>
+                ))}
+              </Select>
+              <FormHelperText>{errors?.chvId?.message}</FormHelperText>
+            </FormControl> */}
+
       </div>
       </Box>
 

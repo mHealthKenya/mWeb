@@ -8,13 +8,13 @@ import { GetServerSideProps } from 'next'
 import nookies from 'nookies'
 import { Users } from 'src/helpers/enums/users.enum'
 
-const MothersPage = ({userDetails, mothers,  }: any) => {
+const MothersPage = ({ userDetails, mothers }: any) => {
 
 
   const {data} = useUsersByRoleAndFacility({role : 'Mother', facilityId : userDetails.facilityId}, mothers, )
   return (
     <FacilityLayout>
-      <UsersByRoleComponent users={data} facility={true} isFacility={true} user={userDetails} />{' '}
+      <UsersByRoleComponent users={data} facility={true} isFacility={true} user={userDetails} chv={userDetails} schedule={userDetails}/>{' '}
     </FacilityLayout>
   )
 }
@@ -63,10 +63,29 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         return res.data
       })
 
+    const chv = await axios
+      .get(
+        baseURL +
+        'users/roleandfacility?facilityId=' +
+        userDetails?.facilityId +
+        '&role=' +
+        Users.CHV,
+        {
+          headers: {
+            Authorization: `Bearer ${cookie}`
+          }
+        }
+      )
+      .then((res) => {
+        return res.data
+      })
+
+
     return {
       props: {
         user,
         mothers,
+        chv,
         userDetails,
         
       }
