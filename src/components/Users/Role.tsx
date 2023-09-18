@@ -1,7 +1,7 @@
 import AddBioDataComponent from '@components/Biodata/AddBioData'
 import SharedModal from '@components/Shared/Modal'
 import { UserByRole } from '@models/user-by-role'
-import { Add, Create, Delete, Edit, Visibility } from '@mui/icons-material'
+import { Add, Create, Delete, Edit, PregnantWoman, PregnantWomanOutlined, PregnantWomanRounded, PregnantWomanTwoTone, Visibility } from '@mui/icons-material'
 import { Button } from '@mui/material'
 import Box from '@mui/material/Box'
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid'
@@ -121,7 +121,7 @@ const UsersByRoleComponent: React.FC<{
           return {
             field: col.field,
             headerName: col.headerName,
-            width: 500,
+            width: 800,
             renderCell: (params) => {
               return (
                 <Box
@@ -170,6 +170,17 @@ const UsersByRoleComponent: React.FC<{
                       handlAddBirthPlan(params.value)
                     }}>
                     Birth plan
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ mr: 1 }}
+                    startIcon={<PregnantWoman />}
+                    size="small"
+                    onClick={() => {
+                      handlAddBirthPlan(params.value)
+                    }}>
+                    View Birth plan
                   </Button>
                 </Box>
               )

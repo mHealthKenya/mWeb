@@ -28,17 +28,17 @@ export interface AddBirthPlanProps {
 const schema = Yup.object().shape({
   delivery_mode: Yup.string().required(),
   preferred_transport: Yup.string().required(),
-  alternative_facility_id: Yup.string().required(),
-  support_person_name: Yup.string().required(),
-  support_person_phone: Yup.string().required(),
-  preferred_attendant_name: Yup.string().required(),
-  preferred_attendant_phone: Yup.string().required(),
-  blood_donor_name: Yup.string().required(),
-  blood_donor_phone: Yup.string().required(),
-  emergency_decision_maker_phone: Yup.string().required(),
-  emergency_decision_maker_name: Yup.string().required(),
-  emergency_cs_plan: Yup.string().required(),
-  savings_plan: Yup.string().required(),
+  alternative_facility_id: Yup.string().optional(),
+  support_person_name: Yup.string().optional(),
+  support_person_phone: Yup.string().optional(),
+  preferred_attendant_name: Yup.string().optional(),
+  preferred_attendant_phone: Yup.string().optional(),
+  blood_donor_name: Yup.string().optional(),
+  blood_donor_phone: Yup.string().optional(),
+  emergency_decision_maker_phone: Yup.string().optional(),
+  emergency_decision_maker_name: Yup.string().optional(),
+  emergency_cs_plan: Yup.string().optional(),
+  savings_plan: Yup.string().optional(),
   delivery_bag: Yup.boolean().required()
 })
 
@@ -64,7 +64,8 @@ const AddBirthPlanComponent: FC<{
       ...data,
 
       facilityId: user?.facilityId || '',
-      motherId: mother?.id || ''
+      motherId: mother?.id || '',
+      alternative_facility_id: user?.facilityId || ''
     }
     mutate(item)
 
