@@ -1,34 +1,48 @@
 import CenterComponent from '@components/Shared/Center'
+import SharedModal from '@components/Shared/Modal'
 import { UserByRole } from '@models/user-by-role'
+import { Update } from '@mui/icons-material'
 import {
   Button,
+  Card,
   CardActionArea,
   CardActions,
   CardContent,
   CardHeader,
+  Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow
 } from '@mui/material'
-import React, { FC } from 'react'
-import { Card, TabContainer, Table } from 'react-bootstrap'
+import React, { FC, useState } from 'react'
+import { UpdateBirthPlanComponent } from './editBirthPlan'
 
 export const ViewBirthPlanComponent: FC<{
   handleToggle: () => void
   birthPlan: UserByRole | undefined
 }> = ({ handleToggle, birthPlan }) => {
+  const [open, setOpen] = useState(false)
+
+  const [user, setUser] = useState<UserByRole | undefined>()
+
+  const handleUpdate = (user: UserByRole) => {
+    setOpen(true)
+    setUser(user)
+  }
+
   return (
     <CenterComponent>
-      <Card>
+      <Card sx={{ minWidth: 700 }}>
         <CardHeader title={`${birthPlan?.f_name} - Birth Plan`} />
         <CardContent>
-          <TabContainer>
+          <TableContainer>
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Field</TableCell>
-                  <TableCell>Value</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>Field</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>Value</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -90,9 +104,20 @@ export const ViewBirthPlanComponent: FC<{
                 </TableRow>
               </TableBody>
             </Table>
-          </TabContainer>
+          </TableContainer>
           <CardActionArea>
             <CardActions>
+              <Button
+                variant="contained"
+                color="info"
+                startIcon={<Update />}
+                size="small"
+                onClick={() => {
+                  handleUpdate(birthPlan!)
+                }}>
+                Update
+              </Button>
+
               <Button variant="contained" color="error" size="small" onClick={handleToggle}>
                 close
               </Button>
@@ -100,6 +125,14 @@ export const ViewBirthPlanComponent: FC<{
           </CardActionArea>
         </CardContent>
       </Card>
+
+      <SharedModal
+        items={{
+          open,
+          handleToggle
+        }}>
+        <UpdateBirthPlanComponent handleToggle={handleToggle} birthPlanUpdate={user!}/>
+      </SharedModal>
     </CenterComponent>
   )
 }

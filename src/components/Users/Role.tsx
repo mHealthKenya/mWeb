@@ -17,7 +17,7 @@ import ViewBioDataComponent from '../Biodata/view'
 import CreateFollowUpComponent from '@components/Followup/Createfollowup'
 import { FollowUp, Schedule } from '@models/followup'
 import AddBirthPlanComponent from '@components/Birthplan/Create'
-import { ViewBirthPlanComponent } from '@components/Birthplan/view'
+import { ViewBirthPlanComponent } from '@components/Birthplan/viewBirthPlan'
 
 const UsersByRoleComponent: React.FC<{
   chv?: UserByRole
@@ -179,31 +179,31 @@ const UsersByRoleComponent: React.FC<{
                     Follow-Up
                   </Button>
 
-                  {/* {params.value?.BirthPlan?.length > 0 ? ( */}
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{ mr: 1 }}
-                    startIcon={<PregnantWoman />}
-                    size="small"
-                    onClick={() => {
-                      handleViewBirthPlan(params.value)
-                    }}>
-                    View Birth plan
-                  </Button>
-                  {/* ) : ( */}
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    sx={{ mr: 1 }}
-                    startIcon={<Add />}
-                    size="small"
-                    onClick={() => {
-                      handlAddBirthPlan(params.value)
-                    }}>
-                    Birth plan
-                  </Button>
-                  {/* )} */}
+                  {params.value?.BirthPlan?.length > 0 ? (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      sx={{ mr: 1 }}
+                      startIcon={<PregnantWoman />}
+                      size="small"
+                      onClick={() => {
+                        handleViewBirthPlan(params.value)
+                      }}>
+                      View Birth plan
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      sx={{ mr: 1 }}
+                      startIcon={<Add />}
+                      size="small"
+                      onClick={() => {
+                        handlAddBirthPlan(params.value)
+                      }}>
+                      Birth plan
+                    </Button>
+                  )}
                 </Box>
               )
             }
@@ -282,7 +282,7 @@ const UsersByRoleComponent: React.FC<{
 
   return (
     <>
-      <Box sx={{ height: 500, width: '100%' }}>
+      <Box sx={{ height: 800, width: '100%' }}>
         <DataGrid
           rows={rows}
           slots={{ toolbar: GridToolbar }}

@@ -55,8 +55,8 @@ const ViewBioDataComponent: FC<ViewBioDataComponentProps> = ({ bio, handleToggle
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Field</TableCell>
-                  <TableCell>Value</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>Field</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>Value</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -85,7 +85,7 @@ const ViewBioDataComponent: FC<ViewBioDataComponentProps> = ({ bio, handleToggle
                   <TableCell>{bio?.BioData[0].pregnancy_period}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>Last Clinic Visit:</TableCell>I
+                  <TableCell>Last Clinic Visit:</TableCell>
                   <TableCell>{formatDate(bio!.BioData[0].last_clinic_visit)}</TableCell>
                 </TableRow>
                 <TableRow>

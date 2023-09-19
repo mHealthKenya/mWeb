@@ -17,113 +17,112 @@ export interface FollowUpProps {
 
 const schema = Yup.object().shape({
   // description: Yup.string().optional(),
-// scheduleId: Yup.string().required('Schedule is required'),
+  // scheduleId: Yup.string().required('Schedule is required'),
   chvId: Yup.string().required('CHV is required')
 })
 
-const CreateFollowUpComponent : FC<{
-   followUpCreate?: FollowUp
-   schedule?: Schedule
-   chv?: UserByRole
-   handleToggle: () => void;
-   }> = ({
-    handleToggle,
-    // followUpCreate,
-    schedule,
-    chv
+const CreateFollowUpComponent: FC<{
+  followUpCreate?: FollowUp
+  schedule?: Schedule
+  chv?: UserByRole
+  handleToggle: () => void
+}> = ({
+  handleToggle,
+  // followUpCreate,
+  schedule,
+  chv
 }) => {
   const {
     handleSubmit,
     register,
     reset,
-    formState: { errors },
+    formState: { errors }
   } = useForm<FollowUpProps>({
     resolver: yupResolver(schema)
   })
 
-  console.log("errors", errors)
+  console.log('errors', errors)
 
   // console.log("data", schedule)
 
   const { mutate, isLoading } = useFollowUp(reset)
 
   const onSubmit = (data: FollowUpProps) => {
-
-    console.log("called",{...chv, chvId: chv?.id})
+    console.log('called', { ...chv, chvId: chv?.id })
 
     const item = {
       ...data,
       chvId: chv?.id || '',
-      scheduleId: schedule?.id || '',
+      scheduleId: schedule?.id || ''
     }
-    mutate(item);
-    handleToggle();
+    mutate(item)
+
+    handleToggle()
   }
-  
+
   return (
     <CenterComponent>
-       <form onSubmit={handleSubmit(onSubmit)}>
-        <Card sx={{minWidth: 700}}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Card sx={{ minWidth: 700 }}>
           <CardHeader title={`Follow up`} />
-        <CardContent>
-        <Box
-      component="form"
-      sx={{
-        '& .MuiTextField-root': { m: 1, width: '25ch' },
-      }}
-      noValidate
-      autoComplete="off"
-      >
-      <div>
-      <TextField
-        id="outlined-multiline-static"
-        label="Title"
-        multiline
-        defaultValue={schedule?.title}
-        disabled
-      />
-       <TextField
-        id="outlined-multiline-static"
-        label="Description"
-        multiline
-        defaultValue={schedule?.description}
-        disabled
-        rows={3}
-      />
-      </div>
-      <div>
-      <TextField
-        id="outlined-multiline-static"
-        label="Schedule"
-        multiline
-        defaultValue={schedule?.id}
-        disabled
-        // error={!!errors.scheduleId}
-        // helperText={errors.scheduleId?.message}
-        rows={3}
-      />
-      </div>
-      <div>
-      <TextField
-          id="outlined-multiline-static"
-          label="Date"
-          multiline
-          defaultValue="Default Value"
-        /> 
-             
-      <TextField
-        // id="outlined-multiline-static"
-        label="CHV"
-        // multiline
-        defaultValue={chv?.id}
-        {...register('chvId')}
-        helperText={errors.chvId?.message}  
-        error={!!errors.chvId?.message}   
-        // disabled
-        inputProps={{ 'data-testid': 'chvId_input' }}
-      />
+          <CardContent>
+            <Box
+              component="form"
+              sx={{
+                '& .MuiTextField-root': { m: 1, width: '25ch' }
+              }}
+              noValidate
+              autoComplete="off">
+              <div>
+                <TextField
+                  id="outlined-multiline-static"
+                  label="Title"
+                  multiline
+                  defaultValue={schedule?.title}
+                  disabled
+                />
+                <TextField
+                  id="outlined-multiline-static"
+                  label="Description"
+                  multiline
+                  defaultValue={schedule?.description}
+                  disabled
+                  rows={3}
+                />
+              </div>
+              <div>
+                <TextField
+                  id="outlined-multiline-static"
+                  label="Schedule"
+                  multiline
+                  defaultValue={schedule?.id}
+                  disabled
+                  // error={!!errors.scheduleId}
+                  // helperText={errors.scheduleId?.message}
+                  rows={3}
+                />
+              </div>
+              <div>
+                <TextField
+                  id="outlined-multiline-static"
+                  label="Date"
+                  multiline
+                  defaultValue="Default Value"
+                />
 
-          {/* <FormControl fullWidth size="small" required>
+                <TextField
+                  // id="outlined-multiline-static"
+                  label="CHV"
+                  // multiline
+                  defaultValue={chv?.id}
+                  {...register('chvId')}
+                  helperText={errors.chvId?.message}
+                  error={!!errors.chvId?.message}
+                  // disabled
+                  inputProps={{ 'data-testid': 'chvId_input' }}
+                />
+
+                {/* <FormControl fullWidth size="small" required>
               <InputLabel id="role">CHV</InputLabel>
               <Select
                 labelId="role-label"
@@ -142,33 +141,30 @@ const CreateFollowUpComponent : FC<{
               </Select>
               <FormHelperText>{errors?.chvId?.message}</FormHelperText>
             </FormControl> */}
+              </div>
+            </Box>
 
-      </div>
-      </Box>
+            <CardActions>
+              <Button
+                variant="contained"
+                color="success"
+                type="submit"
+                startIcon={<FollowTheSignsOutlined />}
+                disabled={isLoading}
+                // data-testid="submit_button"
+              >
+                {isLoading ? 'following.....' : 'Follow up'}
+              </Button>
 
-      <CardActions>
-        <Button
-        variant="contained"
-        color="success"
-        type="submit"
-        startIcon={<FollowTheSignsOutlined />}
-        disabled={isLoading}
-        data-testid="submit_button"
-        >
-            Follow Up
-        </Button>
-
-        <Button variant="contained" color="error" onClick={handleToggle}>
-              Cancel
-            </Button>
-
-      </CardActions>
-      </CardContent>
-      </Card>
-        </form>
+              <Button variant="contained" color="error" onClick={handleToggle}>
+                Cancel
+              </Button>
+            </CardActions>
+          </CardContent>
+        </Card>
+      </form>
     </CenterComponent>
   )
 }
-
 
 export default CreateFollowUpComponent

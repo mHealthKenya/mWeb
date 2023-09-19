@@ -185,7 +185,8 @@ const AddBioDataComponent: FC<{
                 type="submit"
                 startIcon={<Add />}
                 disabled={isLoading}
-                data-testid="submit_button">
+                // data-testid="submit_button"
+              >
                 {isLoading ? 'Adding...' : 'Add'}
               </Button>
 
