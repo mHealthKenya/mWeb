@@ -14,6 +14,7 @@ export interface UserByRole {
   facilityId:    string;
   Facility:      Facility;
   BioData:       BioDatum[];
+  BirthPlan:     BirthPlan[];
 }
 
 export interface BioDatum {
@@ -33,6 +34,28 @@ export interface BioDatum {
   updatedById:            string;
   createdAt:              Date;
   updatedAt:              Date;
+}
+
+export interface BirthPlan {
+  id:                             string;
+  motherId:                       string;
+  facilityId:                     string;
+  alternative_facility_id:        string;
+  delivery_mode:                  string;
+  support_person_name:            string;
+  support_person_phone:           string;
+  preferred_transport:            string;
+  preferred_attendant_name:       string;
+  preferred_attendant_phone:      string;
+  blood_donor_name:               string;
+  blood_donor_phone:              string;
+  emergency_decision_maker_phone: string;
+  emergency_decision_maker_name:  string;
+  delivery_bag:                   boolean;
+  emergency_cs_plan:              string;
+  savings_plan:                   string;
+  createdAt:                      Date;
+  updatedAr:                      Date;
 }
 
 export interface Facility {

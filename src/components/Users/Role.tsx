@@ -1,7 +1,7 @@
 import AddBioDataComponent from '@components/Biodata/AddBioData'
 import SharedModal from '@components/Shared/Modal'
 import { UserByRole } from '@models/user-by-role'
-import { Add, Create, Delete, Edit, PregnantWoman, PregnantWomanOutlined, PregnantWomanRounded, PregnantWomanTwoTone, Visibility } from '@mui/icons-material'
+import { Add, Create, Delete, Edit, PregnantWoman, Visibility } from '@mui/icons-material'
 import { Button } from '@mui/material'
 import Box from '@mui/material/Box'
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid'
@@ -17,6 +17,7 @@ import ViewBioDataComponent from '../Biodata/view'
 import CreateFollowUpComponent from '@components/Followup/Createfollowup'
 import { FollowUp, Schedule } from '@models/followup'
 import AddBirthPlanComponent from '@components/Birthplan/Create'
+import { ViewBirthPlanComponent } from '@components/Birthplan/view'
 
 const UsersByRoleComponent: React.FC<{
   chv?: UserByRole
@@ -31,8 +32,10 @@ const UsersByRoleComponent: React.FC<{
   const [add, setAdd] = useState(false)
   const [followUp, setFollowUp] = useState(false)
   const [addBirthPlan, setAddBirthPlan] = useState(false)
+  const [viewBirthPlan, setViewBirthPlan] = useState(false)
   const [, setEditUser] = useState<UserByRole>()
   const [data, setData] = useState<UserByRole>()
+  const [birthPlanView, setBirthPlanView] = useState<UserByRole>()
   const [addBio, setAddBio] = useState<UserByRole>()
   const [birthPlan, setBirthPlan] = useState<UserByRole>()
   const [, setIsLoading] = useState(true)
@@ -61,6 +64,10 @@ const UsersByRoleComponent: React.FC<{
 
   const toggleAddBirthPlan = () => {
     setAddBirthPlan((addBirthPlan) => !addBirthPlan)
+  }
+
+  const toggleViewBirthPlan = () => {
+    setViewBirthPlan((viewBirthPlan) => !viewBirthPlan)
   }
 
   const rows = useMemo(() => {
@@ -106,6 +113,17 @@ const UsersByRoleComponent: React.FC<{
     setMother(data)
   }
 
+  const handleViewBirthPlan = async (birthPlan: UserByRole) => {
+    try {
+      setBirthPlanView(birthPlan)
+      setViewBirthPlan(true)
+    } catch (error) {
+      setError('Error fetching birthplan' + error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const columnTypes = useMemo(() => {
     if (facility) {
       return colsWithFacilityCol
@@ -136,7 +154,7 @@ const UsersByRoleComponent: React.FC<{
                       startIcon={<Visibility />}
                       size="small"
                       onClick={() => handleViewDetails(params.value)}>
-                      View Details
+                      View Bio
                     </Button>
                   ) : (
                     <Button
@@ -160,6 +178,20 @@ const UsersByRoleComponent: React.FC<{
                     }}>
                     Follow-Up
                   </Button>
+
+                  {/* {params.value?.BirthPlan?.length > 0 ? ( */}
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ mr: 1 }}
+                    startIcon={<PregnantWoman />}
+                    size="small"
+                    onClick={() => {
+                      handleViewBirthPlan(params.value)
+                    }}>
+                    View Birth plan
+                  </Button>
+                  {/* ) : ( */}
                   <Button
                     variant="contained"
                     color="secondary"
@@ -171,17 +203,7 @@ const UsersByRoleComponent: React.FC<{
                     }}>
                     Birth plan
                   </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{ mr: 1 }}
-                    startIcon={<PregnantWoman />}
-                    size="small"
-                    onClick={() => {
-                      handlAddBirthPlan(params.value)
-                    }}>
-                    View Birth plan
-                  </Button>
+                  {/* )} */}
                 </Box>
               )
             }
@@ -328,7 +350,15 @@ const UsersByRoleComponent: React.FC<{
           open: addBirthPlan,
           handleToggle: toggleAddBirthPlan
         }}>
-        <AddBirthPlanComponent handleToggle={toggleAddBirthPlan} user={user}  mother={mother}/>
+        <AddBirthPlanComponent handleToggle={toggleAddBirthPlan} user={user} mother={mother} />
+      </SharedModal>
+
+      <SharedModal
+        items={{
+          open: viewBirthPlan,
+          handleToggle: toggleViewBirthPlan
+        }}>
+        <ViewBirthPlanComponent handleToggle={toggleViewBirthPlan} birthPlan={birthPlanView} />
       </SharedModal>
     </>
   )
