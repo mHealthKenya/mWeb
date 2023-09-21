@@ -71,7 +71,7 @@ export const ViewBirthPlanComponent: FC<{
                   <TableCell>{birthPlan?.BirthPlan[0].preferred_attendant_name}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>Preferreed Attendant Phone</TableCell>
+                  <TableCell>Preferred Attendant Phone</TableCell>
                   <TableCell>{birthPlan?.BirthPlan[0].preferred_attendant_phone}</TableCell>
                 </TableRow>
                 <TableRow>
@@ -131,7 +131,7 @@ export const ViewBirthPlanComponent: FC<{
           open,
           handleToggle
         }}>
-        <UpdateBirthPlanComponent handleToggle={handleToggle} birthPlanUpdate={user!}/>
+        <UpdateBirthPlanComponent handleToggle={handleToggle} birthPlanUpdate={user!} />
       </SharedModal>
     </CenterComponent>
   )

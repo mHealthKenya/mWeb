@@ -99,7 +99,7 @@ const AddBirthPlanComponent: FC<{
                   inputProps={{ 'data-testid': 'delivery_mode_input' }}
                 />
                 <TextField
-                  label="Preffered Transport"
+                  label="Preferred Transport"
                   id="outlined-size-small"
                   placeholder="Preffered Transport"
                   type="text"

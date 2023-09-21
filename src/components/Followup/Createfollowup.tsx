@@ -79,7 +79,7 @@ const CreateFollowUpComponent: FC<{
                   label="Title"
                   multiline
                   defaultValue={schedule?.title}
-                  disabled
+                  // disabled
                 />
                 <TextField
                   id="outlined-multiline-static"
@@ -88,6 +88,7 @@ const CreateFollowUpComponent: FC<{
                   defaultValue={schedule?.description}
                   disabled
                   rows={3}
+                  
                 />
               </div>
               <div>
@@ -95,11 +96,12 @@ const CreateFollowUpComponent: FC<{
                   id="outlined-multiline-static"
                   label="Schedule"
                   multiline
+                  // disabled
                   defaultValue={schedule?.id}
-                  disabled
-                  // error={!!errors.scheduleId}
-                  // helperText={errors.scheduleId?.message}
                   rows={3}
+                  // helperText={errors.scheduleId?.message}
+                  // error={!!errors.scheduleId?.message}
+                  // inputProps={{ 'data-testid': 'scheduleId_input' }}
                 />
               </div>
               <div>
@@ -107,7 +109,7 @@ const CreateFollowUpComponent: FC<{
                   id="outlined-multiline-static"
                   label="Date"
                   multiline
-                  defaultValue="Default Value"
+                  defaultValue="01/01/2023"
                 />
 
                 <TextField

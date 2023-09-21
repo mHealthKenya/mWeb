@@ -80,6 +80,21 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         return res.data
       })
 
+      const schedule = await axios
+      .get(
+        baseURL +
+        'schedules/facility?facilityId=' +
+        userDetails?.facilityId,
+        {
+          headers: {
+            Authorization: `Bearer ${cookie}`
+          }
+        }
+      )
+      .then((res) => {
+        return res.data
+      })
+
 
     return {
       props: {
@@ -87,6 +102,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         mothers,
         chv,
         userDetails,
+        schedule
         
       }
     }

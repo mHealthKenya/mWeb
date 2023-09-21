@@ -55,7 +55,7 @@ const AddUserComponent: FC<{ facilities: Facility[] }> = ({ facilities }) => {
     handleSubmit,
     formState: { errors },
     reset
-  } = useForm<AddUserFormProps>({ 
+  } = useForm<AddUserFormProps>({
     resolver: yupResolver(schema)
   })
 

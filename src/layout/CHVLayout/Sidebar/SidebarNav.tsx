@@ -1,12 +1,11 @@
 import { IconDefinition } from '@fortawesome/free-regular-svg-icons'
 import {
-  faDroplet,
+  faArrows,
+  faEnvelope,
+  faFemale,
   faGauge,
-  faLocation,
-  faMap,
-  faPencil,
-  faPerson,
-  faPersonPregnant
+  faPersonPregnant,
+  faQuestion
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
@@ -47,7 +46,7 @@ const SidebarNavTitle = (props: PropsWithChildren) => {
 export default function SidebarNav() {
   return (
     <ul className="list-unstyled">
-      <SidebarNavItem icon={faGauge} href="/facility">
+      <SidebarNavItem icon={faGauge} href="/sadmin">
         Dashboard
         <small className="ms-auto">
           <Badge bg="info" className="ms-auto">
@@ -55,27 +54,28 @@ export default function SidebarNav() {
           </Badge>
         </small>
       </SidebarNavItem>
+
       <SidebarNavTitle>Users</SidebarNavTitle>
-      <SidebarNavItem icon={faPersonPregnant} href="/facility/mothers">
+      <SidebarNavItem icon={faPersonPregnant} href="/chv/mothers">
         Mothers
       </SidebarNavItem>
-      <SidebarNavItem icon={faPerson} href="/facility/chv">
-        CHVs
+      <SidebarNavItem icon={faArrows} href="/chv/followup">
+        Follow Up
       </SidebarNavItem>
+      <SidebarNavItem icon={faFemale} href="/admin/users/chv">
+        Pregnancy
+      </SidebarNavItem>
+      <SidebarNavItem icon={faEnvelope} href="/admin/users/mother">
+        Appointments
+      </SidebarNavItem>
+
       <SidebarNavTitle>Coverage</SidebarNavTitle>
-      <SidebarNavItem icon={faLocation} href="/facility/facilities">
-        Facilities
+      <SidebarNavItem icon={faQuestion} href="/admin/facilities">
+        Enquiries
       </SidebarNavItem>
-      <SidebarNavItem icon={faMap} href="/facility/coverage">
+      {/* <SidebarNavItem icon={faMap} href="/admin/coverage">
         Map View
-      </SidebarNavItem>
-      <SidebarNavTitle>Materials</SidebarNavTitle>
-      <SidebarNavItem icon={faDroplet} href="#">
-        Indicators
-      </SidebarNavItem>
-      <SidebarNavItem icon={faPencil} href="#">
-        Books
-      </SidebarNavItem>
+      </SidebarNavItem> */}
     </ul>
   )
 }

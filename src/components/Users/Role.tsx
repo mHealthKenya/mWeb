@@ -15,7 +15,7 @@ import {
 import EditUserWithRoleComponent from './Edit'
 import ViewBioDataComponent from '../Biodata/view'
 import CreateFollowUpComponent from '@components/Followup/Createfollowup'
-import { FollowUp, Schedule } from '@models/followup'
+import { FollowUp } from '@models/followup'
 import AddBirthPlanComponent from '@components/Birthplan/Create'
 import { ViewBirthPlanComponent } from '@components/Birthplan/viewBirthPlan'
 

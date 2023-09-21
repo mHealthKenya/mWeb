@@ -119,7 +119,7 @@ export const UpdateBirthPlanComponent: FC<{
               </div>
               <div>
                 <TextField
-                  label="Preffered Transport"
+                  label="Preferred Transport"
                   type="text"
                   defaultValue={birthPlanUpdate?.BirthPlan[0].preferred_transport}
                   {...register('preferred_transport')}
@@ -128,7 +128,7 @@ export const UpdateBirthPlanComponent: FC<{
                   inputProps={{ 'data-testid': 'preferred_transport_input' }}
                 />
                 <TextField
-                  label="Preffered Attendant Name"
+                  label="Preferred Attendant Name"
                   type="text"
                   defaultValue={birthPlanUpdate?.BirthPlan[0].preferred_attendant_name}
                   {...register('preferred_attendant_name')}
@@ -139,7 +139,7 @@ export const UpdateBirthPlanComponent: FC<{
               </div>
               <div>
                 <TextField
-                  label="Preffered Attendant Phone"
+                  label="Preferred Attendant Phone"
                   type="number"
                   defaultValue={birthPlanUpdate?.BirthPlan[0].preferred_attendant_phone}
                   {...register('preferred_attendant_phone')}
