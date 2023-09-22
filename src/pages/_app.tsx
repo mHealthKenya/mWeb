@@ -9,6 +9,9 @@ import SSRProvider from 'react-bootstrap/SSRProvider'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import Head from 'next/head'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import ScheduleProvider from 'src/context/ScheduleContext'
 
 config.autoAddCss = false
 
@@ -19,14 +22,18 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <SSRProvider>
-        <ProgressBar />
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <QueryClientProvider client={queryClient}>
-          <Component {...pageProps} />
-          <ReactQueryDevtools initialIsOpen={false} position="bottom-left" />
-        </QueryClientProvider>
-      </SSRProvider>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <SSRProvider>
+          <ProgressBar />
+          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+          <QueryClientProvider client={queryClient}>
+            <ScheduleProvider>
+              <Component {...pageProps} />
+            </ScheduleProvider>
+            <ReactQueryDevtools initialIsOpen={false} position="bottom-left" />
+          </QueryClientProvider>
+        </SSRProvider>
+      </LocalizationProvider>
     </>
   )
 }

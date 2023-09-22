@@ -1,9 +1,11 @@
 import SharedModal from '@components/Shared/Modal'
+import { Facility } from '@models/facility'
 import { UserByRole } from '@models/user-by-role'
 import { Add, Delete, Edit, Visibility } from '@mui/icons-material'
 import { Button } from '@mui/material'
 import Box from '@mui/material/Box'
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid'
+import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import {
   colsWithFacilityCol,
@@ -12,9 +14,6 @@ import {
   rowsWithoutFacility
 } from 'src/data/users-by-role'
 import EditUserWithRoleComponent from './Edit'
-import Swal from 'sweetalert2'
-import { Facility } from '@models/facility'
-import { useRouter } from 'next/router'
 
 const UsersByRoleComponent: React.FC<{
   users: UserByRole[]
@@ -45,13 +44,8 @@ const UsersByRoleComponent: React.FC<{
     setUser(user)
   }
 
-  const handleComingSoon = () => {
-    Swal.fire({
-      title: 'Coming soon!',
-      text: 'The requested feature is still in development and will be available soon',
-      icon: 'info',
-      confirmButtonText: 'OK'
-    })
+  const handleComingSoon = (id: string) => {
+    router.push('/facility/mothers/' + id)
   }
 
   const handleRecord = (id: string) => {
@@ -78,7 +72,7 @@ const UsersByRoleComponent: React.FC<{
             field: col.field,
             headerName: col.headerName,
             width: 200,
-            renderCell: () => {
+            renderCell: (params) => {
               return (
                 <Box
                   sx={{
@@ -90,7 +84,7 @@ const UsersByRoleComponent: React.FC<{
                     sx={{ mr: 1 }}
                     startIcon={<Visibility />}
                     size="small"
-                    onClick={() => handleComingSoon()}>
+                    onClick={() => handleComingSoon(params.value.id)}>
                     View Details
                   </Button>
                 </Box>
