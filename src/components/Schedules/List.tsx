@@ -9,8 +9,12 @@ import dayjs from 'dayjs'
 import * as React from 'react'
 import { useScheduler } from 'src/context/ScheduleContext'
 import EditScheduleComponent from './Edit'
+import { User } from '@models/user'
 
-const SchedulesListComponent: React.FC<{ schedules?: UserSchedule[] }> = ({ schedules = [] }) => {
+const SchedulesListComponent: React.FC<{ schedules?: UserSchedule[]; chvs: User[] }> = ({
+  schedules = [],
+  chvs = []
+}) => {
   const [open, setOpen] = React.useState(false)
 
   const handleToggle = () => {
@@ -113,7 +117,12 @@ const SchedulesListComponent: React.FC<{ schedules?: UserSchedule[] }> = ({ sche
           open,
           handleToggle
         }}>
-        <EditScheduleComponent data={{}} handleToggle={handleToggle} />
+        <EditScheduleComponent
+          data={{
+            chvs
+          }}
+          handleToggle={handleToggle}
+        />
       </SharedModal>
     </>
   )

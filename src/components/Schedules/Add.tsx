@@ -49,6 +49,7 @@ const AddScheduleComponent: FC<{
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm<FormProps>({
     resolver: yupResolver(formSchema),
@@ -69,7 +70,7 @@ const AddScheduleComponent: FC<{
     required: true
   }
 
-  const { mutate, isLoading } = useAddSchedule()
+  const { mutate, isLoading } = useAddSchedule(reset)
 
   const onSubmit = (data: FormProps) => {
     mutate({

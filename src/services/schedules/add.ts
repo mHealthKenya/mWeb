@@ -11,7 +11,7 @@ export const addSchedule = async (data: AddSchedule) => {
   return schedule
 }
 
-const useAddSchedule = () => {
+const useAddSchedule = (completeFn: () => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: addSchedule,
@@ -23,6 +23,8 @@ const useAddSchedule = () => {
         text: 'Schedule has successfully been created',
         icon: 'success',
         confirmButtonText: 'OK'
+      }).then(() => {
+        completeFn()
       })
     },
 

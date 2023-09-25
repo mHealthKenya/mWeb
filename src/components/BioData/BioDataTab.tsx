@@ -7,6 +7,9 @@ import Typography from '@mui/material/Typography'
 import * as React from 'react'
 import AddBiodata, { MotherDetailsProps } from './Add'
 import useFindSchedulesByMotherId from '@services/schedules/find-by-mother-id'
+import AddBirthPlanComponent from '@components/BirthPlan/Add'
+import { Facility } from '@models/facility'
+import { BirthPlan } from '@models/birthplan'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -42,7 +45,11 @@ function a11yProps(index: number) {
 
 const BioDataTabs: React.FC<{
   data: MotherDetailsProps
-}> = ({ data }) => {
+  facilities: Facility[]
+  birthPlan?: BirthPlan
+}> = ({ data, facilities, birthPlan }) => {
+  const { chvs } = data
+
   const [value, setValue] = React.useState(0)
 
   const { data: freshSchedules } = useFindSchedulesByMotherId(data?.schedules, data?.user?.id)
@@ -57,6 +64,7 @@ const BioDataTabs: React.FC<{
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Bio Data" {...a11yProps(0)} />
           <Tab label="Schedules" {...a11yProps(1)} />
+          <Tab label="Birth Plan" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
@@ -68,9 +76,17 @@ const BioDataTabs: React.FC<{
         </Box>
         <Box sx={{ m: 1 }}>
           <Box sx={{ mt: 4 }}>
-            <SchedulesListComponent schedules={freshSchedules} />
+            <SchedulesListComponent schedules={freshSchedules} chvs={chvs} />
           </Box>
         </Box>
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={2}>
+        <AddBirthPlanComponent
+          facilities={facilities}
+          user={data?.user}
+          birthPlan={birthPlan}
+          facilityId={data?.facilityId || ''}
+        />
       </CustomTabPanel>
     </Box>
   )

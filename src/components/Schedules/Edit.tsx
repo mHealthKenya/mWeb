@@ -20,7 +20,7 @@ import {
 import { DateTimePicker } from '@mui/x-date-pickers'
 import useEditSchedule from '@services/schedules/edit'
 import dayjs, { Dayjs } from 'dayjs'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useScheduler } from 'src/context/ScheduleContext'
 import * as Yup from 'yup'
@@ -29,12 +29,14 @@ interface FormProps {
   title: string
   description: string
   status: string
+  chvId: string | undefined
 }
 
 const formSchema = Yup.object().shape({
   title: Yup.string().required('Title cannot be empty'),
   description: Yup.string().required('description cannot be empty'),
-  status: Yup.string().required('Status cannot be empty')
+  status: Yup.string().required('Status cannot be empty'),
+  chvId: Yup.string().optional()
 })
 
 export interface MotherDetailsProps {
@@ -42,6 +44,7 @@ export interface MotherDetailsProps {
   userId?: string
   facilityId?: string
   user?: User
+  chvs?: User[]
 }
 
 export interface FormScroll {
@@ -55,16 +58,29 @@ const EditScheduleComponent: FC<{
   data: MotherDetailsProps
   handleToggle: () => void
 }> = ({ data, handleToggle }) => {
-  const { userId, facilityId } = data
+  const { userId, facilityId, chvs } = data
+
+  const [chv, setChv] = useState(false)
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors }
   } = useForm<FormProps>({
     resolver: yupResolver(formSchema),
     mode: 'onBlur'
   })
+
+  const val = watch('status')
+
+  useEffect(() => {
+    if (val === 'Follow_up') {
+      setChv(true)
+    } else {
+      setChv(false)
+    }
+  }, [val])
 
   const now = dayjs(new Date()).format('YYYY-MM-DDTHH:mm')
 
@@ -89,13 +105,24 @@ const EditScheduleComponent: FC<{
   const { mutate, isLoading } = useEditSchedule(handleToggle)
 
   const onSubmit = (data: FormProps) => {
-    mutate({
-      ...data,
-      id: scheduler?.schedule?.id || '',
-      motherId: userId!!,
-      facilityId: facilityId!!,
-      date: date.toISOString()
-    })
+    if (chv) {
+      mutate({
+        ...data,
+        id: scheduler?.schedule?.id || '',
+        motherId: userId!!,
+        facilityId: facilityId!!,
+        date: date.toISOString(),
+        chvId: data?.chvId
+      })
+    } else {
+      mutate({
+        ...data,
+        id: scheduler?.schedule?.id || '',
+        motherId: userId!!,
+        facilityId: facilityId!!,
+        date: date.toISOString()
+      })
+    }
   }
 
   return (
@@ -131,7 +158,7 @@ const EditScheduleComponent: FC<{
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  label="Role"
+                  label="Status"
                   size="small"
                   defaultValue={scheduler?.schedule?.status}
                   {...register('status')}
@@ -144,6 +171,26 @@ const EditScheduleComponent: FC<{
                   ))}
                 </Select>
               </FormControl>
+
+              {chv && (
+                <FormControl fullWidth size="small">
+                  <InputLabel id="demo-simple-select-label">Select CHV</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Select CHV"
+                    size="small"
+                    {...register('chvId')}
+                    error={!!errors.chvId?.message}
+                    inputProps={{ 'data-testid': 'role_input' }}>
+                    {chvs?.map((item, index) => (
+                      <MenuItem key={index} value={item.id}>
+                        {`${item.f_name} ${item.l_name}`}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              )}
 
               <DateTimePicker
                 label="Date of Visit"

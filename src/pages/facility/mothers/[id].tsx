@@ -1,6 +1,8 @@
 import BioDataTabs from '@components/BioData/BioDataTab'
 import { baseURL } from '@config/axios'
 import FacilityLayout from '@layout/FacilityLayout/FacilityLayout'
+import { BirthPlan } from '@models/birthplan'
+import { Facility } from '@models/facility'
 import { UserSchedule } from '@models/schedules'
 import { User } from '@models/user'
 import axios from 'axios'
@@ -14,9 +16,20 @@ export interface MotherAndUserDetails {
   motherDetails: User
   bioData: any
   schedules: UserSchedule[]
+  facilities: Facility[]
+  birthPlan: BirthPlan
+  chvs: User[]
 }
 
-const MotherPage = ({ userDetails, motherDetails, bioData, schedules }: MotherAndUserDetails) => {
+const MotherPage = ({
+  userDetails,
+  motherDetails,
+  bioData,
+  schedules,
+  facilities,
+  birthPlan,
+  chvs
+}: MotherAndUserDetails) => {
   return (
     <FacilityLayout>
       <BioDataTabs
@@ -25,8 +38,11 @@ const MotherPage = ({ userDetails, motherDetails, bioData, schedules }: MotherAn
           userId: motherDetails?.id,
           facilityId: userDetails?.facilityId,
           schedules,
-          user: motherDetails
+          user: motherDetails,
+          chvs
         }}
+        facilities={facilities}
+        birthPlan={birthPlan}
       />
     </FacilityLayout>
   )
@@ -67,10 +83,29 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       }
     })
 
-    const [userDetails, motherDetails, schedules] = await Promise.all([userD, motherD, scheds])
+    const bplan = axios.get(baseURL + 'birthplan/mother?motherId=' + id, {
+      headers: {
+        Authorization: `Bearer ${cookie}`
+      }
+    })
 
-    const bioData = await axios
-      .get(baseURL + 'biodata/id?motherId=' + motherDetails?.data?.id, {
+    const bio = axios.get(baseURL + 'biodata/id?motherId=' + id, {
+      headers: {
+        Authorization: `Bearer ${cookie}`
+      }
+    })
+
+    const facs = axios.get(baseURL + 'facilities/all')
+
+    const [userDetails, motherDetails, schedules, facilities, birthPlan, bioData] =
+      await Promise.all([userD, motherD, scheds, facs, bplan, bio])
+
+    const finalFacilities = facilities.data.filter(
+      (item: Facility) => item.id !== userDetails.data.facilityId
+    )
+
+    const chvs = await axios
+      .get(baseURL + `users/roleandfacility?facilityId=${userDetails?.data?.facilityId}&role=CHV`, {
         headers: {
           Authorization: `Bearer ${cookie}`
         }
@@ -82,8 +117,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         user,
         userDetails: userDetails.data,
         motherDetails: motherDetails.data,
-        bioData,
-        schedules: schedules.data
+        bioData: bioData.data,
+        schedules: schedules.data,
+        facilities: finalFacilities,
+        birthPlan: birthPlan.data,
+        chvs
       }
     }
   } catch (error) {

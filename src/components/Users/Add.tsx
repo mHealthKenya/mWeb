@@ -134,7 +134,7 @@ const AddUserComponent: FC<{ facilities: Facility[] }> = ({ facilities }) => {
                 id="facility"
                 label="Facility"
                 {...register('facilityId')}
-                error={!!errors?.l_name?.message}
+                error={!!errors?.facilityId?.message}
                 defaultValue=""
                 inputProps={{ 'data-testid': 'facility_input' }}>
                 {facilities.map((facility) => (

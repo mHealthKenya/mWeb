@@ -39,6 +39,7 @@ export interface MotherDetailsProps {
   facilityId?: string
   schedules?: UserSchedule[]
   user?: User
+  chvs: User[]
 }
 
 const AddBiodata: FC<{ data: MotherDetailsProps }> = ({ data }) => {
@@ -46,6 +47,7 @@ const AddBiodata: FC<{ data: MotherDetailsProps }> = ({ data }) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm<FormProps>({
     resolver: yupResolver(formSchema),
@@ -113,6 +115,8 @@ const AddBiodata: FC<{ data: MotherDetailsProps }> = ({ data }) => {
       userId: userId || '',
       facilityId: facilityId || ''
     })
+
+    reset()
   }
 
   return (

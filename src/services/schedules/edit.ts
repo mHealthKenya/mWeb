@@ -5,6 +5,7 @@ import Swal from 'sweetalert2'
 
 interface EditSchedule extends AddSchedule {
   id: string
+  chvId?: string
 }
 
 const editSchedule = async (data: EditSchedule) => {
