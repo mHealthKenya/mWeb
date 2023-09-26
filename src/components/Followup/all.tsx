@@ -37,8 +37,8 @@ export const followUpColumn: Col[] = [
 const AllFollowUpComponent: FC<{
   data: any
   followUpUpdate: FollowUp | undefined
-}> = ({ data, followUpUpdate }) => {
-  const [open, setOpen] = useState(false)
+}> = ({ data }) => {
+  const [_open, setOpen] = useState(false)
   const followups: any = useAllFollowUp(data)
 
   const [openUpdate, setOpenUpdate] = useState(false)
@@ -67,7 +67,7 @@ const AllFollowUpComponent: FC<{
       }))
     }
     return []
-  }, [followups?.data])
+  }, [followups])
 
   const columns: GridColDef[] = useMemo(() => {
     // const actionCol: GridColDef = {

@@ -10,10 +10,10 @@ import nookies from 'nookies'
 import { useState } from 'react'
 import { Users } from 'src/helpers/enums/users.enum'
 
-const ChvFollowUp = ({ User, followups }: any) => {
+const ChvFollowUp = ({ followups }: any) => {
   const { data: allFollowUps } = useAllFollowUp( followups )
 
-  const [followUpEdit, setFollowWUpEdit] = useState<FollowUp>({} as FollowUp)
+  const [followUpEdit, _setFollowWUpEdit] = useState<FollowUp>({} as FollowUp)
 
   return (
     <CHVLayout>
