@@ -14,3 +14,13 @@ export interface User {
   facilityId: string
   createdById: null
 }
+
+export interface TotalUsers {
+  total_users: number
+}
+
+export interface MotherDistribution {
+  facilityId: string
+  count: number
+  facilityName: string
+}
