@@ -3,7 +3,7 @@ import { baseURL } from '@config/axios'
 import NAdminLayout from '@layout/NAdminLayout/NAdminLayout'
 import { SMSCost } from '@models/sms'
 import { SMSStats } from '@models/smsstats'
-import { MotherDistribution, TotalUsers } from '@models/user'
+import { MotherDistribution, TotalUsers, TotalVisits } from '@models/user'
 import axios from 'axios'
 
 import * as jwt from 'jsonwebtoken'
@@ -19,6 +19,7 @@ interface HomeAdmin {
   mother_distribution: MotherDistribution[]
   chv_distribution: MotherDistribution[]
   smsStats: SMSStats[]
+  visits_distribution: MotherDistribution[]
 }
 
 const Admin = ({
@@ -28,7 +29,8 @@ const Admin = ({
   total_visits,
   mother_distribution,
   smsStats,
-  chv_distribution
+  chv_distribution,
+  visits_distribution
 }: HomeAdmin) => {
   return (
     <NAdminLayout>
@@ -41,6 +43,7 @@ const Admin = ({
         mother_distribution={mother_distribution}
         smsStats={smsStats}
         chv_distribution={chv_distribution}
+        visits_distribution={visits_distribution}
       />
     </NAdminLayout>
   )
@@ -95,19 +98,29 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       }
     })
 
-    const [smsCost1, totalUsers1, mDist1, smsStat, cDist1] = await Promise.all([
-      sCost,
-      tUsers,
-      mDist,
-      smStat,
-      cDist
-    ])
+    const tVisit = axios.get(baseURL + 'clinicvisit/count', {
+      headers: {
+        Authorization: `Bearer ${cookie}`
+      }
+    })
+
+    const vDist = axios.get(baseURL + 'clinicvisit/visits/count', {
+      headers: {
+        Authorization: `Bearer ${cookie}`
+      }
+    })
+
+    const [smsCost1, totalUsers1, mDist1, smsStat, cDist1, totalVisit1, vDist1] = await Promise.all(
+      [sCost, tUsers, mDist, smStat, cDist, tVisit, vDist]
+    )
 
     const smsCost: SMSCost = smsCost1.data
     const totalUsers: TotalUsers = totalUsers1.data
     const mother_distribution = mDist1.data
     const smsStats: SMSStats = smsStat.data
     const chv_distribution = cDist1.data
+    const visits_distribution = vDist1.data
+    const total_visits: TotalVisits = totalVisit1.data
 
     return {
       props: {
@@ -115,10 +128,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         total_sms_cost: smsCost._sum.cost,
         total_users: totalUsers.total_users,
         total_facilities: 10,
-        total_visits: 300,
+        total_visits: total_visits.count,
         mother_distribution,
         chv_distribution,
-        smsStats
+        smsStats,
+        visits_distribution
       }
     }
   } catch (error) {

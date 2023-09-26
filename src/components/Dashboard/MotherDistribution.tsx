@@ -14,7 +14,7 @@ import {
 
 const acronymToNameMap: Record<string, string> = {}
 
-function createAcronym(name: string) {
+export function createAcronym(name: string) {
   const words = name.split(' ')
 
   let acronym = ''

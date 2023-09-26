@@ -24,3 +24,7 @@ export interface MotherDistribution {
   count: number
   facilityName: string
 }
+
+export interface TotalVisits {
+  count: number
+}
