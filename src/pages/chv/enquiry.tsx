@@ -1,4 +1,4 @@
-import { AddEnquiriesComponent } from '@components/Chv/Enquiries/Add'
+import AddEnquiriesComponent from '@components/Chv/Enquiries/Add'
 import CHVLayout from '@layout/CHVLayout/CHVLayout'
 import axios from 'axios'
 import * as jwt from 'jsonwebtoken'
@@ -7,12 +7,11 @@ import nookies from 'nookies'
 import { baseURL } from 'src/config/axios'
 // import { Users } from 'src/helpers/enums/users.enum'
 
-const EnquiriesPage = ({}: any) => {
-  // const { data: allChvMothers } = useAllChvMothers(userDetails)
+const EnquiriesPage = ({data}: any) => {
 
   return (
     <CHVLayout>
-      <AddEnquiriesComponent />
+      <AddEnquiriesComponent data={data} />
     </CHVLayout>
   )
 }

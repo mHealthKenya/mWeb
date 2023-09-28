@@ -7,12 +7,12 @@ import nookies from 'nookies'
 import { baseURL } from 'src/config/axios'
 // import { Users } from 'src/helpers/enums/users.enum'
 
-const MotherChv = ({ chvmothers }: any) => {
+const MotherChv = ({ chvmothers, target }: any) => {
   // const { data: allChvMothers } = useAllChvMothers(userDetails)
 
   return (
     <CHVLayout>
-      <ChvMothersComponent data={chvmothers}  />
+      <ChvMothersComponent data={chvmothers} user={target} />
     </CHVLayout>
   )
 }
@@ -56,11 +56,22 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         return res.data
       })
 
+      const target = await axios
+      .get(baseURL + 'targets/chvtarget', {
+        headers: {
+          Authorization: `Bearer ${cookie}`
+        }
+      })
+      .then((res) => {
+        return res.data
+      })
+
     return {
       props: {
         user,
         // userDetails,
-        chvmothers
+        chvmothers,
+        target
       }
     }
   } catch (error) {

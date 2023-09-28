@@ -45,7 +45,6 @@ const ChvMothersComponent: FC<{
   const chvmothers = useAllChvMothers(data)
   const [viewTarget, setViewTarget] = useState(false)
 
-
   const toggleAdd = () => {
     setOpen((open) => !open)
   }
@@ -107,7 +106,7 @@ const ChvMothersComponent: FC<{
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 10
+                pageSize: 9
               }
             }
           }}

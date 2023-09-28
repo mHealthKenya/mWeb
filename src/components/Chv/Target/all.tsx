@@ -36,11 +36,13 @@ export const ViewTargetComponent: FC<{
               <TableBody>
                 <TableRow>
                   <TableCell>Set Target</TableCell>
-                  <TableCell>{target?.setTarget}</TableCell>
+                  <TableCell>0</TableCell>
+                  {/* <TableCell>{target?.setTarget}</TableCell> */}
                 </TableRow>
                 <TableRow>
                   <TableCell>Current</TableCell>
-                  <TableCell>{target?.current}</TableCell>
+                  <TableCell>13</TableCell>
+                  {/* <TableCell>{target?.current}</TableCell> */}
                 </TableRow>
               </TableBody>
             </Table>

@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import { User } from '@models/user'
 import { UserByRole } from '@models/user-by-role'
 import { Add } from '@mui/icons-material'
 import { Button, Card, CardActions, CardContent, CardHeader, Stack, TextField } from '@mui/material'
@@ -6,6 +7,11 @@ import useAddMother from '@services/chvmother/add'
 import React, { FC } from 'react'
 import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
+
+export interface AddMotherProps {
+  facilityId?: string
+  user?: User
+}
 
 export interface AddMotherFormProps {
   f_name: string
@@ -29,7 +35,7 @@ const schema = Yup.object().shape({
 
 const AddMotherComponent: FC<{
   handleToggle: () => void
-  user: UserByRole
+  user?: UserByRole
 }> = ({ handleToggle, user }) => {
   const {
     register,
@@ -42,10 +48,10 @@ const AddMotherComponent: FC<{
 
   const { mutate, isLoading } = useAddMother(reset)
 
-  const onSubmit = (data: AddMotherFormProps): void => {
+  const onSubmit = (data: AddMotherFormProps) => {
     console.log('Facility', {
       facilityId: user?.role,
-      user,
+      user
     })
     const item = {
       ...data,
