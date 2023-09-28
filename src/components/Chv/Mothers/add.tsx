@@ -27,9 +27,9 @@ const schema = Yup.object().shape({
   //   facilityId: Yup.string().required()
 })
 
-export const AddMotherComponent: FC<{
+const AddMotherComponent: FC<{
   handleToggle: () => void
-  user?: UserByRole
+  user: UserByRole
 }> = ({ handleToggle, user }) => {
   const {
     register,
@@ -44,7 +44,8 @@ export const AddMotherComponent: FC<{
 
   const onSubmit = (data: AddMotherFormProps): void => {
     console.log('Facility', {
-      facilityId: user?.role
+      facilityId: user?.role,
+      user,
     })
     const item = {
       ...data,
@@ -54,6 +55,8 @@ export const AddMotherComponent: FC<{
     }
 
     mutate(item)
+    handleToggle()
+    reset()
   }
 
   return (
@@ -62,11 +65,6 @@ export const AddMotherComponent: FC<{
         <Card sx={{ minWidth: 680, mt: 3, mb: 3 }}>
           <CardHeader title="Add mother" subheader="All fields marked with * are required fields" />
           <CardContent>
-            {/* <Box
-              component="form"
-              
-              noValidate
-              autoComplete="off"> */}
             <Stack spacing={1}>
               <TextField
                 size="small"
@@ -130,9 +128,7 @@ export const AddMotherComponent: FC<{
                 color="success"
                 type="submit"
                 startIcon={<Add />}
-                // data-testid="submit_button"
                 disabled={isLoading}>
-                {/* Add */}
                 {isLoading ? 'Adding Mother' : 'Add Mother'}
               </Button>
 
@@ -146,3 +142,5 @@ export const AddMotherComponent: FC<{
     </>
   )
 }
+
+export default AddMotherComponent

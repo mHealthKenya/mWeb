@@ -1,10 +1,10 @@
+import { faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleLeft } from '@fortawesome/free-solid-svg-icons'
-import React, { useEffect, useState } from 'react'
 import classNames from 'classnames'
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import SidebarNav from './SidebarNav'
-import Image from 'next/image'
 
 export default function Sidebar(props: { isShow: boolean; isShowMd: boolean }) {
   const { isShow, isShowMd } = props
@@ -39,6 +39,16 @@ export default function Sidebar(props: { isShow: boolean; isShowMd: boolean }) {
           <Image src="/assets/brand/logo.png" alt="logo" width={200} height={50} />
         </div>
       </div>
+      {/* <div className="sidebar-brand d-none d-md-flex align-items-center justify-content-center">
+        <svg width="118" height="46">
+          <title>mPlus</title>
+          <use xlinkHref="/assets/brand/logo.svg#full" />
+        </svg>
+        <svg width="46" height="46">
+          <title>mPlus</title>
+          <use xlinkHref="/assets/brand/logo.svg#signet" />
+        </svg>
+      </div> */}
 
       <div className="sidebar-nav flex-fill">
         <SidebarNav />
@@ -50,7 +60,11 @@ export default function Sidebar(props: { isShow: boolean; isShowMd: boolean }) {
         onClick={toggleIsNarrow}
         type="button"
         aria-label="sidebar toggler">
-        <FontAwesomeIcon className="sidebar-toggler-chevron" icon={faAngleLeft} fontSize={24} />
+        {isNarrow ? (
+          <FontAwesomeIcon icon={faLockOpen} fontSize={24} />
+        ) : (
+          <FontAwesomeIcon icon={faLock} fontSize={24} />
+        )}
       </Button>
     </div>
   )

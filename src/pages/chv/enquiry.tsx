@@ -1,4 +1,4 @@
-import ChvMothersComponent from '@components/Chv/Mothers/chv-mothers'
+import { AddEnquiriesComponent } from '@components/Chv/Enquiries/Add'
 import CHVLayout from '@layout/CHVLayout/CHVLayout'
 import axios from 'axios'
 import * as jwt from 'jsonwebtoken'
@@ -7,17 +7,17 @@ import nookies from 'nookies'
 import { baseURL } from 'src/config/axios'
 // import { Users } from 'src/helpers/enums/users.enum'
 
-const MotherChv = ({ chvmothers }: any) => {
+const EnquiriesPage = ({}: any) => {
   // const { data: allChvMothers } = useAllChvMothers(userDetails)
 
   return (
     <CHVLayout>
-      <ChvMothersComponent data={chvmothers}  />
+      <AddEnquiriesComponent />
     </CHVLayout>
   )
 }
 
-export default MotherChv
+export default EnquiriesPage
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookies = nookies.get(ctx)
@@ -46,21 +46,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     //     return res.data
     //   })
 
-    const chvmothers = await axios
-      .get(baseURL + 'users/chvmothers', {
-        headers: {
-          Authorization: `Bearer ${cookie}`
-        }
-      })
-      .then((res) => {
-        return res.data
-      })
-
     return {
       props: {
         user,
-        // userDetails,
-        chvmothers
+        // userDetails
       }
     }
   } catch (error) {
