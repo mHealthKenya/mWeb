@@ -1,4 +1,4 @@
-import AllFollowUpComponent from '@components/Followup/all'
+import AllFollowUpComponent from '@components/Chv/Followup/all'
 import { baseURL } from '@config/axios'
 import CHVLayout from '@layout/CHVLayout/CHVLayout'
 import { FollowUp } from '@models/followup'
@@ -10,10 +10,10 @@ import nookies from 'nookies'
 import { useState } from 'react'
 import { Users } from 'src/helpers/enums/users.enum'
 
-const ChvFollowUp = ({ User, followups }: any) => {
-  const { data: allFollowUps } = useAllFollowUp( followups )
+const ChvFollowUp = ({ followups }: any) => {
+  const { data: allFollowUps } = useAllFollowUp(followups)
 
-  const [followUpEdit, setFollowWUpEdit] = useState<FollowUp>({} as FollowUp)
+  const [followUpEdit, ] = useState<FollowUp>({} as FollowUp)
 
   return (
     <CHVLayout>
@@ -21,8 +21,6 @@ const ChvFollowUp = ({ User, followups }: any) => {
     </CHVLayout>
   )
 }
-
-export default ChvFollowUp
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookies = nookies.get(ctx)
@@ -49,6 +47,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         }
       })
       .then((res) => res.data)
+
     return {
       props: {
         user,
@@ -65,3 +64,5 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   }
 }
+
+export default ChvFollowUp

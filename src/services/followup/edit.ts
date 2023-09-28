@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { axiosConfig } from "@config/axios";
 import Swal from 'sweetalert2';
-import { FollowUpUpdateProps } from '@components/Followup/edit';
+import { FollowUpUpdateProps } from '@components/Chv/Followup/edit';
 
 interface FollowUp extends FollowUpUpdateProps {
     id: string

@@ -55,7 +55,7 @@ export default function SidebarNav() {
         </small>
       </SidebarNavItem>
 
-      <SidebarNavTitle>Users</SidebarNavTitle>
+      <SidebarNavTitle>Records</SidebarNavTitle>
       <SidebarNavItem icon={faPersonPregnant} href="/chv/mothers">
         Mothers
       </SidebarNavItem>
@@ -68,7 +68,6 @@ export default function SidebarNav() {
       <SidebarNavItem icon={faEnvelope} href="/admin/users/mother">
         Appointments
       </SidebarNavItem>
-
       <SidebarNavTitle>Coverage</SidebarNavTitle>
       <SidebarNavItem icon={faQuestion} href="/admin/facilities">
         Enquiries
