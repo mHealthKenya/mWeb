@@ -60,7 +60,7 @@ const AllFollowUpComponent: FC<{
       }))
     }
     return []
-  }, [followups?.data])
+  }, [followups])
 
   const columns: GridColDef[] = useMemo(() => {
     return [

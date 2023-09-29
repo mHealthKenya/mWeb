@@ -2,14 +2,12 @@ import { IconDefinition } from '@fortawesome/free-regular-svg-icons'
 import {
   faArrows,
   faEnvelope,
-  faGauge,
   faPersonPregnant,
   faQuestion
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
 import { PropsWithChildren } from 'react'
-import Badge from 'react-bootstrap/Badge'
 import Nav from 'react-bootstrap/Nav'
 
 type SidebarNavItemProps = {

@@ -9,6 +9,8 @@
     "clinicvisit",
     "clinicvisits",
     "DDTHH",
+    "facilitychvdistribution",
+    "facilitydistribution",
     "facilityid",
     "facs",
     "fortawesome",
@@ -19,9 +21,12 @@
     "sadmin",
     "sampleid",
     "scheds",
+    "SMSC",
+    "smsstats",
     "VBAC",
     "vdrl",
     "vespaiach",
+    "Vist",
     "weightchart"
   ]
 }

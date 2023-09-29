@@ -1,7 +1,6 @@
 import { IconDefinition } from '@fortawesome/free-regular-svg-icons'
 import {
   faDroplet,
-  faGauge,
   faHospital,
   faLocation,
   faMap,
@@ -12,7 +11,6 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
 import { PropsWithChildren } from 'react'
-import Badge from 'react-bootstrap/Badge'
 import Nav from 'react-bootstrap/Nav'
 
 type SidebarNavItemProps = {
