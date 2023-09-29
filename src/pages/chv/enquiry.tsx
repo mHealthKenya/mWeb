@@ -1,11 +1,8 @@
 import AddEnquiriesComponent from '@components/Chv/Enquiries/Add'
 import CHVLayout from '@layout/CHVLayout/CHVLayout'
-import axios from 'axios'
 import * as jwt from 'jsonwebtoken'
 import { GetServerSideProps } from 'next'
 import nookies from 'nookies'
-import { baseURL } from 'src/config/axios'
-// import { Users } from 'src/helpers/enums/users.enum'
 
 const EnquiriesPage = ({data}: any) => {
 

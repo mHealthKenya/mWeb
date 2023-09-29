@@ -13,24 +13,17 @@ export interface FollowUpData {
 
 export const followUpColumn: Col[] = [
   {
-    field: 'schedule',
-    headerName: 'Schedule'
-  },
-  {
-    field: 'chv',
-    headerName: 'CHV'
-  },
-  {
-    field: 'status',
-    headerName: 'Status'
+    field: 'title',
+    headerName: 'Title'
   },
   {
     field: 'description',
     headerName: 'Description'
   },
+
   {
-    field: 'title',
-    headerName: 'Title'
+    field: 'status',
+    headerName: 'Status'
   }
 ]
 
@@ -59,44 +52,17 @@ const AllFollowUpComponent: FC<{
     if (followups && followups.data) {
       return followups.data.map((followup: any) => ({
         id: followup.id,
-        schedule: followup.scheduleId,
-        chv: followup.chvId,
-        status: followup.status,
+        title: followup.schedule.title,
         description: followup.schedule.description,
-        title: followup.schedule.title
+        status: followup.status,
+        schedule: followup.scheduleId,
+        chv: followup.chvId
       }))
     }
     return []
   }, [followups?.data])
 
   const columns: GridColDef[] = useMemo(() => {
-    // const actionCol: GridColDef = {
-    //   field: 'actions',
-    //   headerName: 'Actions',
-    //   width: 200,
-    //   renderCell: (params) => {
-    //     return (
-    //       <Box
-    //         sx={{
-    //           display: 'flex',
-    //           alignItems: 'center',
-    //           justifyContent: 'center'
-    //         }}>
-    //         <Button
-    //           variant="contained"
-    //           color="info"
-    //           sx={{ mr: 1 }}
-    //           startIcon={<Update />}
-    //           size="small"
-    //           onClick={() => {
-    //             handleToggleUpdate(params.value!)
-    //           }}>
-    //           Update
-    //         </Button>
-    //       </Box>
-    //     )
-    //   }
-    // }
     return [
       ...followUpColumn.map((col) => ({
         field: col.field,

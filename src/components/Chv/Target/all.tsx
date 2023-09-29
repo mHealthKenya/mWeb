@@ -19,7 +19,7 @@ import React, { FC } from 'react'
 export const ViewTargetComponent: FC<{
   handleToggle: () => void
   target: Target | undefined
-}> = ({ handleToggle, target }) => {
+}> = ({ handleToggle }) => {
   return (
     <CenterComponent>
       <Card sx={{ minWidth: 400, mt: 3, mb: 3 }}>
