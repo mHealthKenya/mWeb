@@ -28,3 +28,13 @@ export interface MotherDistribution {
 export interface TotalVisits {
   count: number
 }
+
+export interface UserDistribution {
+  _count: Count
+  role: string
+}
+
+export interface Count {
+  role: number
+}
+

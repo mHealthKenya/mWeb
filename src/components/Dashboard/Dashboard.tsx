@@ -1,5 +1,6 @@
+/* eslint-disable react/no-unescaped-entities */
 import { SMSStats } from '@models/smsstats'
-import { MotherDistribution } from '@models/user'
+import { MotherDistribution, TotalVisits, UserDistribution } from '@models/user'
 import { Box, Typography } from '@mui/material'
 import {
   BarElement,
@@ -16,6 +17,7 @@ import { Card } from 'react-bootstrap'
 import MotherDistributionChart from './MotherDistribution'
 import SMSStatsComponent from './SMSStats'
 import VisitStats from './VisitStats'
+import UserDistributionStats from './UserDist'
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Tooltip, Filler)
 
 const Home: FC<{
@@ -23,20 +25,48 @@ const Home: FC<{
   total_facilities: number
   total_visits: number
   total_sms_cost: number
+  monthly_sms_cost: number
   mother_distribution: MotherDistribution[]
   chv_distribution: MotherDistribution[]
   visits_distribution: MotherDistribution[]
   smsStats: SMSStats[]
+  users_distribution: UserDistribution[]
+  monthly_sms_count: TotalVisits
+  total_sms_count: TotalVisits
+  monthly_clinic_visits: TotalVisits
 }> = ({
   total_users,
+  monthly_sms_cost,
   total_facilities,
   total_visits,
   total_sms_cost,
   mother_distribution,
   smsStats,
   chv_distribution,
-  visits_distribution
+  visits_distribution,
+  users_distribution,
+  monthly_sms_count,
+  total_sms_count,
+  monthly_clinic_visits
 }) => {
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ]
+
+  const currentDate = new Date()
+  const currentMonth = months[currentDate.getMonth()]
+
   const currencyCode = 'KSH'
   const locale = 'en-KE'
 
@@ -80,19 +110,18 @@ const Home: FC<{
               <div>
                 <Box sx={{ m: 2 }}>
                   <div className="fs-4 fw-semibold">{total_users.toLocaleString()}</div>
-                  <div>Users</div>
+                  <div>Total Users</div>
                 </Box>
               </div>
             </Card.Body>
           </Card>
         </div>
-
         <div className="col-sm-6 col-lg-3">
           <Card bg="info" text="white" className="mb-4">
             <Card.Body className="pb-0 d-flex justify-content-between align-items-start">
               <Box sx={{ m: 2 }}>
                 <div className="fs-4 fw-semibold">{total_facilities.toLocaleString()}</div>
-                <div>Facilities</div>
+                <div>Total Facilities</div>
               </Box>
             </Card.Body>
           </Card>
@@ -103,7 +132,41 @@ const Home: FC<{
             <Card.Body className="pb-0 d-flex justify-content-between align-items-start">
               <Box sx={{ m: 2 }}>
                 <div className="fs-4 fw-semibold">{total_visits.toLocaleString()}</div>
-                <div>Clinic Visits</div>
+                <div>Total Clinic Visits</div>
+              </Box>
+            </Card.Body>
+          </Card>
+        </div>
+        <div className="col-sm-6 col-lg-3">
+          <Card bg="danger" text="white" className="mb-4">
+            <Card.Body className="pb-0 d-flex justify-content-between align-items-start">
+              <Box sx={{ m: 2 }}>
+                <div className="fs-4 fw-semibold">{currencyFormatter.format(total_sms_cost)}</div>
+                <div>Total SMS Cost</div>
+              </Box>
+            </Card.Body>
+          </Card>
+        </div>
+
+        <div className="col-sm-6 col-lg-3">
+          <Card bg="secondary" text="white" className="mb-4">
+            <Card.Body className="pb-0 d-flex justify-content-between align-items-start">
+              <div>
+                <Box sx={{ m: 2 }}>
+                  <div className="fs-4 fw-semibold">{total_sms_count.count.toLocaleString()}</div>
+                  <div>Total SMS Count</div>
+                </Box>
+              </div>
+            </Card.Body>
+          </Card>
+        </div>
+
+        <div className="col-sm-6 col-lg-3">
+          <Card bg="info" text="white" className="mb-4">
+            <Card.Body className="pb-0 d-flex justify-content-between align-items-start">
+              <Box sx={{ m: 2 }}>
+                <div className="fs-4 fw-semibold">{monthly_sms_count.count.toLocaleString()}</div>
+                <div>{currentMonth} SMS Count</div>
               </Box>
             </Card.Body>
           </Card>
@@ -113,13 +176,40 @@ const Home: FC<{
           <Card bg="danger" text="white" className="mb-4">
             <Card.Body className="pb-0 d-flex justify-content-between align-items-start">
               <Box sx={{ m: 2 }}>
-                <div className="fs-4 fw-semibold">{currencyFormatter.format(total_sms_cost)}</div>
-                <div>SMS Cost</div>
+                <div className="fs-4 fw-semibold">{currencyFormatter.format(monthly_sms_cost)}</div>
+                <div>{currentMonth} SMS Cost</div>
+              </Box>
+            </Card.Body>
+          </Card>
+        </div>
+
+        <div className="col-sm-6 col-lg-3">
+          <Card bg="primary" text="white" className="mb-4">
+            <Card.Body className="pb-0 d-flex justify-content-between align-items-start">
+              <Box sx={{ m: 2 }}>
+                <div className="fs-4 fw-semibold">
+                  {monthly_clinic_visits.count.toLocaleString()}
+                </div>
+                <div>{currentMonth} Clinic Visits</div>
               </Box>
             </Card.Body>
           </Card>
         </div>
       </div>
+
+      <Card className="mb-4">
+        <Card.Body>
+          <div className="d-flex justify-content-between">
+            <div>
+              <h4 className="mb-0">Users</h4>
+              <div className="small text-black-50">All time users distribution</div>
+            </div>
+          </div>
+          <div style={{ width: '100%', height: '500px' }}>
+            <UserDistributionStats data={users_distribution} />
+          </div>
+        </Card.Body>
+      </Card>
 
       <Card className="mb-4">
         <Card.Body>

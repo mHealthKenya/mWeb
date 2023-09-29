@@ -13,10 +13,14 @@ export default Home
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookies = nookies.get(ctx)
 
+  console.log('sample')
+
   const cookie = cookies['access-token']
 
   try {
     const user: any = await jwt.verify(cookie, `${process.env.NEXT_PUBLIC_JWT_SECRET}`)
+
+    console.log('user', user)
 
     switch (user.role) {
       case Users.SuperAdmin:

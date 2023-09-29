@@ -41,6 +41,7 @@ const Login: NextPage = () => {
   const { mutate: login, isLoading } = useLogin()
 
   const onSubmit = (credentials: LoginCredentials) => {
+    console.log(credentials)
     login(credentials)
   }
 

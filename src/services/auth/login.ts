@@ -27,6 +27,8 @@ const useLogin = () => {
     onSuccess: async (data) => {
       const { token } = data
       await Cookies.set('access-token', token)
+
+      console.log('success')
       router.push('/')
     },
     onError: (error: any) => {
@@ -36,6 +38,8 @@ const useLogin = () => {
         icon: 'error',
         confirmButtonText: 'OK'
       })
+
+      console.log('error', error)
     }
   })
 }
