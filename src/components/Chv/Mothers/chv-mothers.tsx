@@ -64,7 +64,7 @@ const ChvMothersComponent: FC<{
       }))
     }
     return []
-  }, [chvmothers?.data])
+  }, [chvmothers])
 
   const columns: GridColDef[] = useMemo(() => {
     return [
