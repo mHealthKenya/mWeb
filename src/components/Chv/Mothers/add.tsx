@@ -8,18 +8,12 @@ import React, { FC } from 'react'
 import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
-export interface AddMotherProps {
-  facilityId?: string
-  user?: User
-}
-
 export interface AddMotherFormProps {
   f_name: string
   l_name: string
   email?: string
   national_id: string
   phone_number: string
-  //   facilityId: string
 }
 
 const schema = Yup.object().shape({
@@ -30,13 +24,19 @@ const schema = Yup.object().shape({
   phone_number: Yup.string()
     .matches(/^254\d{9}$/, 'Invalid phone number format. Use this format 254xxxxxxxxx')
     .required('Phone number is a required field')
-  //   facilityId: Yup.string().required()
 })
 
-const AddMotherComponent: FC<{
-  handleToggle: () => void
+export interface AddMotherProps {
+  facilityId?: string
+  chv?: User
   user?: UserByRole
-}> = ({ handleToggle, user }) => {
+}
+
+const AddMotherComponent: FC<{
+  datas: AddMotherProps
+  handleToggle: () => void
+}> = ({ datas, handleToggle }) => {
+  const { facilityId } = datas || {}
   const {
     register,
     handleSubmit,
@@ -50,14 +50,14 @@ const AddMotherComponent: FC<{
 
   const onSubmit = (data: AddMotherFormProps) => {
     console.log('Facility', {
-      facilityId: user?.role,
-      user
+      facilityID: datas.facilityId
+      // chv
     })
     const item = {
       ...data,
       role: 'Mother',
       gender: 'Female',
-      facilityId: 'cljwr1ppa0006s6cs03efcx73'
+      facilityId: facilityId ?? 'cljwr1ppa0006s6cs03efcx73'
     }
 
     mutate(item)

@@ -13,14 +13,6 @@ export interface FollowUpData {
 
 export const followUpColumn: Col[] = [
   {
-    field: 'schedule',
-    headerName: 'Schedule'
-  },
-  {
-    field: 'chv',
-    headerName: 'CHV'
-  },
-  {
     field: 'status',
     headerName: 'Status'
   },
@@ -59,8 +51,6 @@ const AllFollowUpComponent: FC<{
     if (followups && followups.data) {
       return followups.data.map((followup: any) => ({
         id: followup.id,
-        schedule: followup.scheduleId,
-        chv: followup.chvId,
         status: followup.status,
         description: followup.schedule.description,
         title: followup.schedule.title

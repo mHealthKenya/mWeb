@@ -11,6 +11,7 @@ import { ViewTargetComponent } from '../Target/all'
 import { Add, ViewTimelineTwoTone } from '@mui/icons-material'
 import { Target } from '@models/target'
 import AddMotherComponent from './add'
+import { User } from '@models/biodata'
 
 export interface ChvMothersData {
   chvmothers: ChvMothers | undefined
@@ -37,9 +38,10 @@ export const chvMothersColumn: Col[] = [
 
 const ChvMothersComponent: FC<{
   data: any
-  user?: UserByRole
+  chv: User
   target?: Target
-}> = ({ data, user, target }) => {
+  user: UserByRole
+}> = ({ data, chv, target, user }) => {
   const [open, setOpen] = useState(false)
   const [_openAdd, _setOpenAdd] = useState(false)
   const chvmothers = useAllChvMothers(data)
@@ -118,7 +120,7 @@ const ChvMothersComponent: FC<{
 
       <SharedModal items={{ open, handleToggle: toggleAdd }}>
         <Center>
-          <AddMotherComponent handleToggle={toggleAdd} user={user} />
+          <AddMotherComponent datas={user} handleToggle={toggleAdd} />{' '}
         </Center>
       </SharedModal>
 

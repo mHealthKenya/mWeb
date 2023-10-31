@@ -1,13 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import Swal from 'sweetalert2'
 import { axiosConfig } from '../../config/axios'
-import { AddMotherFormProps } from '@components/Chv/Mothers/add'
+import { AddMotherFormProps, AddMotherProps } from '@components/Chv/Mothers/add'
+import { UserByRole } from '@models/user-by-role'
 
-interface AddMother extends AddMotherFormProps {
-    facilityId?: string,
-}
 
-export const addMother = async (data: AddMother) => {
+export const addMother = async (data: AddMotherProps) => {
   const axiosInstance = await axiosConfig()
   const newMother = await axiosInstance.post('users/add', data).then((res) => res.data)
 
@@ -18,8 +16,8 @@ const useAddMother = (completeFn: () => void) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: addMother,
-    onSuccess: async () => {
-      await Promise.all([queryClient.invalidateQueries(['users-by-role'])])
+    onSuccess: async (data) => {
+      await Promise.all([queryClient.invalidateQueries([`users-by-role${data.facilityId}`])])
       Swal.fire({
         title: 'Success!',
         text: 'Mother added successfully',
