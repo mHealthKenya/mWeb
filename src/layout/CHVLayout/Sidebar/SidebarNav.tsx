@@ -1,8 +1,8 @@
 import { IconDefinition } from '@fortawesome/free-regular-svg-icons'
 import {
-  faArrows,
   faEnvelope,
   faGauge,
+  faMap,
   faPersonPregnant,
   faQuestion
 } from '@fortawesome/free-solid-svg-icons'
@@ -58,19 +58,20 @@ export default function SidebarNav() {
       <SidebarNavItem icon={faPersonPregnant} href="/chp/mothers">
         Mothers
       </SidebarNavItem>
-      <SidebarNavItem icon={faArrows} href="/chp/followup">
+      {/* <SidebarNavItem icon={faArrows} href="/chp/followup">
         Follow Up
-      </SidebarNavItem>
+      </SidebarNavItem> */}
       <SidebarNavItem icon={faEnvelope} href="/chp/appointments">
         Appointments
       </SidebarNavItem>
-      <SidebarNavTitle>Coverage</SidebarNavTitle>
       <SidebarNavItem icon={faQuestion} href="/chp/enquiry">
         Enquiries
       </SidebarNavItem>
-      {/* <SidebarNavItem icon={faMap} href="/admin/coverage">
+      <SidebarNavTitle>Coverage</SidebarNavTitle>
+
+      <SidebarNavItem icon={faMap} href="/admin/coverage">
         Map View
-      </SidebarNavItem> */}
+      </SidebarNavItem>
     </ul>
   )
 }

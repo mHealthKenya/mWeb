@@ -50,7 +50,7 @@ const AddMotherComponent: FC<{
 
   const onSubmit = (data: AddMotherFormProps) => {
     console.log('Facility', {
-      facilityID: datas.facilityId
+      facilityID: facilityId
       // chv
     })
     const item = {
