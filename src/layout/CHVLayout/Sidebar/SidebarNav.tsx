@@ -55,17 +55,17 @@ export default function SidebarNav() {
       </SidebarNavItem>
 
       <SidebarNavTitle>Records</SidebarNavTitle>
-      <SidebarNavItem icon={faPersonPregnant} href="/chv/mothers">
+      <SidebarNavItem icon={faPersonPregnant} href="/chp/mothers">
         Mothers
       </SidebarNavItem>
-      <SidebarNavItem icon={faArrows} href="/chv/followup">
+      <SidebarNavItem icon={faArrows} href="/chp/followup">
         Follow Up
       </SidebarNavItem>
-      <SidebarNavItem icon={faEnvelope} href="/admin/users/mother">
+      <SidebarNavItem icon={faEnvelope} href="/chp/appointments">
         Appointments
       </SidebarNavItem>
       <SidebarNavTitle>Coverage</SidebarNavTitle>
-      <SidebarNavItem icon={faQuestion} href="/chv/enquiry">
+      <SidebarNavItem icon={faQuestion} href="/chp/enquiry">
         Enquiries
       </SidebarNavItem>
       {/* <SidebarNavItem icon={faMap} href="/admin/coverage">
