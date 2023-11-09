@@ -12,7 +12,7 @@ const MotherChv = ({ chvmothers, target }: any) => {
 
   return (
     <CHVLayout>
-      <ChvMothersComponent data={chvmothers} user={target} />
+      <ChvMothersComponent data={chvmothers} user={target} chv={chvmothers} target={target} />
     </CHVLayout>
   )
 }

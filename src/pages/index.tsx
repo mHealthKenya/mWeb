@@ -43,7 +43,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       case Users.CHV: {
         return {
           redirect: {
-            destination: '/chv',
+            destination: '/chp',
             permanent: false
           }
         }

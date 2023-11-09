@@ -39,7 +39,7 @@ export const chvMothersColumn: Col[] = [
 const ChvMothersComponent: FC<{
   data: any
   chv: User
-  target?: Target
+  target: Target
   user: UserByRole
 }> = ({ data, chv, target, user }) => {
   const [open, setOpen] = useState(false)

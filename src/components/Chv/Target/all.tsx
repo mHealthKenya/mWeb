@@ -1,4 +1,5 @@
 import CenterComponent from '@components/Shared/Center'
+import { User } from '@models/biodata'
 import { Target } from '@models/target'
 import {
   Button,
@@ -18,7 +19,7 @@ import React, { FC } from 'react'
 
 export const ViewTargetComponent: FC<{
   handleToggle: () => void
-  target: Target | undefined
+  target: Target,
 }> = ({ handleToggle, target }) => {
   return (
     <CenterComponent>
@@ -36,13 +37,13 @@ export const ViewTargetComponent: FC<{
               <TableBody>
                 <TableRow>
                   <TableCell>Set Target</TableCell>
-                  <TableCell>0</TableCell>
-                  {/* <TableCell>{target?.setTarget}</TableCell> */}
+                  {/* <TableCell>0</TableCell> */}
+                  <TableCell>{target?.setTarget}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>Current</TableCell>
-                  <TableCell>13</TableCell>
-                  {/* <TableCell>{target?.current}</TableCell> */}
+                  {/* <TableCell>13</TableCell> */}
+                  <TableCell>{target?.current}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
