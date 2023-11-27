@@ -39,7 +39,7 @@ export const ViewAppointmentCoomponent: FC<{
         title: appointment.title,
         description: appointment.description,
         status: appointment.status,
-        mother: appointment.motherId,
+        mother: appointment.mother.f_name + ' ' + appointment.mother.l_name
       }))
     }
     return []
