@@ -60,6 +60,8 @@ const EditScheduleComponent: FC<{
 }> = ({ data, handleToggle }) => {
   const { userId, facilityId, chvs } = data
 
+  console.log({ userId })
+
   const [chv, setChv] = useState(false)
 
   const {
@@ -182,12 +184,17 @@ const EditScheduleComponent: FC<{
                     size="small"
                     {...register('chvId')}
                     error={!!errors.chvId?.message}
+                    defaultValue={scheduler?.schedule?.mother?.createdById}
                     inputProps={{ 'data-testid': 'role_input' }}>
-                    {chvs?.map((item, index) => (
-                      <MenuItem key={index} value={item.id}>
-                        {`${item.f_name} ${item.l_name}`}
-                      </MenuItem>
-                    ))}
+                    {chvs?.map((item, index) => {
+                      console.log(item)
+
+                      return (
+                        <MenuItem key={index} value={item.id}>
+                          {`${item.f_name} ${item.l_name}`}
+                        </MenuItem>
+                      )
+                    })}
                   </Select>
                 </FormControl>
               )}

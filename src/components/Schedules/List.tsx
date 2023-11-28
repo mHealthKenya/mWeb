@@ -24,6 +24,7 @@ const SchedulesListComponent: React.FC<{ schedules?: UserSchedule[]; chvs: User[
   const scheduleValue = useScheduler()
 
   const handleComingSoon = (schedule: UserSchedule) => {
+    console.log(schedule)
     scheduleValue?.handleSchedule(schedule)
     setOpen((open) => !open)
   }
