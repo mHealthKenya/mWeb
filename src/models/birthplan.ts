@@ -31,7 +31,7 @@ export interface AddBirthPlan {
   facilityId: string
   delivery_mode: string
   preferred_transport: string
-  alternative_facility_id: string
+  other_facility: string
   support_person_name: string
   support_person_phone: string
   preferred_attendant_name?: string | null | undefined
