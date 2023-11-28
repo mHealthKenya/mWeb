@@ -119,7 +119,7 @@ export default function SidebarNav() {
         Mothers
       </SidebarNavItem>
       <SidebarNavItem icon={faPerson} href="/facility/chv">
-        CHVs
+        CHPs
       </SidebarNavItem>
 
       <SidebarNavTitle>Visits</SidebarNavTitle>
