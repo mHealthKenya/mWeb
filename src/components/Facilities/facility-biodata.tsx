@@ -126,10 +126,15 @@ const BioDataByFacility: React.FC<{
 
   return (
     <>
-      <Box sx={{ height: 450, width: '100%' }}>
+      <Box sx={{ height: '100%', width: '100%' }}>
         <DataGrid
           rows={rows}
           slots={{ toolbar: GridToolbar }}
+          slotProps={{
+            toolbar: {
+              showQuickFilter: true
+            }
+          }}
           columns={columns}
           initialState={{
             pagination: {

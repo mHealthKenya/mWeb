@@ -183,7 +183,7 @@ const UsersByRoleComponent: React.FC<{
         return {
           field: col.field,
           headerName: col.headerName,
-          width: 200
+          width: 300
         }
       default:
         return {
@@ -196,11 +196,16 @@ const UsersByRoleComponent: React.FC<{
 
   return (
     <>
-      <Box sx={{ height: 450, width: '100%' }}>
+      <Box sx={{ height: '100%', width: '100%' }}>
         <DataGrid
           rows={rows}
           slots={{ toolbar: GridToolbar }}
           columns={columns}
+          slotProps={{
+            toolbar: {
+              showQuickFilter: true
+            }
+          }}
           initialState={{
             pagination: {
               paginationModel: {

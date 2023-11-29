@@ -13,7 +13,7 @@ import {
   TextField,
   TextFieldProps
 } from '@mui/material'
-import { DateTimePicker } from '@mui/x-date-pickers'
+import { DatePicker } from '@mui/x-date-pickers'
 import useAddBioData from '@services/biodata/add-biodata'
 import useGetBioData from '@services/biodata/get'
 import dayjs, { Dayjs } from 'dayjs'
@@ -25,12 +25,16 @@ interface FormProps {
   height: number
   weight: number
   age: number
+  parity: number
+  gravidity: number
 }
 
 const formSchema = Yup.object().shape({
   height: Yup.number().required('Height cannot be empty').min(56),
   weight: Yup.number().required('Weight cannot be empty').min(20),
-  age: Yup.number().required('Age cannot be empty').min(10)
+  age: Yup.number().required('Age cannot be empty').min(10),
+  parity: Yup.number().required('Parity is a required field'),
+  gravidity: Yup.number().required('Parity is a required field')
 })
 
 export interface MotherDetailsProps {
@@ -47,7 +51,6 @@ const AddBiodata: FC<{ data: MotherDetailsProps }> = ({ data }) => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors }
   } = useForm<FormProps>({
     resolver: yupResolver(formSchema),
@@ -100,13 +103,16 @@ const AddBiodata: FC<{ data: MotherDetailsProps }> = ({ data }) => {
     setPeriod('' + actualDiff)
   }, [lmp])
 
-  const { mutate, isLoading } = useAddBioData()
   const { data: bio, isLoading: loadingBio } = useGetBioData(biodata!!, userId!!)
+
+  const { mutate, isLoading } = useAddBioData()
 
   const onSubmit = (data: FormProps) => {
     mutate({
       age: '' + data.age,
       height: '' + data.height,
+      parity: data.parity,
+      gravidity: data.gravidity,
       weight: '' + data.weight,
       expected_delivery_date: new Date(edd.toISOString()),
       last_monthly_period: new Date(lmp.toISOString()),
@@ -115,8 +121,6 @@ const AddBiodata: FC<{ data: MotherDetailsProps }> = ({ data }) => {
       userId: userId || '',
       facilityId: facilityId || ''
     })
-
-    reset()
   }
 
   return (
@@ -129,7 +133,7 @@ const AddBiodata: FC<{ data: MotherDetailsProps }> = ({ data }) => {
               type="number"
               label="Height in Centimeters"
               {...textFieldProps}
-              defaultValue={biodata?.height}
+              defaultValue={bio?.height}
               {...register('height')}
               error={!!errors?.height?.message}
               helperText={errors?.height?.message}
@@ -138,7 +142,7 @@ const AddBiodata: FC<{ data: MotherDetailsProps }> = ({ data }) => {
               type="number"
               label="Weight in Kg"
               {...textFieldProps}
-              defaultValue={biodata?.weight}
+              defaultValue={bio?.weight}
               {...register('weight')}
               error={!!errors?.weight?.message}
               helperText={errors?.weight?.message}
@@ -147,20 +151,42 @@ const AddBiodata: FC<{ data: MotherDetailsProps }> = ({ data }) => {
               type="number"
               label="Age in Years"
               {...textFieldProps}
-              defaultValue={biodata?.age}
+              defaultValue={bio?.age}
               {...register('age')}
               error={!!errors?.age?.message}
               helperText={errors?.age?.message}
             />
-            <DateTimePicker
+
+            <TextField
+              type="number"
+              label="Parity"
+              {...textFieldProps}
+              defaultValue={bio?.parity}
+              {...register('parity')}
+              error={!!errors?.parity?.message}
+              helperText={errors?.parity?.message}
+            />
+
+            <TextField
+              type="number"
+              label="Gravidity"
+              {...textFieldProps}
+              defaultValue={bio?.gravidity}
+              {...register('gravidity')}
+              error={!!errors?.gravidity?.message}
+              helperText={errors?.gravidity?.message}
+            />
+            <DatePicker
               label="Last Clinic Visit"
+              format="YYYY-MM-DD"
               onChange={(i) => handleDateChange(i!)}
               slotProps={{ textField: { size: 'small', required: true } }}
               value={date}
             />
 
-            <DateTimePicker
+            <DatePicker
               label="Last Monthly Period"
+              format="YYYY-MM-DD"
               onChange={(i) => handleLMPChange(i!)}
               slotProps={{ textField: { size: 'small', required: true } }}
               value={lmp}
@@ -175,8 +201,9 @@ const AddBiodata: FC<{ data: MotherDetailsProps }> = ({ data }) => {
               disabled
             />
 
-            <DateTimePicker
+            <DatePicker
               label="Expected Delivery Date"
+              format="YYYY-MM-DD"
               onChange={(i) => handleEddChange(i!)}
               slotProps={{ textField: { size: 'small', required: true } }}
               value={edd}

@@ -16,7 +16,7 @@ import {
   TextField
 } from '@mui/material'
 import useAddVisit from '@services/visits/add'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
@@ -54,6 +54,8 @@ const validationSchema = Yup.object().shape({
 })
 
 const status = ['positive', 'negative']
+
+const hiv = ['reactive', 'non reactive']
 const groups = ['A', 'B', 'AB', 'Ø']
 
 const AddVisitComponent: FC<{
@@ -70,6 +72,16 @@ const AddVisitComponent: FC<{
   const handleDateChange = (value: Dayjs) => {
     setDate(value)
   }
+
+  const [period, setPeriod] = useState('')
+
+  useEffect(() => {
+    const diff = new Date().getTime() - new Date(userDetails?.last_monthly_period || '').getTime()
+
+    const actualDiff = Math.floor(diff / (1000 * 60 * 60 * 24 * 7))
+
+    setPeriod('' + actualDiff)
+  }, [userDetails?.last_monthly_period])
 
   const {
     register,
@@ -104,6 +116,15 @@ const AddVisitComponent: FC<{
               <TextField
                 fullWidth
                 size="small"
+                label="Gestation Period In Weeks"
+                required
+                defaultValue={period}
+                value={period}
+                disabled
+              />
+              <TextField
+                fullWidth
+                size="small"
                 label="Weight"
                 required
                 {...register('weight')}
@@ -117,10 +138,10 @@ const AddVisitComponent: FC<{
                 render={({ field }) => (
                   <>
                     <FormLabel required error={!!errors?.hiv?.message}>
-                      HIV status
+                      HIV
                     </FormLabel>
                     <RadioGroup {...field} row>
-                      {status.map((state, index) => (
+                      {hiv.map((state, index) => (
                         <FormControlLabel
                           value={state}
                           control={<Radio />}
@@ -265,6 +286,8 @@ const AddVisitComponent: FC<{
               />
 
               <DateTimePicker
+                maxDate={dayjs(new Date())}
+                format="YYYY-MM-DD HH:mm"
                 label="Date and Time of Visit"
                 onChange={(i) => handleDateChange(i!)}
                 slotProps={{ textField: { size: 'small' } }}
