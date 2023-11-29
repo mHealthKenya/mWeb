@@ -81,6 +81,7 @@
     "@types/react-dom": "^18.2.4",
     "@types/react-resize-detector": "^6.1.0",
     "@types/react-test-renderer": "^18.0.0",
+    "@types/recharts": "^1.8.28",
     "@typescript-eslint/eslint-plugin": "^5.59.9",
     "@typescript-eslint/parser": "^5.59.9",
     "enzyme": "^3.11.0",
