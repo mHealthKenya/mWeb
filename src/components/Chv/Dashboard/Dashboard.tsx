@@ -22,7 +22,7 @@ Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement
 const CHVHome: FC<{
   mother_stats: Motherstats
   total_mother_stats: TotalMotherstats
-  followup_stats: Followupstats[]
+  followup_stats: Followupstats
   enquiry_stats: Enquirystats
 }> = ({ mother_stats, total_mother_stats, followup_stats, enquiry_stats }) => {
   const months = [
@@ -53,7 +53,7 @@ const CHVHome: FC<{
 
   //   let extended_list_of_strings: string[] = []
 
-    // const list_of_strings: string[] = ['success', 'info', 'warning', 'danger', 'primary']
+  // const list_of_strings: string[] = ['success', 'info', 'warning', 'danger', 'primary']
 
   //   if (visits_distribution.length > list_of_strings.length) {
   //     const repeat_times: number = Math.floor(visits_distribution.length / list_of_strings.length)

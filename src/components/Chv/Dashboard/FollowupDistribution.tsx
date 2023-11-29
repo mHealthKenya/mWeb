@@ -56,24 +56,34 @@ const CustomTooltip: React.FC<{
   return null
 }
 
-const FollowupDistributionChart: FC<{ data: Followupstats[] }> = ({ data }) => {
-  const nVal = useMemo(() => {
-    if (!Array.isArray(data)) {
-      console.error('Data is not an array:', data)
-      return []
-    }
+const FollowupDistributionChart: FC<{ data: Followupstats }> = ({ data }) => {
+  const { followups } = data
 
-    return data.map((item) => ({
-      status: createAcronym(item.followups[0].status),
-      count: item.followups[0]._count
-    }))
-  }, [data])
+  const nVal = useMemo(
+    () =>
+      followups.map((item) => ({
+        count: item._count.status,
+        status: item.status
+      })),
+    [followups]
+  )
+  //   const nVal = useMemo(() => {
+  //     if (!Array.isArray(data)) {
+  //       console.error('Data is not an array:', data)
+  //       return []
+  //     }
+
+  //     return data.map((item) => ({
+  //       status: createAcronym(item.followups[0].status),
+  //       count: item.followups[0]._count
+  //     }))
+  //   }, [data])
 
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart data={nVal}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="facilityName" angle={-45} textAnchor="end" interval={0} height={40} />
+        <XAxis dataKey="status" angle={-45} textAnchor="end" interval={0} height={40} />
         <YAxis />
         <Tooltip content={<CustomTooltip />} />
         <Legend />

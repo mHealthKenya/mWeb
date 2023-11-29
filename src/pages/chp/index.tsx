@@ -13,7 +13,7 @@ import { Enquirystats } from '@models/enquiry'
 interface HomeCHV {
   mother_stats: Motherstats
   total_mother_stats: TotalMotherstats
-  followup_stats: Followupstats[]
+  followup_stats: Followupstats
   enquiry_stats: Enquirystats
 }
 
