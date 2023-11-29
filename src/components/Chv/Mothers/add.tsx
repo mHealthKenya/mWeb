@@ -29,37 +29,34 @@ const schema = Yup.object().shape({
 export interface AddMotherProps {
   facilityId?: string
   chv?: User
-  user?: UserByRole 
 }
 
 const AddMotherComponent: FC<{
   datas: AddMotherProps
+  user?: UserByRole
   handleToggle: () => void
-}> = ({ datas, handleToggle }) => {
-  const { facilityId } = datas || {}
+}> = ({ handleToggle, user }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    reset
+    reset,
+    formState: { errors }
   } = useForm({
     resolver: yupResolver(schema)
-    // mode: 'onBlur'
   })
 
   const { mutate, isLoading } = useAddMother(reset)
 
   const onSubmit = (data: AddMotherFormProps) => {
-    console.log('Facility', {
-      facilityID: facilityId!!
-      // chv
-    })
+    // console.log('Facility', {
+    //   facilityID: user?.facilityId
+    //   // chv
+    // })
     const item = {
       ...data,
       role: 'Mother',
       gender: 'Female',
-      // facilityId: facilityId ?? 'cljwr1ppa0006s6cs03efcx73'
-      facilityId: facilityId!!
+      facilityId: user?.facilityId
     }
 
     mutate(item)
@@ -136,7 +133,8 @@ const AddMotherComponent: FC<{
                 color="success"
                 type="submit"
                 startIcon={<Add />}
-                disabled={isLoading}>
+                disabled={isLoading}
+                >
                 {isLoading ? 'Adding Mother' : 'Add Mother'}
               </Button>
 

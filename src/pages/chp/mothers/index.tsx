@@ -30,22 +30,21 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     if (user.role !== 'CHV') {
       return {
         redirect: {
-          destination: '/',
+          destination: '/login',
           permanent: false
         }
       }
     }
 
-    // const userDetails = await axios
-    //   .get(baseURL + 'users/user?id=' + user.id, {
-    //     headers: {
-    //       Authorization: `Bearer ${cookie}`
-    //     }
-    //   })
-    //   .then((res) => {
-    //     console.log('User Details Response:', res.data)
-    //     return res.data
-    //   })
+    const userDetails = await axios
+      .get(baseURL + 'users/individual', {
+        headers: {
+          Authorization: `Bearer ${cookie}`
+        }
+      })
+      .then((res) => {
+        return res.data
+      })
 
     const chvmothers = await axios
       .get(baseURL + 'users/chvmothers', {
@@ -70,13 +69,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
       props: {
         user,
-        // facilityId: userDetails.facilityId,
+        userDetails,
         chvmothers,
         target
       }
     }
   } catch (error) {
-    console.error('Error in getServerSideProps:', error)
     return {
       redirect: {
         destination: '/login',

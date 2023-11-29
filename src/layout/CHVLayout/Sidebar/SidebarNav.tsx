@@ -55,7 +55,7 @@ export default function SidebarNav() {
       </SidebarNavItem>
 
       <SidebarNavTitle>Records</SidebarNavTitle>
-      <SidebarNavItem icon={faPersonPregnant} href="/chp/mothers/mothers">
+      <SidebarNavItem icon={faPersonPregnant} href="/chp/mothers">
         Mothers
       </SidebarNavItem>
       <SidebarNavItem icon={faArrows} href="/chp/followup">

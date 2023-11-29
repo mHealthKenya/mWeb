@@ -41,7 +41,7 @@ const ChvMothersComponent: FC<{
   chv: User
   target: Target
   user: UserByRole
-}> = ({ data, user, chv, target }) => {
+}> = ({ data, user, target }) => {
   const [open, setOpen] = useState(false)
   const [_openAdd, _setOpenAdd] = useState(false)
   const chvmothers = useAllChvMothers(data)
@@ -120,7 +120,7 @@ const ChvMothersComponent: FC<{
 
       <SharedModal items={{ open, handleToggle: toggleAdd }}>
         <Center>
-          <AddMotherComponent datas={user} handleToggle={toggleAdd} />{' '}
+          <AddMotherComponent user={user} handleToggle={toggleAdd} datas={data} />{' '}
         </Center>
       </SharedModal>
 
