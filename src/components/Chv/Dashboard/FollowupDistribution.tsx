@@ -67,17 +67,6 @@ const FollowupDistributionChart: FC<{ data: Followupstats }> = ({ data }) => {
       })),
     [followups]
   )
-  //   const nVal = useMemo(() => {
-  //     if (!Array.isArray(data)) {
-  //       console.error('Data is not an array:', data)
-  //       return []
-  //     }
-
-  //     return data.map((item) => ({
-  //       status: createAcronym(item.followups[0].status),
-  //       count: item.followups[0]._count
-  //     }))
-  //   }, [data])
 
   return (
     <ResponsiveContainer width="100%" height="100%">
