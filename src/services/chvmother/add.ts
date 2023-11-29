@@ -1,9 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import Swal from 'sweetalert2'
 import { axiosConfig } from '../../config/axios'
-import { AddMotherFormProps, AddMotherProps } from '@components/Chv/Mothers/add'
-import { UserByRole } from '@models/user-by-role'
-
+import { AddMotherProps } from '@components/Chv/Mothers/add'
 
 export const addMother = async (data: AddMotherProps) => {
   const axiosInstance = await axiosConfig()

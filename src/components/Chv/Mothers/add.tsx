@@ -29,7 +29,7 @@ const schema = Yup.object().shape({
 export interface AddMotherProps {
   facilityId?: string
   chv?: User
-  user?: UserByRole
+  user?: UserByRole 
 }
 
 const AddMotherComponent: FC<{
@@ -44,20 +44,22 @@ const AddMotherComponent: FC<{
     reset
   } = useForm({
     resolver: yupResolver(schema)
+    // mode: 'onBlur'
   })
 
   const { mutate, isLoading } = useAddMother(reset)
 
   const onSubmit = (data: AddMotherFormProps) => {
     console.log('Facility', {
-      facilityID: facilityId
+      facilityID: facilityId!!
       // chv
     })
     const item = {
       ...data,
       role: 'Mother',
       gender: 'Female',
-      facilityId: facilityId ?? 'cljwr1ppa0006s6cs03efcx73'
+      // facilityId: facilityId ?? 'cljwr1ppa0006s6cs03efcx73'
+      facilityId: facilityId!!
     }
 
     mutate(item)

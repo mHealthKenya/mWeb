@@ -30,7 +30,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     if (user.role !== 'CHV') {
       return {
         redirect: {
-          destination: '/login',
+          destination: '/',
           permanent: false
         }
       }
@@ -43,6 +43,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     //     }
     //   })
     //   .then((res) => {
+    //     console.log('User Details Response:', res.data)
     //     return res.data
     //   })
 
@@ -69,12 +70,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
       props: {
         user,
-        // userDetails,
+        // facilityId: userDetails.facilityId,
         chvmothers,
         target
       }
     }
   } catch (error) {
+    console.error('Error in getServerSideProps:', error)
     return {
       redirect: {
         destination: '/login',

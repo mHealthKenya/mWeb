@@ -45,7 +45,7 @@ const SidebarNavTitle = (props: PropsWithChildren) => {
 export default function SidebarNav() {
   return (
     <ul className="list-unstyled">
-      <SidebarNavItem icon={faGauge} href="/sadmin">
+      <SidebarNavItem icon={faGauge} href="/chp">
         Dashboard
         <small className="ms-auto">
           <Badge bg="info" className="ms-auto">
@@ -55,7 +55,7 @@ export default function SidebarNav() {
       </SidebarNavItem>
 
       <SidebarNavTitle>Records</SidebarNavTitle>
-      <SidebarNavItem icon={faPersonPregnant} href="/chp/mothers">
+      <SidebarNavItem icon={faPersonPregnant} href="/chp/mothers/mothers">
         Mothers
       </SidebarNavItem>
       <SidebarNavItem icon={faArrows} href="/chp/followup">

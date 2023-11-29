@@ -14,7 +14,7 @@ import AddMotherComponent from './add'
 import { User } from '@models/biodata'
 
 export interface ChvMothersData {
-  chvmothers: ChvMothers | undefined
+  chvmothers: ChvMothers
 }
 
 export const chvMothersColumn: Col[] = [
@@ -41,7 +41,7 @@ const ChvMothersComponent: FC<{
   chv: User
   target: Target
   user: UserByRole
-}> = ({ data, chv, target, user }) => {
+}> = ({ data, user, chv, target }) => {
   const [open, setOpen] = useState(false)
   const [_openAdd, _setOpenAdd] = useState(false)
   const chvmothers = useAllChvMothers(data)
