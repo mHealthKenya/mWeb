@@ -43,7 +43,7 @@ export const ViewAppointmentCoomponent: FC<{
       }))
     }
     return []
-  }, [appointments?.data])
+  }, [appointments])
 
   const columns: GridColDef[] = useMemo(() => {
     return [

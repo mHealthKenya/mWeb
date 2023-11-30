@@ -66,7 +66,7 @@ const ChvMothersComponent: FC<{
       }))
     }
     return []
-  }, [chvmothers?.data])
+  }, [chvmothers])
 
   const columns: GridColDef[] = useMemo(() => {
     return [
@@ -105,11 +105,9 @@ const ChvMothersComponent: FC<{
           rows={rows}
           slots={{ toolbar: GridToolbar }}
           columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 9
-              }
+          slotProps={{
+            toolbar: {
+              showQuickFilter: true
             }
           }}
           pageSizeOptions={[5]}
