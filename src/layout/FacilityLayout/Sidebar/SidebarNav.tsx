@@ -6,7 +6,6 @@ import {
   faLocation,
   faMap,
   faPencil,
-  faPerson,
   faPersonPregnant
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -118,9 +117,9 @@ export default function SidebarNav() {
       <SidebarNavItem icon={faPersonPregnant} href="/facility/mothers">
         Mothers
       </SidebarNavItem>
-      <SidebarNavItem icon={faPerson} href="/facility/chv">
+      {/* <SidebarNavItem icon={faPerson} href="/facility/chv">
         CHPs
-      </SidebarNavItem>
+      </SidebarNavItem> */}
 
       <SidebarNavTitle>Visits</SidebarNavTitle>
       <SidebarNavItem icon={faHospital} href="/facility/visits/all">
