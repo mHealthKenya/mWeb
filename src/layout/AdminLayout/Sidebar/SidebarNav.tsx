@@ -127,7 +127,7 @@ export default function SidebarNav() {
         Facility Admins
       </SidebarNavItem>
       <SidebarNavItem icon={faUserAlt} href="/sadmin/users/chv">
-        CHVs
+        CHPs
       </SidebarNavItem>
       <SidebarNavItem icon={faUserCheck} href="/sadmin/users/mother">
         Mothers

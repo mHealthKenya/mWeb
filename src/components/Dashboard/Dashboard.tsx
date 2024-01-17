@@ -258,7 +258,7 @@ const Home: FC<{
         <Card.Body>
           <div className="d-flex justify-content-between">
             <div>
-              <h4 className="mb-0">CHV Distribution</h4>
+              <h4 className="mb-0">CHP Distribution</h4>
               <div className="small text-black-50">All time chv distribution</div>
             </div>
           </div>
