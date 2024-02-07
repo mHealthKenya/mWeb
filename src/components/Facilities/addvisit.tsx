@@ -35,8 +35,10 @@ interface FormProps {
   vdrl: string
   bloodRBS: string
   hepatitisB: string
+  treatment: string
   notes: string
   TB: string
+  tetanus: string
 }
 
 const validationSchema = Yup.object().shape({
@@ -49,12 +51,14 @@ const validationSchema = Yup.object().shape({
   vdrl: Yup.string().required(),
   bloodRBS: Yup.string().required(),
   hepatitisB: Yup.string().required(),
+  treatment: Yup.string().required(),
   notes: Yup.string().required(),
-  TB: Yup.string().required()
+  TB: Yup.string().required(),
+  tetanus: Yup.string().required()
 })
 
 const status = ['positive', 'negative']
-
+const injections = ['Injected', 'Not Injected']
 const hiv = ['reactive', 'non reactive']
 const groups = ['A', 'B', 'AB', 'Ø']
 
@@ -68,9 +72,19 @@ const AddVisitComponent: FC<{
   const now = dayjs(new Date()).format('YYYY-MM-DDTHH:mm')
 
   const [date, setDate] = useState(dayjs(now))
+  const [tetanusDate, setTetanusDate] = useState(dayjs(now))
+  const [hivTestDate, setHivTestDate] = useState(dayjs(now))
 
   const handleDateChange = (value: Dayjs) => {
     setDate(value)
+  }
+
+  const handletetanusDateChange = (value: Dayjs) => {
+    setTetanusDate(value)
+  }
+
+  const hadleHIVdateChange = (value: Dayjs) => {
+    setHivTestDate(value)
   }
 
   const [period, setPeriod] = useState('')
@@ -152,6 +166,15 @@ const AddVisitComponent: FC<{
                     </RadioGroup>
                   </>
                 )}
+              />
+
+              <DateTimePicker
+                maxDate={dayjs(new Date())}
+                format="YYYY-MM-DD HH:mm"
+                label="HIV Test Date"
+                onChange={(i) => hadleHIVdateChange(i!)}
+                slotProps={{ textField: { size: 'small' } }}
+                value={hivTestDate}
               />
 
               <TextField
@@ -285,6 +308,38 @@ const AddVisitComponent: FC<{
                 )}
               />
 
+              <Controller
+                name="tetanus"
+                control={control}
+                defaultValue={clinicVisit?.tetanus || ''}
+                render={({ field }) => (
+                  <>
+                    <FormLabel required error={!!errors?.tetanus?.message}>
+                      Tetanus Injection
+                    </FormLabel>
+                    <RadioGroup {...field} row>
+                      {[...injections].map((state, index) => (
+                        <FormControlLabel
+                          value={state}
+                          control={<Radio />}
+                          label={state}
+                          key={index}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </>
+                )}
+              />
+
+              <DateTimePicker
+                maxDate={dayjs(new Date())}
+                format="YYYY-MM-DD HH:mm"
+                label="Tetanus Injection Date"
+                onChange={(i) => handletetanusDateChange(i!)}
+                slotProps={{ textField: { size: 'small' } }}
+                value={tetanusDate}
+              />
+
               <DateTimePicker
                 maxDate={dayjs(new Date())}
                 format="YYYY-MM-DD HH:mm"
@@ -292,6 +347,18 @@ const AddVisitComponent: FC<{
                 onChange={(i) => handleDateChange(i!)}
                 slotProps={{ textField: { size: 'small' } }}
                 value={date}
+              />
+
+              <TextField
+                fullWidth
+                size="small"
+                label="Treatment Issued"
+                rows={4}
+                multiline
+                defaultValue={clinicVisit?.treatment}
+                error={!!errors?.treatment?.message}
+                helperText={errors?.treatment?.message}
+                {...register('treatment')}
               />
 
               <TextField
