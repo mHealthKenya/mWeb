@@ -16,7 +16,7 @@ import {
 import { FC } from 'react'
 import { Card } from 'react-bootstrap'
 import FollowupDistributionChart from './FollowupDistribution'
-import { Enquirystats } from '@models/enquiry'
+import { Enquirystats, MonthlyEnquirystats } from '@models/enquiry'
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Tooltip, Filler)
 
 const CHVHome: FC<{
@@ -24,6 +24,7 @@ const CHVHome: FC<{
   total_mother_stats: TotalMotherstats
   followup_stats: Followupstats
   enquiry_stats: Enquirystats
+  monthly_enquiry_stats: MonthlyEnquirystats
 }> = ({ mother_stats, total_mother_stats, followup_stats, enquiry_stats }) => {
   const months = [
     'January',
@@ -80,6 +81,17 @@ const CHVHome: FC<{
             </Card.Body>
           </Card>
         </div>
+
+        {/* <div className="col-sm-6 col-lg-3">
+          <Card bg="success" text="white" className="mb-4">
+            <Card.Body className="pb-0 d-flex justify-content-between align-items-start">
+              <Box sx={{ m: 2 }}>
+                <div className="fs-4 fw-semibold">{monthly_enquiry_stats.enquiriesThisMonth}</div>
+                <div>Monthly Enquiries</div>
+              </Box>
+            </Card.Body>
+          </Card>
+        </div> */}
       </div>
 
       <Card className="mb-4">

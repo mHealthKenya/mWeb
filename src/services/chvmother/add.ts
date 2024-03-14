@@ -15,7 +15,7 @@ const useAddMother = (completeFn: () => void) => {
   return useMutation({
     mutationFn: addMother,
     onSuccess: async (data) => {
-      await Promise.all([queryClient.invalidateQueries([`users-by-role${data.facilityId}`])])
+      await queryClient.invalidateQueries([`users-by-role${data.facilityId}`])
       Swal.fire({
         title: 'Success!',
         text: 'Mother added successfully',

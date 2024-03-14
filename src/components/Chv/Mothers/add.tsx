@@ -56,7 +56,7 @@ const AddMotherComponent: FC<{
       ...data,
       role: 'Mother',
       gender: 'Female',
-      facilityId: user?.facilityId
+      facilityId: user?.facilityId || '',
     }
 
     mutate(item)

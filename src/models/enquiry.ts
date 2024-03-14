@@ -14,3 +14,6 @@ export interface Enquiry {
 export interface Enquirystats {
   totalEnquiries: number
 }
+export interface MonthlyEnquirystats {
+  enquiriesThisMonth: number
+}
