@@ -1,4 +1,4 @@
-import ChvMothersComponent from '@components/Chv/Mothers/chv-mothers'
+import ChvMothersComponent from '@components/Chv/Mothers/all'
 import CHVLayout from '@layout/CHVLayout/CHVLayout'
 import axios from 'axios'
 import * as jwt from 'jsonwebtoken'
