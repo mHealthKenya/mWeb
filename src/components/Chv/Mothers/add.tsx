@@ -48,17 +48,13 @@ const AddMotherComponent: FC<{
   const { mutate, isLoading } = useAddMother(reset)
 
   const onSubmit = (data: AddMotherFormProps) => {
-    // console.log('Facility', {
-    //   facilityID: user?.facilityId
-    //   // chv
-    // })
     const item = {
       ...data,
       role: 'Mother',
       gender: 'Female',
       facilityId: user?.facilityId || '',
+      email: data.email || null
     }
-
     mutate(item)
     handleToggle()
     reset()
@@ -133,8 +129,7 @@ const AddMotherComponent: FC<{
                 color="success"
                 type="submit"
                 startIcon={<Add />}
-                disabled={isLoading}
-                >
+                disabled={isLoading}>
                 {isLoading ? 'Adding Mother' : 'Add Mother'}
               </Button>
 

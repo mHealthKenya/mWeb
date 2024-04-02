@@ -19,7 +19,7 @@ import {
   TextField
 } from '@mui/material'
 import { FC } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 import { gender } from '../../data/gender'
 import { rolesSuperAdmin } from '../../data/roles'
@@ -28,7 +28,7 @@ import useAddUser from '../../services/users/add-user'
 export interface AddUserFormProps {
   f_name: string
   l_name: string
-  email?: string
+  email?: string | null
   national_id: string
   gender: string
   phone_number: string
@@ -53,6 +53,7 @@ const AddUserComponent: FC<{ facilities: Facility[] }> = ({ facilities }) => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
     reset
   } = useForm({
@@ -64,7 +65,8 @@ const AddUserComponent: FC<{ facilities: Facility[] }> = ({ facilities }) => {
   const onSubmit = (data: AddUserFormProps) => {
     const item = {
       ...data,
-      role: data.role === 'Facility Admin' ? 'Facility' : data.role
+      role: data.role === 'Facility Admin' ? 'Facility' : data.role,
+      email: data.email || null
     }
 
     mutate(item)
@@ -164,14 +166,33 @@ const AddUserComponent: FC<{ facilities: Facility[] }> = ({ facilities }) => {
               </Select>
               <FormHelperText>{errors?.role?.message}</FormHelperText>
             </FormControl>
-            <FormControl required>
+
+            <Controller
+              name="gender"
+              control={control}
+              defaultValue="Female"
+              render={({ field }) => (
+                <>
+                  <FormLabel required error={!!errors?.gender?.message}>
+                    Gender
+                  </FormLabel>
+                  <RadioGroup {...field} row>
+                    {gender.map((item, index) => (
+                      <FormControlLabel value={item} control={<Radio />} label={item} key={index} />
+                    ))}
+                  </RadioGroup>
+                </>
+              )}
+            />
+
+            {/* <FormControl required>
               <FormLabel id="gender-radio">Gender</FormLabel>
               <RadioGroup aria-labelledby="gender" defaultValue="Female" {...register('gender')}>
                 {gender.map((item, index) => (
                   <FormControlLabel value={item} control={<Radio />} label={item} key={index} />
                 ))}
               </RadioGroup>
-            </FormControl>
+            </FormControl> */}
           </Stack>
         </CardContent>
 

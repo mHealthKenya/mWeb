@@ -100,8 +100,8 @@ const AddVisitComponent: FC<{
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    control
+    control,
+    formState: { errors }
   } = useForm<FormProps>({
     resolver: yupResolver(validationSchema),
     mode: 'onChange'
@@ -124,7 +124,10 @@ const AddVisitComponent: FC<{
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Card>
-          <CardHeader title={titleString} />
+          <CardHeader
+            title={titleString}
+            subheader="All fields marked with * are required fields"
+          />
           <CardContent>
             <Stack spacing={1}>
               <TextField
@@ -237,6 +240,7 @@ const AddVisitComponent: FC<{
                 fullWidth
                 size="small"
                 label="Urinalysis"
+                required
                 rows={4}
                 multiline
                 defaultValue={clinicVisit?.urinalysis}
@@ -353,6 +357,7 @@ const AddVisitComponent: FC<{
                 fullWidth
                 size="small"
                 label="Treatment Issued"
+                required
                 rows={4}
                 multiline
                 defaultValue={clinicVisit?.treatment}
@@ -365,6 +370,7 @@ const AddVisitComponent: FC<{
                 fullWidth
                 size="small"
                 label="Notes"
+                required
                 rows={4}
                 multiline
                 defaultValue={clinicVisit?.notes}
