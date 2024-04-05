@@ -169,7 +169,7 @@ const AddBiodata: FC<{ data: MotherDetailsProps }> = ({ data }) => {
 
             <TextField
               type="number"
-              label="Gravidity"
+              label="Gravida"
               {...textFieldProps}
               defaultValue={bio?.gravidity}
               {...register('gravidity')}

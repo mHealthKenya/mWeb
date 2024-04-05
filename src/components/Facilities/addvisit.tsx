@@ -25,7 +25,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import dayjs, { Dayjs } from 'dayjs'
 import { BiodataUser } from '@models/biodatauser'
 
-interface FormProps {
+export interface FormProps {
   weight: string
   hiv: string
   hbLevel: string
@@ -36,7 +36,7 @@ interface FormProps {
   bloodRBS: string
   hepatitisB: string
   treatment: string
-  notes: string
+  notes: string | null | undefined
   TB: string
   tetanus: string
 }
@@ -52,7 +52,7 @@ const validationSchema = Yup.object().shape({
   bloodRBS: Yup.string().required(),
   hepatitisB: Yup.string().required(),
   treatment: Yup.string().required(),
-  notes: Yup.string().required(),
+  notes: Yup.string().nullable().optional(),
   TB: Yup.string().required(),
   tetanus: Yup.string().required()
 })
@@ -114,7 +114,8 @@ const AddVisitComponent: FC<{
       ...data,
       bioDataId,
       facilityId: facilityAdmin.facilityId || '',
-      date: date.toISOString()
+      date: date.toISOString(),
+      notes: data.notes ?? ''
     })
   }
 
@@ -252,6 +253,7 @@ const AddVisitComponent: FC<{
                 fullWidth
                 size="small"
                 label="VDRL"
+                required
                 {...register('vdrl')}
                 defaultValue={clinicVisit?.vdrl}
                 error={!!errors?.vdrl?.message}
@@ -261,6 +263,7 @@ const AddVisitComponent: FC<{
                 fullWidth
                 size="small"
                 label="Blood RBS"
+                required
                 {...register('bloodRBS')}
                 defaultValue={clinicVisit?.bloodRBS}
                 error={!!errors?.bloodRBS?.message}
@@ -370,7 +373,7 @@ const AddVisitComponent: FC<{
                 fullWidth
                 size="small"
                 label="Notes"
-                required
+                // required
                 rows={4}
                 multiline
                 defaultValue={clinicVisit?.notes}
