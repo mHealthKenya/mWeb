@@ -1,6 +1,5 @@
 import { IconDefinition } from '@fortawesome/free-regular-svg-icons'
 import {
-  faDashboard,
   faDatabase,
   faDroplet,
   faGauge,
@@ -129,13 +128,13 @@ export default function SidebarNav() {
         All
       </SidebarNavItem>
 
-      <SidebarNavTitle>Wallet</SidebarNavTitle>
-      <SidebarNavItem icon={faDatabase} href="">
+      {/* <SidebarNavTitle>Wallet</SidebarNavTitle> */}
+      {/* <SidebarNavItem icon={faDatabase} href="">
         Wallet Stats
       </SidebarNavItem>
       <SidebarNavItem icon={faWallet} href="/facility/wallet/all">
         Manage Wallet
-      </SidebarNavItem>
+      </SidebarNavItem> */}
       <SidebarNavTitle>Coverage</SidebarNavTitle>
       <SidebarNavItem icon={faLocation} href="/facility/facilities">
         Facilities
