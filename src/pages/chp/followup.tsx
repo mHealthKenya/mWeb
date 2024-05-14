@@ -11,9 +11,15 @@ import { useState } from 'react'
 import { Users } from 'src/helpers/enums/users.enum'
 
 const ChvFollowUp = ({ followups }: any) => {
+<<<<<<< HEAD:src/pages/chp/followup.tsx
   const { data: allFollowUps } = useAllFollowUp(followups)
 
   const [followUpEdit, ] = useState<FollowUp>({} as FollowUp)
+=======
+  const { data: allFollowUps } = useAllFollowUp( followups )
+
+  const [followUpEdit, _setFollowWUpEdit] = useState<FollowUp>({} as FollowUp)
+>>>>>>> 3d1c2bfacd986175f0e582b3e1534adf0b842c54:src/pages/chv/followup.tsx
 
   return (
     <CHVLayout>

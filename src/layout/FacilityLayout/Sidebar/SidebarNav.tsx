@@ -2,7 +2,6 @@ import { IconDefinition } from '@fortawesome/free-regular-svg-icons'
 import {
   faDatabase,
   faDroplet,
-  faGauge,
   faHospital,
   faLocation,
   faMap,
@@ -13,7 +12,6 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
 import { PropsWithChildren } from 'react'
-import Badge from 'react-bootstrap/Badge'
 import Nav from 'react-bootstrap/Nav'
 
 type SidebarNavItemProps = {
@@ -107,14 +105,14 @@ const SidebarNavTitle = (props: PropsWithChildren) => {
 export default function SidebarNav() {
   return (
     <ul className="list-unstyled">
-      <SidebarNavItem icon={faGauge} href="/facility">
+      {/* <SidebarNavItem icon={faGauge} href="/facility">
         Dashboard
         <small className="ms-auto">
           <Badge bg="info" className="ms-auto">
             NEW
           </Badge>
         </small>
-      </SidebarNavItem>
+      </SidebarNavItem> */}
       <SidebarNavTitle>Users</SidebarNavTitle>
       <SidebarNavItem icon={faPersonPregnant} href="/facility/mothers">
         Mothers

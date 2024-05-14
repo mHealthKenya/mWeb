@@ -28,7 +28,11 @@
     "sadmin",
     "sampleid",
     "scheds",
+<<<<<<< HEAD
     "schedulesist",
+=======
+    "SMSC",
+>>>>>>> 3d1c2bfacd986175f0e582b3e1534adf0b842c54
     "smsstats",
     "tchv",
     "tmothers",
@@ -39,6 +43,7 @@
     "VBAC",
     "vdrl",
     "vespaiach",
+    "Vist",
     "weightchart"
   ]
 }

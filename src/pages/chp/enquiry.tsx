@@ -3,7 +3,10 @@ import CHVLayout from '@layout/CHVLayout/CHVLayout'
 import * as jwt from 'jsonwebtoken'
 import { GetServerSideProps } from 'next'
 import nookies from 'nookies'
+<<<<<<< HEAD:src/pages/chp/enquiry.tsx
 // import { Users } from 'src/helpers/enums/users.enum'
+=======
+>>>>>>> 3d1c2bfacd986175f0e582b3e1534adf0b842c54:src/pages/chv/enquiry.tsx
 
 const EnquiriesPage = ({data}: any) => {
 
