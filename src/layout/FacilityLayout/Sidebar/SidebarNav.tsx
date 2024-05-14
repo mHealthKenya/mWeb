@@ -1,6 +1,5 @@
 import { IconDefinition } from '@fortawesome/free-regular-svg-icons'
 import {
-  faDatabase,
   faDroplet,
   faGauge,
   faHospital,
@@ -8,7 +7,6 @@ import {
   faMap,
   faPencil,
   faPersonPregnant,
-  faWallet
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
