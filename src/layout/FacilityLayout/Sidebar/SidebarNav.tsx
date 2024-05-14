@@ -1,12 +1,14 @@
 import { IconDefinition } from '@fortawesome/free-regular-svg-icons'
 import {
+  faDatabase,
   faDroplet,
   faGauge,
   faHospital,
   faLocation,
   faMap,
   faPencil,
-  faPersonPregnant
+  faPersonPregnant,
+  faWallet
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
@@ -124,6 +126,14 @@ export default function SidebarNav() {
       <SidebarNavTitle>Visits</SidebarNavTitle>
       <SidebarNavItem icon={faHospital} href="/facility/visits/all">
         All
+      </SidebarNavItem>
+
+      <SidebarNavTitle>Wallet</SidebarNavTitle>
+      <SidebarNavItem icon={faDatabase} href="">
+        Wallet Stats
+      </SidebarNavItem>
+      <SidebarNavItem icon={faWallet} href="/facility/wallet/all">
+        Manage Wallet
       </SidebarNavItem>
       <SidebarNavTitle>Coverage</SidebarNavTitle>
       <SidebarNavItem icon={faLocation} href="/facility/facilities">
