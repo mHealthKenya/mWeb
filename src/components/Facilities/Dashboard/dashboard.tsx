@@ -58,7 +58,7 @@ const FDashboard: FC<{
               <div>
                 <Box sx={{ m: 2 }}>
                   <div className="fs-4 fw-semibold">{totalchvs.chvsInFacility}</div>
-                  <div>Total CHVs</div>
+                  <div>Total CHPs</div>
                 </Box>
               </div>
             </Card.Body>

@@ -1,7 +1,7 @@
 import SharedModal from '@components/Shared/Modal'
 import { Facility } from '@models/facility'
 import { UserByRole } from '@models/user-by-role'
-import { Add, Delete, Edit, Visibility } from '@mui/icons-material'
+import { Add, Delete, Edit, Visibility, Wallet } from '@mui/icons-material'
 import { Button } from '@mui/material'
 import Box from '@mui/material/Box'
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid'
@@ -126,7 +126,7 @@ const UsersByRoleComponent: React.FC<{
         return {
           field: col.field,
           headerName: col.headerName,
-          width: 200,
+          width: 700,
           renderCell: (params) => {
             return (
               <Box
@@ -149,6 +149,14 @@ const UsersByRoleComponent: React.FC<{
                   startIcon={<Delete />}
                   size="small">
                   Delete
+                </Button>
+                <Button
+                  variant="contained"
+                  color="success"
+                  onClick={() => console.log(params.value)}
+                  startIcon={<Wallet />}
+                  size="small">
+                  Manage Wallet
                 </Button>
               </Box>
             )

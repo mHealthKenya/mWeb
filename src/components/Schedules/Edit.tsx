@@ -176,7 +176,7 @@ const EditScheduleComponent: FC<{
 
               {chv && (
                 <FormControl fullWidth size="small">
-                  <InputLabel id="demo-simple-select-label">Select CHV</InputLabel>
+                  <InputLabel id="demo-simple-select-label">Select CHP</InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"

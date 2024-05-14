@@ -259,7 +259,7 @@ const Home: FC<{
           <div className="d-flex justify-content-between">
             <div>
               <h4 className="mb-0">CHP Distribution</h4>
-              <div className="small text-black-50">All time chv distribution</div>
+              <div className="small text-black-50">All time chp distribution</div>
             </div>
           </div>
           <div style={{ width: '100%', height: '500px' }}>
