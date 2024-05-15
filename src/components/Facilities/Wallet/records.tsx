@@ -5,7 +5,7 @@ import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid'
 import React, { FC, useMemo, useState, useRef } from 'react'
 import { ChvMothers } from '@models/chvmothers'
 import { RemoveRedEyeSharp } from '@mui/icons-material'
-import TransactionComponent from './singletransaction'
+import TransactionComponent from './printablesingletransaction'
 import CenterComponent from '@components/Shared/Center'
 import JsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
@@ -43,7 +43,7 @@ const RecordsComponent: FC<{
   //   chv: User
   //   target: Target
   //   user: UserByRole
-}> = ({ data, handleClose }) => {
+}> = ({ data }) => {
   const [open, setOpen] = useState(false)
   const [_openAdd, _setOpenAdd] = useState(false)
   const pdfContainerRef = useRef<HTMLDivElement | null>(null)
@@ -63,18 +63,14 @@ const RecordsComponent: FC<{
 
     pdf.addImage(imageData, 'PNG', 0, 0, pdfWidth, pdfHeight)
 
-    await pdf.save('visit.pdf')
+    await pdf.save('trasaction.pdf')
 
-    handleClose()
+    // handleClose()
   }
 
   const toggleView = () => {
     setOpen((open) => !open)
   }
-
-  // const toggleViewTarget = () => {
-  //   setViewTarget((viewTarget) => !viewTarget)
-  // }
 
   const sampleData = [
     {
@@ -176,15 +172,14 @@ const RecordsComponent: FC<{
                 subHeader="Detailed View"
               />
             </div>
-
             <CardActions>
-              <Button
+              {/* <Button
                 variant="contained"
                 color="success"
                 data-testid="submit_button"
                 onClick={handleClose}>
                 Close
-              </Button>
+              </Button> */}
 
               <Button
                 variant="contained"
@@ -195,12 +190,6 @@ const RecordsComponent: FC<{
               </Button>
             </CardActions>
           </Card>
-
-          {/* <TransactionComponent
-            visit={data}
-            title="Transaction Details"
-            subHeader="Detailed View"
-          /> */}
         </CenterComponent>
       </SharedModal>
     </>

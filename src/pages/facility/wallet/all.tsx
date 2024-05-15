@@ -1,4 +1,4 @@
-import FacilityManageWalletComponent from '@components/Facilities/Wallet/all'
+import WalletTabs from '@components/Facilities/Wallet/wallettab'
 import { baseURL } from '@config/axios'
 import FacilityLayout from '@layout/FacilityLayout/FacilityLayout'
 import useVisitsByFacility from '@services/visits/byfacility'
@@ -7,14 +7,12 @@ import * as jwt from 'jsonwebtoken'
 import { GetServerSideProps } from 'next'
 import nookies from 'nookies'
 
-const ViewWallet = ({ clinicalVisits, bioData, userDetails }: any) => {
-  const { data: visits } = useVisitsByFacility(userDetails.facilityId, clinicalVisits)
+const ViewWallet = ({ clinicalVisits, userDetails }: any) => {
+  const {} = useVisitsByFacility(userDetails.facilityId, clinicalVisits)
 
   return (
     <FacilityLayout>
-      <FacilityManageWalletComponent data={undefined} handleToggle={function (): void {
-              throw new Error('Function not implemented.')
-          } } />
+      <WalletTabs data={undefined} />
     </FacilityLayout>
   )
 }

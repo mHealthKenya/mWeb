@@ -33,6 +33,7 @@ const ClinicalVisitsComponent: FC<{
     setOpen((open) => !open)
     setVisit(data)
   }
+
   const handleRedirect = (data: ClinicalVisit) => {
     router.push(`/facility/visit/graph/${data.bioDataId}`)
   }

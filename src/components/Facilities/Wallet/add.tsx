@@ -148,9 +148,9 @@ const WalletRecordComponent: FC<{
                   fullWidth
                   label="Balance"
                   variant="filled"
-                  {...register('phone_number')}
-                  helperText={errors?.phone_number?.message}
-                  error={!!errors?.phone_number?.message}
+                  {...register('national_id')}
+                  helperText={errors?.national_id?.message}
+                  error={!!errors?.national_id?.message}
                   inputProps={{
                     'data-testid': 'phone_input'
                   }}
@@ -197,7 +197,7 @@ const WalletRecordComponent: FC<{
                 type="submit"
                 startIcon={<Add />}
                 disabled={isLoading}>
-                {isLoading ? 'Submit' : 'Submit'}
+                {isLoading ? 'Submiting' : 'Submit Transaction'}
               </Button>
 
               <Button variant="contained" color="error" onClick={handleToggle}>

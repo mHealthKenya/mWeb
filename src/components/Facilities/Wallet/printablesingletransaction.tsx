@@ -67,6 +67,17 @@ const TransactionComponent: FC<{ visit: ClinicalVisit; title: string; subHeader:
               <ListItem disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
+                    <Wallet />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Invoice No."
+                    // secondary={visit.tetanus}
+                  />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
                     <CalendarIcon />
                   </ListItemIcon>
                   <ListItemText
@@ -98,83 +109,7 @@ const TransactionComponent: FC<{ visit: ClinicalVisit; title: string; subHeader:
               </ListItem> */}
             </List>
           </Grid>
-          <Grid item xs={6}>
-            {/* <List>
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <HealthAndSafety />
-                  </ListItemIcon>
-                  <ListItemText primary="Rhesus Factor" secondary={visit.rhesusFactor} />
-                </ListItemButton>
-              </ListItem>
-
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <HealthAndSafety />
-                  </ListItemIcon>
-                  <ListItemText primary="Blood Group" secondary={visit.bloodGroup} />
-                </ListItemButton>
-              </ListItem>
-
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <HealthAndSafety />
-                  </ListItemIcon>
-                  <ListItemText primary="VDRL" secondary={visit.vdrl} />
-                </ListItemButton>
-              </ListItem>
-
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <HealthAndSafety />
-                  </ListItemIcon>
-                  <ListItemText primary="Blood RBS" secondary={visit.bloodRBS} />
-                </ListItemButton>
-              </ListItem>
-            </List> */}
-          </Grid>
         </Grid>
-        {/* <List>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <HealthAndSafety />
-              </ListItemIcon>
-              <ListItemText
-                primary="Urinalysis"
-                // secondary={visit.urinalysis}
-              />
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <HealthAndSafety />
-              </ListItemIcon>
-              <ListItemText
-                primary="Treatment"
-                // secondary={visit.treatment}
-              />
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <HealthAndSafety />
-              </ListItemIcon>
-              <ListItemText
-                primary="Notes"
-                // secondary={visit.notes}
-              />
-            </ListItemButton>
-          </ListItem>
-        </List> */}
       </CardContent>
     </div>
   )
