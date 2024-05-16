@@ -6,6 +6,8 @@ import WalletRecordComponent from './add'
 import { Wallet } from '@mui/icons-material'
 import Center from '@components/Shared/CenterVert'
 import SharedModal from '@components/Shared/Modal'
+import { colsWithFacilityCol, colsWithOutFacilityCol } from 'src/data/users-by-role'
+import AdminManageWalletComponent from './managewallet'
 
 // export interface ChvMothersData {
 //   chvmothers: ChvMothers
@@ -38,22 +40,22 @@ export const FacilityWalletColumn: Col[] = [
   }
 ]
 
-const FacilityManageWalletComponent: FC<{
+const ManageWalletComponent: FC<{
   data: any
+  facility?: boolean
+  isFacility?: boolean
   //   chv: User
   //   target: Target
   //   user: UserByRole
-}> = ({ data }) =>
+}> = ({ data, facility, isFacility }) =>
   // { data, user, target }
   {
     const [open, setOpen] = useState(false)
     const [_openAdd, _setOpenAdd] = useState(false)
     // const [value, setValue] = React.useState(0)
-    // const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
-    //   setValue(newValue)
-    // }
-
-    //   const chvmothers = useAllChvMothers(data)
+    const handleToggle = () => {
+      setOpen((open) => !open)
+    }
 
     const sampleData = [
       {
@@ -67,7 +69,7 @@ const FacilityManageWalletComponent: FC<{
       {
         id: 2,
         name: 'Jennifer Olive',
-        email: 'bob@example.com',
+        email: 'olive@example.com',
         phone_number: '254783998827',
         national_id: '88476625',
         facility: 'Ruaraka Neema Uhai'
@@ -78,6 +80,17 @@ const FacilityManageWalletComponent: FC<{
     const toggleAdd = () => {
       setOpen((open) => !open)
     }
+    const toggleManageWallet = () => {
+      setOpen((open) => !open)
+    }
+
+    const columnTypes = useMemo(() => {
+      if (facility) {
+        return colsWithFacilityCol
+      }
+
+      return colsWithOutFacilityCol
+    }, [facility])
 
     const rows = useMemo(() => {
       if (sampleData && sampleData) {
@@ -94,10 +107,10 @@ const FacilityManageWalletComponent: FC<{
       return []
     }, [sampleData])
 
-    const columns: GridColDef[] = useMemo(() => {
-      return [
-        ...FacilityWalletColumn.map((col) => {
-          if (col.field === 'action') {
+    const columns: GridColDef[] = columnTypes.map((col: GridColDef) => {
+      switch (col.field) {
+        case 'action':
+          if (isFacility) {
             return {
               field: col.field,
               headerName: col.headerName,
@@ -113,14 +126,101 @@ const FacilityManageWalletComponent: FC<{
               )
             }
           }
+
           return {
             field: col.field,
             headerName: col.headerName,
-            flex: 1
+            width: 500,
+            renderCell: (params) => {
+              return (
+                <Box
+                  sx={{
+                    display: 'flex'
+                  }}>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    sx={{ mr: 1 }}
+                    onClick={() => toggleManageWallet()}
+                    startIcon={<Wallet />}
+                    size="small">
+                    Manage Wallet
+                  </Button>
+                </Box>
+              )
+            }
           }
-        })
-      ]
-    }, [])
+
+        case 'email': {
+          return {
+            field: col.field,
+            headerName: col.headerName,
+            width: 250,
+            renderCell: (params) => (
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                <a href={`mailto:${params.value}`}>{params.value}</a>
+              </Box>
+            )
+          }
+        }
+
+        case 'gender':
+          return {
+            field: col.field,
+            headerName: col.headerName,
+            width: 100
+          }
+
+        case 'facility':
+          return {
+            field: col.field,
+            headerName: col.headerName,
+            width: 300
+          }
+        default:
+          return {
+            field: col.field,
+            headerName: col.headerName,
+            width: 150
+          }
+      }
+    })
+
+    // const columns: GridColDef[] = useMemo(() => {
+    //   return [
+    //     ...FacilityWalletColumn.map((col) => {
+    //       if (col.field === 'action') {
+    //         if (isFacility) {
+    //           return {
+    //             field: col.field,
+    //             headerName: col.headerName,
+    //             flex: 1,
+    //             renderCell: () => (
+    //               <Button
+    //                 variant="contained"
+    //                 color="success"
+    //                 startIcon={<Wallet />}
+    //                 onClick={() => toggleAdd()}>
+    //                 Record
+    //               </Button>
+    //             )
+    //           }
+    //         }
+    //       }
+
+    //       return {
+    //         field: col.field,
+    //         headerName: col.headerName,
+    //         flex: 1
+    //       }
+    //     })
+    //   ]
+    // }, [])
 
     return (
       <>
@@ -155,8 +255,21 @@ const FacilityManageWalletComponent: FC<{
             <WalletRecordComponent user={undefined} handleToggle={toggleAdd} datas={data} />{' '}
           </Center>
         </SharedModal>
+        <SharedModal
+          items={{
+            open,
+            handleToggle
+          }}>
+          <Center>
+            <AdminManageWalletComponent
+              user={undefined}
+              handleToggle={toggleManageWallet}
+              // facilities={facilities}
+            />
+          </Center>
+        </SharedModal>
       </>
     )
   }
 
-export default FacilityManageWalletComponent
+export default ManageWalletComponent
