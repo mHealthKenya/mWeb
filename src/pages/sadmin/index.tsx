@@ -1,7 +1,6 @@
 import Home from '@components/Dashboard/Dashboard'
 import { baseURL } from '@config/axios'
 import AdminLayout from '@layout/AdminLayout/AdminLayout'
-import NAdminLayout from '@layout/NAdminLayout/NAdminLayout'
 import { SMSCost } from '@models/sms'
 import { SMSStats } from '@models/smsstats'
 import { MotherDistribution, TotalUsers, TotalVisits, UserDistribution } from '@models/user'
