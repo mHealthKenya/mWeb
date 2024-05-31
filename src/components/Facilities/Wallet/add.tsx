@@ -147,6 +147,7 @@ const WalletRecordComponent: FC<{
                   size="small"
                   fullWidth
                   label="Balance"
+                  disabled
                   variant="filled"
                   {...register('national_id')}
                   helperText={errors?.national_id?.message}
