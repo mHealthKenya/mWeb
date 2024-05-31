@@ -122,12 +122,15 @@ const RecordsComponent: FC<{
           return {
             field: col.field,
             headerName: col.headerName,
+            width: 200,
             flex: 1,
             renderCell: () => (
               <Button
                 variant="contained"
                 color="secondary"
+                sx={{ mr: 1 }}
                 startIcon={<RemoveRedEyeSharp />}
+                size="small"
                 onClick={() => toggleView()}>
                 View Transaction
               </Button>

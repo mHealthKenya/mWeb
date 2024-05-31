@@ -1,5 +1,4 @@
 import ManageWalletComponent from '@components/Facilities/Wallet/all'
-import WalletTabs from '@components/Facilities/Wallet/wallettab'
 import { baseURL } from '@config/axios'
 import AdminLayout from '@layout/AdminLayout/AdminLayout'
 import useVisitsByFacility from '@services/visits/byfacility'
@@ -9,11 +8,11 @@ import { GetServerSideProps } from 'next'
 import nookies from 'nookies'
 
 const SAViewWallet = ({ clinicalVisits, userDetails }: any) => {
-  const {} = useVisitsByFacility(userDetails.facilityId, clinicalVisits)
+  const { data } = useVisitsByFacility(userDetails.facilityId, clinicalVisits)
 
   return (
     <AdminLayout>
-      <ManageWalletComponent data={undefined} />
+      <ManageWalletComponent sadmin={true} users={data} />
     </AdminLayout>
   )
 }

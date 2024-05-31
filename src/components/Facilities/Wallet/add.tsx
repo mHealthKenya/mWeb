@@ -46,7 +46,7 @@ export interface AddMotherProps {
 }
 
 const WalletRecordComponent: FC<{
-  datas: AddMotherProps
+  // datas: AddMotherProps
   user?: UserByRole
   handleToggle: () => void
 }> = ({ handleToggle, user }) => {

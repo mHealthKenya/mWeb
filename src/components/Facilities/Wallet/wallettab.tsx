@@ -4,7 +4,8 @@ import Tabs from '@mui/material/Tabs'
 import Typography from '@mui/material/Typography'
 import * as React from 'react'
 import RecordsComponent from './records'
-import FacilityManageWalletComponent from './all'
+import ManageWalletComponent from './all'
+import { UserByRole } from '@models/user-by-role'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -39,11 +40,14 @@ function a11yProps(index: number) {
 }
 
 const WalletTabs: React.FC<{
+  admin: boolean
+  isFacility?: boolean
+  facility?: boolean
+  users: UserByRole
+  // bioData: FacilityBioData[]
+  // visits: ClinicalVisit[]
   data: any
-  //   visits: ClinicalVisit[]
-  //   bioData: FacilityBioData[]
-  //   admin: boolean
-}> = ({ data }) => {
+}> = ({ admin }) => {
   const [value, setValue] = React.useState(0)
   const [_open, setOpen] = React.useState(true)
 
@@ -72,7 +76,7 @@ const WalletTabs: React.FC<{
       </CustomTabPanel> */}
 
       <CustomTabPanel value={value} index={0}>
-        <FacilityManageWalletComponent data={data} />{' '}
+        <ManageWalletComponent sadmin={admin} isFacility={true} facility={true} users={[]} />{' '}
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <RecordsComponent data={undefined} handleClose={handleToggleClose} />

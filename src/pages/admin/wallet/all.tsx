@@ -13,7 +13,7 @@ const MotherUsers = ({ users }: any) => {
 
   return (
     <NAdminLayout>
-      <ManageWalletComponent data={data} />
+      <ManageWalletComponent facility={true} users={data} sadmin={true} />
     </NAdminLayout>
   )
 }

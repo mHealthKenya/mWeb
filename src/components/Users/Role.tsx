@@ -151,15 +151,6 @@ const UsersByRoleComponent: React.FC<{
                   size="small">
                   Delete
                 </Button>
-                {/* <Button
-                  variant="contained"
-                  color="success"
-                  sx={{ mr: 1 }}
-                  onClick={() => console.log(params.value)}
-                  startIcon={<Wallet />}
-                  size="small">
-                  Manage Wallet
-                </Button> */}
               </Box>
             )
           }

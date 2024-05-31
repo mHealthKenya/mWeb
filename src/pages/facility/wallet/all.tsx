@@ -6,18 +6,17 @@ import axios from 'axios'
 import * as jwt from 'jsonwebtoken'
 import { GetServerSideProps } from 'next'
 import nookies from 'nookies'
+import { Users } from 'src/helpers/enums/users.enum'
 
-const ViewWallet = ({ clinicalVisits, userDetails }: any) => {
-  const {} = useVisitsByFacility(userDetails.facilityId, clinicalVisits)
+const WalletPage = ({ clinicalVisits, userDetails, mothers }: any) => {
+  const { data } = useVisitsByFacility(userDetails.facilityId, clinicalVisits)
 
   return (
     <FacilityLayout>
-      <WalletTabs data={undefined} />
+      <WalletTabs admin={false} isFacility={true} data={mothers} users={data} />
     </FacilityLayout>
   )
 }
-
-export default ViewWallet
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookies = nookies.get(ctx)
@@ -27,7 +26,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
     const user: any = await jwt.verify(cookie, `${process.env.NEXT_PUBLIC_JWT_SECRET}`)
 
-    if (user.role !== 'Facility') {
+    if (user.role !== Users.Facility) {
       return {
         redirect: {
           destination: '/login',
@@ -54,6 +53,23 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       })
       .then((res) => res.data)
 
+    const mothers = await axios
+      .get(
+        baseURL +
+          'users/roleandfacility?facilityId=' +
+          userDetails?.facilityId +
+          '&role=' +
+          Users.Mother,
+        {
+          headers: {
+            Authorization: `Bearer ${cookie}`
+          }
+        }
+      )
+      .then((res) => {
+        return res.data
+      })
+
     const clinicalVisits = await axios
       .get(baseURL + 'clinicvisit/facility?facilityId=' + userDetails.facilityId, {
         headers: {
@@ -66,6 +82,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       props: {
         user,
         userDetails,
+        mothers,
         clinicalVisits,
         bioData
       }
@@ -79,3 +96,5 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   }
 }
+
+export default WalletPage

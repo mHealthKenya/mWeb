@@ -1,5 +1,5 @@
 import { ClinicalVisit } from '@models/clinicvisits'
-import { Wallet } from '@mui/icons-material'
+import { LocalHospital, Wallet } from '@mui/icons-material'
 import {
   CardContent,
   CardHeader,
@@ -99,14 +99,17 @@ const TransactionComponent: FC<{ visit: ClinicalVisit; title: string; subHeader:
                 </ListItemButton>
               </ListItem>
 
-              {/* <ListItem disablePadding>
+              <ListItem disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
-                    <HealthAndSafety />
+                    <LocalHospital />
                   </ListItemIcon>
-                  <ListItemText primary="Hepatitis" secondary={visit.hepatitisB} />
+                  <ListItemText
+                    primary="Services"
+                    // secondary={visit.hepatitisB}
+                  />
                 </ListItemButton>
-              </ListItem> */}
+              </ListItem>
             </List>
           </Grid>
         </Grid>

@@ -72,7 +72,7 @@ const VisitTabs: React.FC<{
             Clinic visits can only be recorded for patients with an existing bio data profile
           </Alert>
         )}
-        <BioDataByFacility bioData={bioData} admin={admin}/>
+        <BioDataByFacility bioData={bioData} admin={admin} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <ClinicalVisitsComponent visits={visits} admin={admin} message={VisitMessage.View} />
