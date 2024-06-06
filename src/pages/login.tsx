@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import EmailIcon from '@mui/icons-material/Email'
+import PhoneIcon from '@mui/icons-material/Phone'
 import LockIcon from '@mui/icons-material/Lock'
 import { Button, Container, IconButton, InputAdornment, Stack, TextField } from '@mui/material'
 import * as jwt from 'jsonwebtoken'
@@ -19,16 +20,21 @@ import mLogo from 'public/assets/brand/Logo.png'
 import mhealthLogo from 'public/assets/brand/mhealthlogo.png'
 import AICSLogo from 'public/assets/brand/AICS.png'
 import SharedModal from '@components/Shared/Modal'
-// import EmailConfirmation from './passwordreset/otp-request'
 import OtpRequest from './passwordreset/otp-request'
 
 export interface LoginCredentials {
-  email: string
+  emailOrPhone: string
   password: string
 }
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().email('Must be a valid email').required('Email is required'),
+  emailOrPhone: Yup.string()
+    .required('Email or Phone is required')
+    .test('test-email-or-phone', 'Must be a valid email or phone number', function (value) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      const phoneRegex = /^\d{12}$/
+      return emailRegex.test(value) || phoneRegex.test(value)
+    }),
   password: Yup.string().required('Password is required')
 })
 
@@ -40,8 +46,6 @@ const Login: NextPage = () => {
   const handleToggle = () => {
     setOpen((open) => !open)
   }
-
-  
 
   const toggleSee = () => {
     setSee(() => !see)
@@ -77,17 +81,19 @@ const Login: NextPage = () => {
               <Stack spacing={3} sx={{ mb: 3 }}>
                 <TextField
                   size="small"
-                  label="Email"
+                  label="Email or Phone"
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <EmailIcon />
+                        <IconButton>
+                          {errors.emailOrPhone && errors.emailOrPhone.message.includes('email') ? <EmailIcon /> : <PhoneIcon />}
+                        </IconButton>
                       </InputAdornment>
                     )
                   }}
-                  {...register('email')}
-                  error={!!errors?.email?.message}
-                  helperText={errors?.email?.message}
+                  {...register('emailOrPhone')}
+                  error={!!errors?.emailOrPhone?.message}
+                  helperText={errors?.emailOrPhone?.message}
                 />
                 <TextField
                   size="small"
@@ -131,26 +137,6 @@ const Login: NextPage = () => {
         </Card.Body>
       </Card>
 
-      <section className="section section-default mt-0 mb-0">
-        <h5 className="mb-sm text-sm" style={{ textAlign: 'center', justifyContent: 'center' }}>partnership solution by:</h5>
-        <Row>
-          <Col xs={12} sm={6} md={4} lg={4}>
-            <div className="square-holder">
-              <Image alt="" src={mhealthLogo} style={{ width: '210px', height: '100px' }} />
-            </div>
-          </Col>
-          <Col xs={12} sm={6} md={4} lg={4}>
-            <div className="square-holder">
-              <Image alt="" src={AICSLogo} style={{ width: '210px', height: '100px' }} />
-            </div>
-          </Col>
-          <Col xs={12} sm={6} md={4} lg={4}>
-            <div className="square-holder">
-              <Image alt="" src={mLogo} style={{ width: '210px', height: '90px' }} />
-            </div>
-          </Col>
-        </Row>
-      </section>
       <SharedModal items={{
                 open,
                 handleToggle,
@@ -185,6 +171,3 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   }
 }
-
-
-

@@ -15,7 +15,13 @@ export interface OTP {
 }
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().email('Must be a valid email').required('Email is required'),
+  email: Yup.string()
+    .required('Email or Phone is required')
+    .test('test-email-or-phone', 'Must be a valid email or phone number', function (value) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      const phoneRegex = /^\d{12}$/
+      return emailRegex.test(value) || phoneRegex.test(value)
+    }),
 })
 
 const OtpRequest: FC<{
@@ -59,7 +65,7 @@ const OtpRequest: FC<{
             <br />
             <TextField
                   size="small"
-                  label="Email"
+                  label="Email or Phone"
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
