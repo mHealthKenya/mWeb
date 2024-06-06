@@ -36,6 +36,6 @@
       "@data/*": ["src/data/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/Users/Add.spec.tsx", "src/components/Dashboard/Dashboard.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/Users/Add.spec.tsx"],
   "exclude": ["node_modules"]
 }

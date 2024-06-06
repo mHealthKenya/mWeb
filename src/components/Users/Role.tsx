@@ -14,16 +14,15 @@ import {
   rowsWithoutFacility
 } from 'src/data/users-by-role'
 import EditUserWithRoleComponent from './Edit'
+import Swal from 'sweetalert2'
+import { Facility } from '@models/facility'
 
 const UsersByRoleComponent: React.FC<{
   users: UserByRole[]
   facility?: boolean
   isFacility?: boolean
   facilities?: Facility[]
-  visit?: boolean
-  sadmin?: boolean
-}> = ({ users, facility, isFacility, facilities, visit, sadmin }) => {
-  const router = useRouter()
+}> = ({ users, facility, isFacility, facilities }) => {
   const [open, setOpen] = useState(false)
   const [user, setUser] = useState<UserByRole>()
 
