@@ -43,7 +43,7 @@ export interface EditForm {
   phone_number: string
   role: string
   gender: string
-  facilityId?: string
+  facilityId: string
 }
 
 const roles = [Roles.ADMIN, Roles.FACILITY, Roles.CHV, Roles.MOTHER]
@@ -145,12 +145,16 @@ const EditUserWithRoleComponent: FC<{
                   inputProps={{ 'data-testid': 'role_input' }}>
                   {roles.map((role) => (
                     <MenuItem key={role} value={role}>
-                      {role === Roles.FACILITY ? 'Facility Admin' : role}
+                      {role === Roles.FACILITY
+                        ? 'Facility Admin'
+                        : role === Roles.CHV
+                        ? 'CHP'
+                        : role}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
-              {facilities ? (
+              {facilities && (
                 <FormControl fullWidth size="small">
                   <InputLabel id="demo-simple-select-facility">Facility</InputLabel>
                   <Select
@@ -158,7 +162,7 @@ const EditUserWithRoleComponent: FC<{
                     id="demo-simple-select-facility"
                     label="Facility"
                     size="small"
-                    defaultValue={user?.facilityId || ''}
+                    defaultValue={user?.facilityId}
                     {...register('facilityId')}
                     error={!!errors.facilityId?.message}
                     inputProps={{ 'data-testid': 'facility_input' }}>
@@ -169,7 +173,7 @@ const EditUserWithRoleComponent: FC<{
                     ))}
                   </Select>
                 </FormControl>
-              ) : null}
+              )}
               <FormControl required>
                 <FormLabel id="gender-radio">Gender</FormLabel>
                 <RadioGroup aria-labelledby="gender" defaultValue="Female" {...register('gender')}>

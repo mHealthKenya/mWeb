@@ -36,7 +36,7 @@ export interface FormProps {
   bloodRBS: string
   hepatitisB: string
   treatment: string
-  notes: string | null | undefined
+  notes?: string | null | undefined
   TB: string
   tetanus: string
 }

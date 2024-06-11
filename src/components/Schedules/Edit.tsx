@@ -29,7 +29,7 @@ interface FormProps {
   title: string
   description: string
   status: string
-  chvId: string | undefined
+  chvId?: string | undefined
 }
 
 const formSchema = Yup.object().shape({

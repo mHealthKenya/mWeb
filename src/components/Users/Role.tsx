@@ -126,7 +126,7 @@ const UsersByRoleComponent: React.FC<{
         return {
           field: col.field,
           headerName: col.headerName,
-          width: 700,
+          width: 200,
           renderCell: (params) => {
             return (
               <Box

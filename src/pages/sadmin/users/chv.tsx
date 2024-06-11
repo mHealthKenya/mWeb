@@ -12,7 +12,12 @@ const CHVUsers = ({ users, facilities }: any) => {
 
   return (
     <AdminLayout>
-      <UsersByRoleComponent users={data} facility={true} facilities={facilities} />
+      <UsersByRoleComponent
+        users={data}
+        facility={true}
+        facilities={facilities}
+        isFacility={false}
+      />
     </AdminLayout>
   )
 }

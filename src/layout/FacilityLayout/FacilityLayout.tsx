@@ -1,10 +1,10 @@
-import React, { PropsWithChildren, useCallback, useEffect, useState } from 'react'
 import Head from 'next/head'
+import { PropsWithChildren, useCallback, useEffect, useState } from 'react'
 import Container from 'react-bootstrap/Container'
 import { useResizeDetector } from 'react-resize-detector/build'
-import Sidebar, { SidebarOverlay } from './Sidebar/Sidebar'
-import Header from './Header/Header'
 import Footer from './Footer/Footer'
+import Header from './Header/Header'
+import Sidebar, { SidebarOverlay } from './Sidebar/Sidebar'
 
 export default function FacilityLayout({ children }: PropsWithChildren) {
   // Show status for xs screen

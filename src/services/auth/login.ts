@@ -1,9 +1,10 @@
+import { LoginCredentials } from '@components/Auth/login'
 import { LoginSuccess } from '@models/login'
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
-import { LoginCredentials } from '../../pages/login'
+// import { LoginCredentials } from '../../pages/login'
 import { baseURL } from 'src/config/axios'
 import Swal from 'sweetalert2'
 
@@ -27,8 +28,6 @@ const useLogin = () => {
     onSuccess: async (data) => {
       const { token } = data
       await Cookies.set('access-token', token)
-
-      console.log('success')
       router.push('/')
     },
     onError: (error: any) => {
@@ -38,8 +37,6 @@ const useLogin = () => {
         icon: 'error',
         confirmButtonText: 'OK'
       })
-
-      console.log('error', error)
     }
   })
 }

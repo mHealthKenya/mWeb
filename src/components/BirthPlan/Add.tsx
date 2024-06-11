@@ -34,13 +34,13 @@ export interface FormProps {
   support_person_name: string
   support_person_phone: string
   other_facility: string
-  preferred_attendant_name: string | null | undefined
-  preferred_attendant_phone: string | null | undefined
-  blood_donor_name: string | null | undefined
-  blood_donor_phone: string | null | undefined
+  preferred_attendant_name?: string | null | undefined
+  preferred_attendant_phone?: string | null | undefined
+  blood_donor_name?: string | null | undefined
+  blood_donor_phone?: string | null | undefined
   emergency_decision_maker_name: string
   emergency_decision_maker_phone: string
-  emergency_cs_plan: string | null | undefined
+  emergency_cs_plan?: string | null | undefined
   savings_plan: string
   delivery_bag: string
 }
