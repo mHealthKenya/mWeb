@@ -8,12 +8,12 @@ import { baseURL } from 'src/config/axios'
 import { Users } from 'src/helpers/enums/users.enum'
 import useUsersByRole from 'src/services/users/by-role'
 
-const CHVUsers = ({ users }: any) => {
+const CHVUsers = ({ users, facilities }: any) => {
   const { data } = useUsersByRole('CHV', users)
 
   return (
     <NAdminLayout>
-      <UsersByRoleComponent users={data} facility={true} />
+      <UsersByRoleComponent users={data} facility={true} facilities={facilities} />
     </NAdminLayout>
   )
 }
@@ -37,16 +37,21 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       }
     }
 
-    const users = await axios
+    const facilitiesD = axios.get(baseURL + 'facilities/all').then((res) => res.data)
+    const usersD = axios
       .get(baseURL + 'users/roles?role=CHV', {
         headers: {
           Authorization: `Bearer ${cookie}`
         }
       })
       .then((res) => res.data)
+
+    const [facilities, users] = await Promise.all([facilitiesD, usersD])
+
     return {
       props: {
         user,
+        facilities,
         users
       }
     }

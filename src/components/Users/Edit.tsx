@@ -40,6 +40,7 @@ export interface EditForm {
   f_name: string
   l_name: string
   email: string
+  phone_number: string
   role: string
   gender: string
   facilityId?: string
@@ -51,6 +52,9 @@ const validationSchema: any = Yup.object().shape({
   f_name: Yup.string().required('First name is required'),
   l_name: Yup.string().required('Last name is required'),
   email: Yup.string().email('Invalid email address').required('Email is required'),
+  phone_number: Yup.string()
+    .matches(/^254\d{9}$/, 'Invalid phone number format. Use this format 254xxxxxxxxx')
+    .required('Phone number is a required field'),
   role: Yup.string().required('Role is required'),
   gender: Yup.string().required('Gender is required'),
   facilityId: Yup.string().optional()
@@ -104,6 +108,18 @@ const EditUserWithRoleComponent: FC<{
                 error={!!errors.l_name?.message}
                 helperText={errors?.l_name?.message}
                 inputProps={{ 'data-testid': 'l_name_input' }}
+              />
+              <TextField
+                size="small"
+                fullWidth
+                label="Phone Number"
+                defaultValue={user?.phone_number}
+                {...register('phone_number')}
+                placeholder="254*********"
+                required
+                helperText={errors?.phone_number?.message}
+                error={!!errors?.phone_number?.message}
+                inputProps={{ 'data-testid': 'phone_input' }}
               />
               <TextField
                 label="Email"
