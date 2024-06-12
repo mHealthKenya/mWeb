@@ -1,0 +1,17 @@
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  redis:
+    image: 'devmhk/mplusweb:1.0.0'
+    env_file:
+      - .env.local
+
+    ports:
+      - '3100:3100'
+
+    restart: always
+
+    networks:
+      - app-tier

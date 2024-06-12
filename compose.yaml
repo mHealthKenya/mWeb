@@ -1,0 +1,10 @@
+services:
+  mweb:
+    build: .
+    container_name: mweb
+    ports:
+      - '3100:3100'
+    env_file:
+      - .env.local
+
+    restart: always
