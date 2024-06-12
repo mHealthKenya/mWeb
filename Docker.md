@@ -22,4 +22,9 @@ As always, replace 1.0.0 with the latest version depending on the build type
 
 Please refer to compose.server.yaml file to run the image on the server. Remember to replace the image with the latest version.
 
+## Run the image locally
+
+Run docker compose -f compose.yaml up -d to run with local images
+OR docker compose -f compose.server.yaml up -d to run with hosted images. For hosted images remember to replace the image with the latest version
+
 ### Happy coding
