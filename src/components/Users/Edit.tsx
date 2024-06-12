@@ -9,18 +9,14 @@ import {
   CardContent,
   CardHeader,
   FormControl,
-  FormControlLabel,
   InputLabel,
   MenuItem,
-  Radio,
-  RadioGroup,
   Select,
   Stack,
   TextField
 } from '@mui/material'
 import useEditUser from '@services/users/edit-user'
 import { FC } from 'react'
-import { FormLabel } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
@@ -76,6 +72,7 @@ const EditUserWithRoleComponent: FC<{
   const { mutate, isLoading } = useEditUser(handleToggle)
 
   const onSubmit = (data: EditForm) => {
+    console.log(data)
     mutate({
       id: '' + user?.id,
       ...data
@@ -174,14 +171,36 @@ const EditUserWithRoleComponent: FC<{
                   </Select>
                 </FormControl>
               )}
-              <FormControl required>
+
+              <FormControl fullWidth size="small" required>
+                <InputLabel id="demo-simple-select-facility">Gender</InputLabel>
+                <Select
+                  labelId="demo-simple-select-facility"
+                  id="demo-simple-select-facility"
+                  label="Gender"
+                  size="small"
+                  defaultValue={user?.gender}
+                  {...register('gender')}
+                  error={!!errors.gender?.message}
+                  inputProps={{ 'data-testid': 'gender_input' }}>
+                  {gender?.map((item, index) => (
+                    <MenuItem key={index} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              {/* <FormControl required>
                 <FormLabel id="gender-radio">Gender</FormLabel>
-                <RadioGroup aria-labelledby="gender" defaultValue="Female" {...register('gender')}>
+                <RadioGroup
+                  aria-labelledby="gender"
+                  defaultValue={user?.gender}
+                  {...register('gender')}>
                   {gender.map((item, index) => (
                     <FormControlLabel value={item} control={<Radio />} label={item} key={index} />
                   ))}
                 </RadioGroup>
-              </FormControl>
+              </FormControl> */}
             </Stack>
           </CardContent>
 

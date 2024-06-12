@@ -4,8 +4,9 @@ import { Button } from '@ui/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@ui/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@ui/ui/form'
 import { Input } from '@ui/ui/input'
-import { Loader2 } from 'lucide-react'
+import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
@@ -37,6 +38,12 @@ const PasswordResetComponent = () => {
   const handleRequest = (data: PasswordReset) => {
     reset(data)
   }
+
+  const [show, setShow] = useState(false)
+
+  const handleToggle = () => {
+    setShow(!show)
+  }
   return (
     <Card className="mx-auto p-4 w-[60%]">
       <CardHeader>
@@ -67,7 +74,26 @@ const PasswordResetComponent = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter new password" {...field} type="password" />
+                    <Input
+                      placeholder="Enter new password"
+                      {...field}
+                      type={!show ? 'password' : 'text'}
+                      Icon={
+                        show ? (
+                          <Eye
+                            className="text-muted-foreground mr-2 cursor-pointer"
+                            size={18}
+                            onClick={handleToggle}
+                          />
+                        ) : (
+                          <EyeOff
+                            className="text-muted-foreground mr-2 cursor-pointer"
+                            size={18}
+                            onClick={handleToggle}
+                          />
+                        )
+                      }
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -81,7 +107,26 @@ const PasswordResetComponent = () => {
                 <FormItem>
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter new password again" {...field} type="password" />
+                    <Input
+                      placeholder="Enter new password again"
+                      {...field}
+                      type={!show ? 'password' : 'text'}
+                      Icon={
+                        show ? (
+                          <Eye
+                            className="text-muted-foreground mr-2 cursor-pointer"
+                            size={18}
+                            onClick={handleToggle}
+                          />
+                        ) : (
+                          <EyeOff
+                            className="text-muted-foreground mr-2 cursor-pointer"
+                            size={18}
+                            onClick={handleToggle}
+                          />
+                        )
+                      }
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

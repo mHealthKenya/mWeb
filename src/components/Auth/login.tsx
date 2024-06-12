@@ -3,11 +3,12 @@ import { Button } from '@ui/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@ui/ui/form'
 import { Input } from '@ui/ui/input'
 import * as jwt from 'jsonwebtoken'
-import { Loader2 } from 'lucide-react'
+import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import { GetServerSideProps } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import nookies from 'nookies'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import useLogin from 'src/services/auth/login'
 import * as Yup from 'yup'
@@ -47,6 +48,12 @@ const LoginComponent = () => {
     login(credentials)
   }
 
+  const [show, setShow] = useState(false)
+
+  const handleToggle = () => {
+    setShow(!show)
+  }
+
   return (
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
       <div className="flex items-center justify-center py-12">
@@ -81,7 +88,26 @@ const LoginComponent = () => {
                     <FormLabel>Password </FormLabel>
 
                     <FormControl>
-                      <Input placeholder="Enter your password" {...field} />
+                      <Input
+                        placeholder="Enter your password"
+                        {...field}
+                        type={!show ? 'password' : 'text'}
+                        Icon={
+                          show ? (
+                            <Eye
+                              className="text-muted-foreground mr-2 cursor-pointer"
+                              size={18}
+                              onClick={handleToggle}
+                            />
+                          ) : (
+                            <EyeOff
+                              className="text-muted-foreground mr-2 cursor-pointer"
+                              size={18}
+                              onClick={handleToggle}
+                            />
+                          )
+                        }
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
