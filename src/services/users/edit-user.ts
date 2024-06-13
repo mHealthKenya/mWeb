@@ -3,8 +3,9 @@ import { axiosConfig } from '@config/axios'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import Swal from 'sweetalert2'
 
-interface EditUser extends EditForm {
+export interface EditUser extends EditForm {
   id: string
+  active?: boolean
 }
 
 export const editUser = async (data: EditUser) => {

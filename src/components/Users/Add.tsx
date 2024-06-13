@@ -185,6 +185,8 @@ const AddUserComponent: FC<{ facilities: Facility[] }> = ({ facilities }) => {
               )}
             />
 
+
+
             {/* <FormControl required>
               <FormLabel id="gender-radio">Gender</FormLabel>
               <RadioGroup aria-labelledby="gender" defaultValue="Female" {...register('gender')}>

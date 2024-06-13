@@ -7,9 +7,10 @@ export interface UserByRole {
   phone_number: string
   national_id: string
   role: string
+  active?: boolean
   createdAt: Date
   updatedAt: Date
-  facilityAdmin: string |  null
+  facilityAdmin: string | null
   facilityId?: string
   Facility?: Facility
 }

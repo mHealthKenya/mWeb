@@ -35,11 +35,11 @@ export enum Gender {
 export interface EditForm {
   f_name: string
   l_name: string
-  email: string
+  email?: string
   phone_number: string
   role: string
   gender: string
-  facilityId: string
+  facilityId?: string
 }
 
 const roles = [Roles.ADMIN, Roles.FACILITY, Roles.CHV, Roles.MOTHER]
@@ -47,7 +47,7 @@ const roles = [Roles.ADMIN, Roles.FACILITY, Roles.CHV, Roles.MOTHER]
 const validationSchema: any = Yup.object().shape({
   f_name: Yup.string().required('First name is required'),
   l_name: Yup.string().required('Last name is required'),
-  email: Yup.string().email('Invalid email address').required('Email is required'),
+  email: Yup.string().email('Invalid email address').optional(),
   phone_number: Yup.string()
     .matches(/^254\d{9}$/, 'Invalid phone number format. Use this format 254xxxxxxxxx')
     .required('Phone number is a required field'),

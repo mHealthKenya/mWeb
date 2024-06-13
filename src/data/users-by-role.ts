@@ -1,4 +1,5 @@
 import { UserByRole } from '@models/user-by-role'
+import dayjs from 'dayjs'
 
 export interface Col {
   field: string
@@ -17,6 +18,10 @@ export const colsWithOutFacilityCol: Col[] = [
   {
     field: 'email',
     headerName: 'Email'
+  },
+  {
+    field: 'date_added',
+    headerName: 'Date Registered'
   },
   {
     field: 'action',
@@ -42,6 +47,10 @@ export const colsWithFacilityCol: Col[] = [
     headerName: 'Facility'
   },
   {
+    field: 'date_added',
+    headerName: 'Date Registered'
+  },
+  {
     field: 'action',
     headerName: 'Action'
   }
@@ -53,6 +62,7 @@ export const rowsWithoutFacility = (users: UserByRole[]) => {
     name: user.f_name + ' ' + user.l_name,
     gender: user.gender,
     email: user.email,
+    date_added: dayjs(user.createdAt).format('ddd DD MMM, YYYY'),
     action: user,
     user
   }))
@@ -65,6 +75,7 @@ export const rowsWithFacility = (users: UserByRole[]) => {
     gender: user.gender,
     phone: user.phone_number,
     facility: user.Facility?.name,
+    date_added: dayjs(user.createdAt).format('ddd DD MMM, YYYY'),
     action: user,
     user
   }))
