@@ -1,8 +1,8 @@
-import AllTransactions from '@components/transactions/all'
+import AllWallets from '@components/wallet/tabs/allwallets'
 import { baseURL } from '@config/axios'
 import AdminLayout from '@layout/AdminLayout/AdminLayout'
-import { AllTransactionsType } from '@models/alltransactions'
-import { User } from '@models/user'
+import { FacilityWallet } from '@models/facilitywallets'
+import { UserWallet } from '@models/userwallet'
 import axios, { AxiosRequestConfig } from 'axios'
 import * as jwt from 'jsonwebtoken'
 import { GetServerSideProps } from 'next'
@@ -10,14 +10,15 @@ import nookies from 'nookies'
 import { Users } from 'src/helpers/enums/users.enum'
 
 const AllTransactionsMade = ({
-  allTransactions
+  allFacilityWallets,
+  wallets
 }: {
-  allTransactions: AllTransactionsType[]
-  user: User
+  allFacilityWallets: FacilityWallet[]
+  wallets: UserWallet[]
 }) => {
   return (
     <AdminLayout>
-      <AllTransactions bills={allTransactions} />
+      <AllWallets allFacilityWallets={allFacilityWallets} wallets={wallets} />
     </AdminLayout>
   )
 }
@@ -51,16 +52,16 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       return item
     }
 
-    const trans = axios(config(baseURL + 'wallet/transactions/all')).then((res) => res.data)
+    const fac = axios(config(baseURL + 'wallet/facility/all')).then((res) => res.data)
 
-    const actualUser = axios(config(baseURL + 'users/individual')).then((res) => res.data)
+    const wall = axios(config(baseURL + 'wallet/all')).then((res) => res.data)
 
-    const [allTransactions, aUser] = await Promise.all([trans, actualUser])
+    const [allFacilityWallets, wallets] = await Promise.all([fac, wall])
 
     return {
       props: {
-        user: aUser,
-        allTransactions
+        allFacilityWallets,
+        wallets
       }
     }
   } catch (error) {

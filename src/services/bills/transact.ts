@@ -33,6 +33,7 @@ const useTransact = () => {
         onSuccess: async () => {
             await setOpen(false)
             queryClient.invalidateQueries(['bills'])
+            queryClient.invalidateQueries(['wallets'])
             queryClient.invalidateQueries(['facility-wallet'])
             Swal.fire({
                 title: 'Success!',

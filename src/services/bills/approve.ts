@@ -26,6 +26,7 @@ const useApproveTransaction = () => {
         mutationFn: approveTransaction,
         onSuccess: async () => {
             await queryClient.invalidateQueries(['bills'])
+            await queryClient.invalidateQueries(['wallets'])
             await queryClient.invalidateQueries(['facility-wallet'])
             await queryClient.invalidateQueries(['transactions'])
 

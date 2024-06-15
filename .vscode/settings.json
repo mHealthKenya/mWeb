@@ -8,6 +8,7 @@
     "facilityid",
     "facilitytransactions",
     "facilitywallet",
+    "facilitywallets",
     "fortawesome",
     "lucide",
     "mplusweb",
@@ -21,6 +22,8 @@
     "sadmin",
     "sampleid",
     "unbilled",
+    "updatebalance",
+    "userwallet",
     "vespaiach"
   ]
 }

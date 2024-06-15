@@ -138,7 +138,7 @@ export default function SidebarNav() {
       <SidebarNavItem icon={faMoneyBill} href="/sadmin/billing">
         Approve Transactions
       </SidebarNavItem>
-      <SidebarNavItem icon={faWallet} href="/sadmin/billing">
+      <SidebarNavItem icon={faWallet} href="/sadmin/billing/wallets">
         Wallets
       </SidebarNavItem>
 
