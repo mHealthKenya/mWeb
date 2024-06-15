@@ -22,7 +22,7 @@ const BioDataByFacility: React.FC<{
         Age: bio.age,
         LMP: dayjs().format('YY-MM-DD HH:mm'),
         Action: bio,
-        bio
+        Balance: bio.user?.Wallet[0]?.balance
       })),
     [bioData]
   )
@@ -49,6 +49,11 @@ const BioDataByFacility: React.FC<{
     },
 
     {
+      field: 'Balance',
+      headerName: 'Available Points'
+    },
+
+    {
       field: 'Action',
       headerName: 'Action'
     }
@@ -64,6 +69,16 @@ const BioDataByFacility: React.FC<{
 
   const columns: GridColDef[] = columnTypes1.map((col) => {
     switch (col.field) {
+      case 'Balance':
+        return {
+          field: col.field,
+          headerName: col.headerName,
+          width: 200,
+          renderCell: (params) => {
+            return <>{JSON.stringify(params.value)}</>
+          }
+        }
+
       case 'Action':
         if (admin) {
           return {
@@ -107,7 +122,8 @@ const BioDataByFacility: React.FC<{
                   sx={{ mr: 1 }}
                   startIcon={<Add />}
                   size="small"
-                  onClick={() => handleRedirectFacility(params.value)}>
+                  onClick={() => handleRedirectFacility(params.value)}
+                  disabled={params.value.user.Wallet[0].balance <= 0}>
                   Record Visit
                 </Button>
               </Box>

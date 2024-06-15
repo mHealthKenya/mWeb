@@ -1,8 +1,12 @@
 {
   "cSpell.words": [
+    "billvisit",
     "chvs",
+    "clinicvisit",
     "devmhk",
     "facilityid",
+    "facilitytransactions",
+    "facilitywallet",
     "fortawesome",
     "lucide",
     "mplusweb",
@@ -11,9 +15,11 @@
     "passreset",
     "passwordreset",
     "pokemons",
+    "requestcode",
     "roleandfacility",
     "sadmin",
     "sampleid",
+    "unbilled",
     "vespaiach"
   ]
 }

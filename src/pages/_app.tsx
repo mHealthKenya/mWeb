@@ -12,6 +12,7 @@ import Head from 'next/head'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import ScheduleProvider from 'src/context/ScheduleContext'
+import { Toaster } from '@ui/ui/toaster'
 
 config.autoAddCss = false
 
@@ -34,6 +35,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           </QueryClientProvider>
         </SSRProvider>
       </LocalizationProvider>
+      <Toaster />
     </>
   )
 }
