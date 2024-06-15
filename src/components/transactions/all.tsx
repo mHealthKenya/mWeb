@@ -1,15 +1,19 @@
 import { DataTable } from '@components/billing/table'
-import WalletTotal from '@components/wallet/facility/facility-wallet'
-import { FacilityTransactions } from '@models/facilitytransactions'
-import { FacilityWallet } from '@models/facilitywallet'
+import SharedModal from '@components/Shared/Modal'
+import { AllTransactionsType } from '@models/alltransactions'
+import useAllTransactions from '@services/bills/alltransactions'
 import { ColumnDef } from '@tanstack/react-table'
+import { Button } from '@ui/ui/button'
 import dayjs from 'dayjs'
+import { useAtom } from 'jotai'
 import { FC } from 'react'
+import { approveAtom } from 'src/atoms/approve'
+import ApproveTransaction from './approve'
 
-export const columns: ColumnDef<FacilityTransactions>[] = [
+export const columns: ColumnDef<AllTransactionsType>[] = [
   {
-    accessorKey: 'name',
-    accessorFn: (row) => row.user.f_name + ' ' + row.user.l_name,
+    accessorKey: 'patient',
+    accessorFn: (row) => row.user,
     header: 'Patient',
     cell: ({ row }) => {
       const patient = row.original.user
@@ -39,6 +43,15 @@ export const columns: ColumnDef<FacilityTransactions>[] = [
           <div className="font-medium">{attendant.phone_number}</div>
         </div>
       )
+    }
+  },
+
+  {
+    accessorKey: 'name',
+    accessorFn: (row) => row.facility.name,
+    header: 'Facility',
+    cell: ({ row }) => {
+      return <div className={`text-right font-medium`}>{row.getValue('name')}</div>
     }
   },
 
@@ -88,22 +101,55 @@ export const columns: ColumnDef<FacilityTransactions>[] = [
       const formatted = date.format('dddd DD MMM, YYYY HH:mm A')
       return <div className="text-right font-medium">{formatted}</div>
     }
+  },
+
+  {
+    id: 'actions',
+
+    accessorKey: 'actions',
+
+    accessorFn: (row) => row,
+
+    cell: ({ row }) => {
+      const data: AllTransactionsType = row.getValue('actions')
+
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const [_, setApproved] = useAtom(approveAtom)
+
+      const handleClick = () => {
+        setApproved((approved) => ({ ...approved, data: data, open: true }))
+      }
+
+      return (
+        <Button onClick={handleClick} disabled={!!data.approvedBy}>
+          {!!data.approvedBy ? 'Approved' : 'Approve'}
+        </Button>
+      )
+    }
   }
 ]
 
-const FTransactions: FC<{
-  bills: FacilityTransactions[]
-  facilityId: string
-  wallet: FacilityWallet
-}> = ({ bills, facilityId, wallet }) => {
-  //   const { data: initial } = useFacilityBills(facilityId, bills)
+const AllTransactions: FC<{
+  bills: AllTransactionsType[]
+}> = ({ bills }) => {
+  const { data: initial } = useAllTransactions(bills)
+
+  const [approved, setApproved] = useAtom(approveAtom)
+
+  const { open, data } = approved
+
+  const handleToggle = () => {
+    setApproved((approved) => ({ ...approved, open: !approved.open }))
+  }
 
   return (
     <div>
-      <WalletTotal wallet={wallet} facilityId={facilityId} />
-      <DataTable columns={columns} data={bills} />
+      <DataTable columns={columns} data={initial} />
+      <SharedModal items={{ open: open, handleToggle }}>
+        <ApproveTransaction data={data!} />
+      </SharedModal>
     </div>
   )
 }
 
-export default FTransactions
+export default AllTransactions

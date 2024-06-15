@@ -7,7 +7,9 @@ import {
   faUserAlt,
   faUserCheck,
   faUserCircle,
-  faUserNurse
+  faUserNurse,
+  faMoneyBill,
+  faWallet
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
@@ -130,6 +132,14 @@ export default function SidebarNav() {
       </SidebarNavItem>
       <SidebarNavItem icon={faUserCheck} href="/sadmin/users/mother">
         Mothers
+      </SidebarNavItem>
+
+      <SidebarNavTitle>Billing</SidebarNavTitle>
+      <SidebarNavItem icon={faMoneyBill} href="/sadmin/billing">
+        Approve Transactions
+      </SidebarNavItem>
+      <SidebarNavItem icon={faWallet} href="/sadmin/billing">
+        Wallets
       </SidebarNavItem>
 
       <SidebarNavTitle>Coverage</SidebarNavTitle>
