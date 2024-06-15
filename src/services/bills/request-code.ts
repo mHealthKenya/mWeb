@@ -2,12 +2,15 @@ import { axiosConfig } from "@config/axios"
 import { useMutation } from "@tanstack/react-query"
 import Swal from "sweetalert2"
 
-const requestCode = async (userId: string) => {
+interface RequestCode {
+    userId: string
+    clinicVisitId: string
+}
+
+const requestCode = async (data: RequestCode) => {
     const axiosInstance = await axiosConfig()
 
-    const data = {
-        userId
-    }
+
 
     const sendCode = await axiosInstance.post('wallet/requestcode', data).then((res) => res.data)
 

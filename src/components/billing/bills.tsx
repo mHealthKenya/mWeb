@@ -79,10 +79,15 @@ export const columns: ColumnDef<BillVisit>[] = [
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const [__, setBill] = useAtom(billAtom)
 
-      const { id } = data.bioData.user
+      const { id: userId } = data.bioData.user
+
+      const { id: clinicVisitId } = data
 
       const handleClick = () => {
-        mutate(id)
+        mutate({
+          userId,
+          clinicVisitId
+        })
       }
 
       const handleOpen = () => {
