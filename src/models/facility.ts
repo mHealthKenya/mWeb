@@ -4,4 +4,5 @@ export interface Facility {
   createdAt: Date
   updatedAt: Date
   status: string
+  hasWallet: boolean,
 }

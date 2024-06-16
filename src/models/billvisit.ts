@@ -3,7 +3,12 @@ export interface BillVisit {
     facilityId: string;
     createdAt: Date;
     billed: boolean;
+    WalletTransaction: WalletTransaction[];
     bioData: BioData;
+}
+
+export interface WalletTransaction {
+    points: number;
 }
 
 export interface BioData {

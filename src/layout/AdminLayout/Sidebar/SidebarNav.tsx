@@ -9,6 +9,7 @@ import {
   faUserCircle,
   faUserNurse,
   faMoneyBill,
+  faMoneyBill1Wave,
   faWallet
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -137,6 +138,9 @@ export default function SidebarNav() {
       <SidebarNavTitle>Billing</SidebarNavTitle>
       <SidebarNavItem icon={faMoneyBill} href="/sadmin/billing">
         Approve Transactions
+      </SidebarNavItem>
+      <SidebarNavItem icon={faMoneyBill1Wave} href="/sadmin/billing/multiapprove">
+        Multi Approve Transactions
       </SidebarNavItem>
       <SidebarNavItem icon={faWallet} href="/sadmin/billing/wallets">
         Wallets
