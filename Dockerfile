@@ -54,9 +54,9 @@ COPY --from=builder --chown=nextjs:nodejs /mweb/.next/static ./.next/static
 
 USER nextjs
 
-EXPOSE 3100
+EXPOSE 3600
 
-ENV PORT 3100
+ENV PORT 3600
 
 CMD ["node", "server.js"]
 

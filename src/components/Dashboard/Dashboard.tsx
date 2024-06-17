@@ -22,7 +22,6 @@ Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement
 
 const Home: FC<{
   total_users: number
-  total_facilities: number
   total_visits: number
   total_sms_cost: number
   monthly_sms_cost: number
@@ -37,7 +36,6 @@ const Home: FC<{
 }> = ({
   total_users,
   monthly_sms_cost,
-  total_facilities,
   total_visits,
   total_sms_cost,
   mother_distribution,
@@ -116,7 +114,7 @@ const Home: FC<{
             </Card.Body>
           </Card>
         </div>
-        <div className="col-sm-6 col-lg-3">
+        {/* <div className="col-sm-6 col-lg-3">
           <Card bg="info" text="white" className="mb-4">
             <Card.Body className="pb-0 d-flex justify-content-between align-items-start">
               <Box sx={{ m: 2 }}>
@@ -125,7 +123,7 @@ const Home: FC<{
               </Box>
             </Card.Body>
           </Card>
-        </div>
+        </div> */}
 
         <div className="col-sm-6 col-lg-3">
           <Card bg="warning" text="white" className="mb-4">

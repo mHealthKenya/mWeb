@@ -14,7 +14,6 @@ import { Users } from 'src/helpers/enums/users.enum'
 interface HomeAdmin {
   total_sms_cost: number
   total_users: number
-  total_facilities: number
   total_visits: number
   mother_distribution: MotherDistribution[]
   chv_distribution: MotherDistribution[]
@@ -30,7 +29,6 @@ interface HomeAdmin {
 const Admin = ({
   total_sms_cost,
   total_users,
-  total_facilities,
   total_visits,
   mother_distribution,
   smsStats,
@@ -48,7 +46,6 @@ const Admin = ({
       <Home
         total_sms_cost={total_sms_cost}
         total_users={total_users}
-        total_facilities={total_facilities}
         total_visits={total_visits}
         mother_distribution={mother_distribution}
         smsStats={smsStats}
@@ -202,7 +199,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         total_sms_cost: smsCost._sum.cost,
         monthly_sms_cost: smsMCost._sum.cost,
         total_users: totalUsers.total_users,
-        total_facilities: 10,
         total_visits: total_visits.count,
         mother_distribution,
         chv_distribution,

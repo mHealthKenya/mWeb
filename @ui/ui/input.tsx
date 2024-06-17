@@ -19,7 +19,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           {...props}
         />
-        {Icon && <div className="absolute inset-y-0 right-0 items-center pr-3">{Icon}</div>}
+        {Icon && <div className="absolute inset-y-0 right-0 items-center mt-2.5 pr-3">{Icon}</div>}
       </div>
     )
   }

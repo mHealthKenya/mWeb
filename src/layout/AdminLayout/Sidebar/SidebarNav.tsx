@@ -10,7 +10,8 @@ import {
   faUserNurse,
   faMoneyBill,
   faMoneyBill1Wave,
-  faWallet
+  faWallet,
+  faPlay
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
@@ -144,6 +145,10 @@ export default function SidebarNav() {
       </SidebarNavItem>
       <SidebarNavItem icon={faWallet} href="/sadmin/billing/wallets">
         Wallets
+      </SidebarNavItem>
+
+      <SidebarNavItem icon={faPlay} href="/sadmin/billing/base">
+        Base
       </SidebarNavItem>
 
       <SidebarNavTitle>Coverage</SidebarNavTitle>
