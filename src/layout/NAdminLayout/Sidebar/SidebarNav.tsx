@@ -76,7 +76,10 @@ export default function SidebarNav() {
       <SidebarNavItem icon={faDatabase} href="">
         Wallet Stats
       </SidebarNavItem>
-      <SidebarNavItem icon={faWallet} href="/admin/wallet/all">
+      <SidebarNavItem icon={faWallet} href="/admin/wallet/facilitywallet">
+        Facility Wallet
+      </SidebarNavItem>
+      <SidebarNavItem icon={faWallet} href="/admin/wallet/motherWallet">
         Manage Wallet
       </SidebarNavItem>
 

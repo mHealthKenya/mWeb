@@ -6,7 +6,6 @@ import { Wallet } from '@mui/icons-material'
 import Center from '@components/Shared/CenterVert'
 import SharedModal from '@components/Shared/Modal'
 import {
-  Col,
   colsWithFacilityCol,
   colsWithOutFacilityCol,
   rowsWithFacility,
@@ -15,51 +14,62 @@ import {
 import AdminManageWalletComponent from './managewallet'
 import { WalletStatusComponent } from './walletstatus'
 import { UserByRole } from '@models/user-by-role'
+import { WalletByUserID } from '@models/wallet'
+import { ClinicalVisit } from '@models/clinicvisits'
+import { FacilityBioData } from '@models/biodata'
+import { MotherTransactions } from '@models/transaction'
 
 // export interface ChvMothersData {
 //   chvmothers: ChvMothers
 // }
 
-export const FacilityWalletColumn: Col[] = [
-  {
-    field: 'name',
-    headerName: 'Name'
-  },
-  {
-    field: 'email',
-    headerName: 'Email'
-  },
-  {
-    field: 'phone',
-    headerName: 'Phone'
-  },
-  {
-    field: 'national_id',
-    headerName: 'National ID'
-  },
-  {
-    field: 'facility',
-    headerName: 'Facility'
-  },
-  {
-    field: 'action',
-    headerName: 'Action'
-  }
-]
+// export const FacilityWalletColumn: Col[] = [
+//   {
+//     field: 'name',
+//     headerName: 'Name'
+//   },
+//   {
+//     field: 'email',
+//     headerName: 'Email'
+//   },
+//   {
+//     field: 'phone',
+//     headerName: 'Phone'
+//   },
+//   {
+//     field: 'national_id',
+//     headerName: 'National ID'
+//   },
+//   {
+//     field: 'facility',
+//     headerName: 'Facility'
+//   },
+//   {
+//     field: 'action',
+//     headerName: 'Action'
+//   }
+// ]
 
 const ManageWalletComponent: React.FC<{
   users: UserByRole[]
+  status: WalletByUserID[]
   facility?: boolean
   isFacility?: boolean
-  sadmin?: boolean
+  admin?: boolean
   visit?: boolean
-  // data: any
-}> = ({ facility, isFacility }) => {
+  visits?: ClinicalVisit[]
+  bioData?: FacilityBioData[]
+  transactions: MotherTransactions[]
+  data?: any
+}> = ({ facility, status, users, isFacility, transactions, visits }) => {
   const [open, setOpen] = useState(false)
+  const [openTrans, setOpenTrans] = useState(false)
+  const [balance, setBalance] = useState(false)
   const [openAdd, setOpenAdd] = useState(false)
   const [walletStatus, setWalletStatus] = useState(false)
   const [user, setUser] = useState<UserByRole>()
-  // const [value, setValue] = React.useState(0)
+  const [userBalance, setUserBalance] = useState<WalletByUserID>()
+  const [transaction, setTransaction] = useState<MotherTransactions>()
 
   const handleToggle = () => {
     setOpen((open) => !open)
@@ -96,6 +106,33 @@ const ManageWalletComponent: React.FC<{
       phone_number: '254783997387',
       national_id: '77388873',
       facility: 'Ruaraka Neema Uhai'
+    },
+    {
+      id: 4,
+      name: 'Irene Oketch',
+      gender: 'Female',
+      email: 'iree@example.com',
+      phone_number: '254788999387',
+      national_id: '99288837',
+      facility: 'Ruaraka Neema Uhai'
+    },
+    {
+      id: 5,
+      name: 'Doris Achieng',
+      gender: 'Female',
+      email: 'doris@example.com',
+      phone_number: '254673899827',
+      national_id: '66378829',
+      facility: 'Ruaraka Neema Uhai'
+    },
+    {
+      id: 6,
+      name: 'Joyce Langat',
+      gender: 'Female',
+      email: 'langat@example.com',
+      phone_number: '254673889928',
+      national_id: '88398827',
+      facility: 'Ruaraka Neema Uhai'
     }
   ]
 
@@ -105,16 +142,21 @@ const ManageWalletComponent: React.FC<{
   //   }
 
   //   return rowsWithoutFacility(users)
-  // }, [users, facility])
+  // }, [users, facility, transactions])
 
-  const toggleManageWallet = (user: UserByRole) => {
-    setOpen((open) => !open)
-    setUser(user)
+  const toggleManageWallet = (transaction: MotherTransactions) => {
+    setOpen(true)
+    setTransaction(transaction)
+    // console.log('transactions', transaction.description)
+  }
+
+  const toggleViewBalance = (userBalance: WalletByUserID) => {
+    setBalance(true)
+    setUserBalance(userBalance)
   }
 
   // to be used to add transactions/records to modal
   const toggleAdd = () => {
-    // router.push('/facility/wallet/' + id)
     setOpenAdd((openAdd) => !openAdd)
   }
 
@@ -125,16 +167,29 @@ const ManageWalletComponent: React.FC<{
     return colsWithOutFacilityCol
   }, [facility])
 
+  // const rows = useMemo(() => {
+  //   if (visits && visits) {
+  //     return visits.map((sample: any) => ({
+  //       id: sample.id,
+  //       name: sample.bioData.user.f_name + ' ' + sample.bioData.user.l_name,
+  //       gender: sample.bioData.user.gender,
+  //       phone: sample.bioData.user.phone_number,
+  //       facility: sample.bioData.user.facility
+  //       // facility: sample.bioData.user.facilityId
+  //     }))
+  //   }
+  //   return []
+  // }, [visits])
+
   const rows = useMemo(() => {
     if (sampleData && sampleData) {
       return sampleData.map((sample: any) => ({
         id: sample.id,
-        // name: sample.f_name + ' ' + sample.l_name,
         name: sample.name,
-        email: sample.email,
+        gender: sample.gender,
         phone: sample.phone_number,
-        national_id: sample.national_id,
         facility: sample.facility
+        // facility: sample.bioData.user.facilityId
       }))
     }
     return []
@@ -173,7 +228,7 @@ const ManageWalletComponent: React.FC<{
         return {
           field: col.field,
           headerName: col.headerName,
-          width: 250,
+          width: 400,
           renderCell: (params) => {
             return (
               <Box
@@ -182,12 +237,21 @@ const ManageWalletComponent: React.FC<{
                 }}>
                 <Button
                   variant="contained"
-                  color="success"
+                  color="primary"
                   sx={{ mr: 1 }}
                   onClick={() => toggleManageWallet(params.value)}
                   startIcon={<Wallet />}
                   size="small">
                   Manage Wallet
+                </Button>
+                <Button
+                  variant="contained"
+                  color="success"
+                  sx={{ mr: 1 }}
+                  onClick={() => toggleViewBalance(params.value)}
+                  startIcon={<Wallet />}
+                  size="small">
+                  Balance
                 </Button>
               </Box>
             )
@@ -294,14 +358,14 @@ const ManageWalletComponent: React.FC<{
           <AdminManageWalletComponent
             user={user}
             handleToggle={handleToggle}
-            // facilities={facilities}
+            transaction={transaction}
           />
         </Center>
       </SharedModal>
 
       <SharedModal items={{ open: walletStatus, handleToggle: toggleViewWalletStatus }}>
         <Center>
-          <WalletStatusComponent handleToggle={toggleViewWalletStatus} />
+          <WalletStatusComponent handleToggle={toggleViewWalletStatus} status={status} />
         </Center>
       </SharedModal>
     </>

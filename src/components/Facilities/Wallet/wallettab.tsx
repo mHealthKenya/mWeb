@@ -5,7 +5,9 @@ import Typography from '@mui/material/Typography'
 import * as React from 'react'
 import RecordsComponent from './records'
 import ManageWalletComponent from './all'
-import { UserByRole } from '@models/user-by-role'
+import { WalletByUserID } from '@models/wallet'
+import { ClinicalVisit } from '@models/clinicvisits'
+import { FacilityBioData } from '@models/biodata'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -40,14 +42,15 @@ function a11yProps(index: number) {
 }
 
 const WalletTabs: React.FC<{
+  status: WalletByUserID[]
+  visits: ClinicalVisit[]
+  bioData: FacilityBioData[]
   admin: boolean
   isFacility?: boolean
   facility?: boolean
-  users: UserByRole
   // bioData: FacilityBioData[]
-  // visits: ClinicalVisit[]
-  data: any
-}> = ({ admin }) => {
+  // users: UserByRole
+}> = ({ admin, status, visits, bioData }) => {
   const [value, setValue] = React.useState(0)
   const [_open, setOpen] = React.useState(true)
 
@@ -70,13 +73,24 @@ const WalletTabs: React.FC<{
       {/* <CustomTabPanel value={value} index={0}>
         {open && (
           <Alert severity="info" sx={{ mt: 1, mb: 1 }} onClose={handleClose}>
-            Clinic visits can only be recorded for patients with an existing bio data profile
+            Transacton can only be recorded for patients with an existing bio data profile
           </Alert>
         )}
+        <BioDataByFacility bioData={bioData} admin={admin} />
       </CustomTabPanel> */}
 
       <CustomTabPanel value={value} index={0}>
-        <ManageWalletComponent sadmin={admin} isFacility={true} facility={true} users={[]} />{' '}
+        <ManageWalletComponent
+          admin={admin}
+          isFacility={true}
+          facility={true}
+          // users={[]}
+          status={status}
+          visits={visits}
+          bioData={bioData}
+          users={[]}
+          transactions={[]}
+        />{' '}
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <RecordsComponent data={undefined} handleClose={handleToggleClose} />

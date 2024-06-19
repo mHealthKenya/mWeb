@@ -6,27 +6,25 @@ import axios from 'axios'
 import * as jwt from 'jsonwebtoken'
 import { GetServerSideProps } from 'next'
 import nookies from 'nookies'
-import { Users } from 'src/helpers/enums/users.enum'
 
-const WalletPage = ({ clinicalVisits, userDetails, mothers }: any) => {
-  const { data } = useVisitsByFacility(userDetails.facilityId, clinicalVisits)
+const WalletPage = ({ clinicalVisits, userDetails, status, bioData }: any) => {
+  const { data: visits } = useVisitsByFacility(userDetails.facilityId, clinicalVisits)
 
   return (
     <FacilityLayout>
-      <WalletTabs admin={false} isFacility={true} data={mothers} users={data} />
+      <WalletTabs visits={visits} bioData={bioData} status={status} admin={false} />
     </FacilityLayout>
   )
 }
 
+export default WalletPage
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookies = nookies.get(ctx)
-
   const cookie = cookies['access-token']
-
   try {
     const user: any = await jwt.verify(cookie, `${process.env.NEXT_PUBLIC_JWT_SECRET}`)
 
-    if (user.role !== Users.Facility) {
+    if (user.role !== 'Facility') {
       return {
         redirect: {
           destination: '/login',
@@ -36,42 +34,35 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
 
     const userDetails = await axios
-      .get(baseURL + 'users/user?id=' + user.id, {
-        headers: {
-          Authorization: `Bearer ${cookie}`
-        }
-      })
-      .then((res) => {
-        return res.data
-      })
-
-    const bioData = await axios
-      .get(baseURL + 'biodata/facility?facilityId=' + userDetails.facilityId, {
+      .get(`${baseURL}users/user?id=${user.id}`, {
         headers: {
           Authorization: `Bearer ${cookie}`
         }
       })
       .then((res) => res.data)
 
-    const mothers = await axios
-      .get(
-        baseURL +
-          'users/roleandfacility?facilityId=' +
-          userDetails?.facilityId +
-          '&role=' +
-          Users.Mother,
-        {
-          headers: {
-            Authorization: `Bearer ${cookie}`
-          }
+    if (!userDetails.facilityId || typeof userDetails.facilityId !== 'string') {
+      throw new Error('Invalid facilityId')
+    }
+
+    const bioData = await axios
+      .get(`${baseURL}biodata/facility?facilityId=${userDetails.facilityId}`, {
+        headers: {
+          Authorization: `Bearer ${cookie}`
         }
-      )
-      .then((res) => {
-        return res.data
       })
+      .then((res) => res.data)
 
     const clinicalVisits = await axios
-      .get(baseURL + 'clinicvisit/facility?facilityId=' + userDetails.facilityId, {
+      .get(`${baseURL}clinicvisit/facility?facilityId=${userDetails.facilityId}`, {
+        headers: {
+          Authorization: `Bearer ${cookie}`
+        }
+      })
+      .then((res) => res.data)
+
+    const status = await axios
+      .get(`${baseURL}wallet/user?userId=20946634-166e-4d43-ba12-e2eb1578fd60`, {
         headers: {
           Authorization: `Bearer ${cookie}`
         }
@@ -82,9 +73,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       props: {
         user,
         userDetails,
-        mothers,
         clinicalVisits,
-        bioData
+        bioData,
+        status
       }
     }
   } catch (error) {
@@ -96,5 +87,3 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   }
 }
-
-export default WalletPage

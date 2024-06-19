@@ -1,4 +1,5 @@
 import CenterComponent from '@components/Shared/Center'
+import { WalletByUserID } from '@models/wallet'
 import {
   Button,
   Card,
@@ -17,7 +18,8 @@ import React, { FC } from 'react'
 
 export const WalletStatusComponent: FC<{
   handleToggle: () => void
-}> = ({ handleToggle }) => {
+  status: WalletByUserID[]
+}> = ({ handleToggle, status }) => {
   return (
     <CenterComponent>
       <Card sx={{ minWidth: 400, mt: 3, mb: 3 }}>
@@ -35,12 +37,20 @@ export const WalletStatusComponent: FC<{
                 <TableRow>
                   <TableCell style={{ fontWeight: 'bold' }}>Balance:</TableCell>
                   <TableCell style={{ backgroundColor: '#e0f2f1' }}>
-                    Ksh:{' '}
-                    <span
-                      style={{ display: 'inline-block', width: '80px', textAlign: 'right' }}></span>
+                    {status.map((wallet) => (
+                      <div key={wallet.id}>
+                        Ksh: {wallet.balance}
+                        <span
+                          style={{
+                            display: 'inline-block',
+                            width: '80px',
+                            textAlign: 'right'
+                          }}></span>
+                      </div>
+                    ))}
                   </TableCell>
                 </TableRow>
-                <TableRow>
+                {/* <TableRow>
                   <TableCell style={{ fontWeight: 'bold' }}>Amount Due:</TableCell>
                   <TableCell style={{ backgroundColor: '#e0f2f1' }}>
                     Ksh:{' '}
@@ -61,7 +71,7 @@ export const WalletStatusComponent: FC<{
                     <span
                       style={{ display: 'inline-block', width: '80px', textAlign: 'right' }}></span>
                   </TableCell>
-                </TableRow>
+                </TableRow> */}
               </TableBody>
             </Table>
           </TableContainer>

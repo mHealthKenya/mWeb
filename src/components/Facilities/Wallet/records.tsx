@@ -128,7 +128,7 @@ const RecordsComponent: FC<{
               <Button
                 variant="contained"
                 color="secondary"
-                sx={{ mr: 1 }}
+                // sx={{ mr: 1 }}
                 startIcon={<RemoveRedEyeSharp />}
                 size="small"
                 onClick={() => toggleView()}>

@@ -1,5 +1,6 @@
+import CenterComponent from '@components/Shared/Center'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { User } from '@models/user'
+import { MotherTransactions } from '@models/transaction'
 import { UserByRole } from '@models/user-by-role'
 import { Cancel, CloudUploadOutlined, Money } from '@mui/icons-material'
 import {
@@ -8,74 +9,55 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  FormControlLabel,
   InputAdornment,
-  Radio,
-  RadioGroup,
   Stack,
   TextField,
   styled
 } from '@mui/material'
-import useAddMother from '@services/chvmother/add'
+import useManageTransaction from '@services/transaction/edit'
 import React, { FC } from 'react'
-import { FormLabel } from 'react-bootstrap'
-import { Controller, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
-export interface AddWalletRecordFormProps {
-  f_name: string
-  l_name: string
-  email?: string
-  national_id: string
-  phone_number: string
+export interface ManageTransactionProps {
+  description: string
+  amount: string
+  status: string
+  facilityId?: string
 }
 
-const schema = Yup.object().shape({
-  f_name: Yup.string().required(),
-  l_name: Yup.string().required(),
-  email: Yup.string().optional(),
-  national_id: Yup.string().required('National Id is a required field'),
-  phone_number: Yup.string()
-    .matches(/^254\d{9}$/, 'Invalid phone number format. Use this format 254xxxxxxxxx')
-    .required('Phone number is a required field')
+const validationSchema: any = Yup.object().shape({
+  description: Yup.string().required('Description is required'),
+  amount: Yup.string().required('Amount is required'),
+  status: Yup.string().required('Status is required'),
+  facilityId: Yup.string().optional()
 })
 
-export interface AddMotherProps {
-  facilityId?: string
-  chv?: User
-}
-
 const AdminManageWalletComponent: FC<{
-  //   datas: AddMotherProps
-  user?: UserByRole
+  user: UserByRole | undefined
+  transaction: MotherTransactions | undefined
   handleToggle: () => void
-}> = ({ handleToggle, user }) => {
+  data?: any
+}> = ({ handleToggle, transaction, user }) => {
   const {
     register,
     handleSubmit,
-    reset,
-    control,
     formState: { errors }
-  } = useForm({
-    resolver: yupResolver(schema)
+  } = useForm<ManageTransactionProps>({
+    resolver: yupResolver(validationSchema)
   })
 
-  const { mutate, isLoading } = useAddMother(reset)
+  const { mutate, isLoading } = useManageTransaction(handleToggle)
 
-  const onSubmit = (data: AddWalletRecordFormProps) => {
-    const item = {
-      ...data,
-      role: 'Mother',
-      gender: 'Female',
+  const onSubmit = (data: ManageTransactionProps) => {
+    mutate({
+      userId: '' + user?.id,
       facilityId: user?.facilityId || '',
-      email: data.email || null
-    }
-    mutate(item)
-    handleToggle()
-    reset()
+      ...data
+    })
   }
 
-  const drugsissued = ['Yes', 'No']
+  // const drugsissued = ['Yes', 'No']
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',
@@ -89,11 +71,11 @@ const AdminManageWalletComponent: FC<{
   })
 
   return (
-    <>
+    <CenterComponent>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Card sx={{ minWidth: 680, mt: 3, mb: 3 }}>
           <CardHeader
-            title="Add Transaction Details"
+            title="Redeem Transaction."
             subheader="All fields marked with * are required fields"
           />
           <CardContent>
@@ -101,97 +83,45 @@ const AdminManageWalletComponent: FC<{
               <TextField
                 size="small"
                 fullWidth
-                label="Service"
+                label="Description"
                 rows={4}
                 multiline
-                {...register('f_name')}
-                required
-                helperText={errors?.f_name?.message}
-                error={!!errors?.f_name?.message}
-                inputProps={{ 'data-testid': 'f_name_input' }}
+                defaultValue={transaction?.description}
+                {...register('description')}
+                helperText={errors?.description?.message}
+                error={!!errors?.description?.message}
+                inputProps={{ 'data-testid': 'description_input' }}
               />
-              <TextField
-                size="small"
-                fullWidth
-                label="Nurse"
-                {...register('l_name')}
-                required
-                helperText={errors?.l_name?.message}
-                error={!!errors?.l_name?.message}
-                inputProps={{ 'data-testid': 'l_name_input' }}
-              />
-              <Controller
-                name="f_name"
-                control={control}
-                // defaultValue={clinicVisit?.tetanus || ''}
-                render={({ field }) => (
-                  <>
-                    <FormLabel required error={!!errors?.email?.message}>
-                      Drugs issued?
-                    </FormLabel>
-                    <RadioGroup {...field} row>
-                      {[...drugsissued].map((state, index) => (
-                        <FormControlLabel
-                          value={state}
-                          control={<Radio />}
-                          label={state}
-                          key={index}
-                        />
-                      ))}
-                    </RadioGroup>
-                  </>
-                )}
-              />
-              <div style={{ display: 'flex', gap: '16px' }}>
-                <TextField
-                  size="small"
-                  fullWidth
-                  label="Tokens"
-                  variant="filled"
-                  {...register('national_id')}
-                  helperText={errors?.national_id?.message}
-                  error={!!errors?.national_id?.message}
-                  inputProps={{
-                    'data-testid': 'balance_input'
-                  }}
-                  InputProps={{
-                    endAdornment: <InputAdornment position="end">Tokens</InputAdornment>
-                  }}
-                />
-              </div>
               <br />
               <div style={{ display: 'flex', gap: '16px' }}>
                 <TextField
                   size="small"
                   fullWidth
-                  label="Balance"
-                  variant="filled"
-                  {...register('national_id')}
-                  helperText={errors?.national_id?.message}
-                  error={!!errors?.national_id?.message}
-                  inputProps={{
-                    'data-testid': 'phone_input'
-                  }}
-                  InputProps={{
-                    startAdornment: <InputAdornment position="start">Ksh: </InputAdornment>
-                  }}
-                />
-
-                <TextField
-                  size="small"
-                  fullWidth
                   label="Amount Charged"
                   variant="filled"
-                  {...register('national_id')}
+                  defaultValue={transaction?.amount}
+                  {...register('amount')}
                   required
-                  helperText={errors?.national_id?.message}
-                  error={!!errors?.national_id?.message}
-                  inputProps={{ 'data-testid': 'id_input' }}
+                  helperText={errors?.amount?.message}
+                  error={!!errors?.amount?.message}
+                  inputProps={{ 'data-testid': 'amount_input' }}
                   InputProps={{
                     startAdornment: <InputAdornment position="start">Ksh: </InputAdornment>
                   }}
                 />
               </div>
+              <br />
+              <TextField
+                size="small"
+                fullWidth
+                label="Status"
+                defaultValue={transaction?.status}
+                {...register('status')}
+                required
+                helperText={errors?.status?.message}
+                error={!!errors?.status?.message}
+                inputProps={{ 'data-testid': 'status_input' }}
+              />
               <br />
               <div style={{ display: 'flex', gap: '20px' }}>
                 <Button
@@ -211,7 +141,7 @@ const AdminManageWalletComponent: FC<{
             <CardActions>
               <Button
                 variant="contained"
-                // color="success"
+                color="error"
                 type="submit"
                 startIcon={<Cancel />}
                 disabled={isLoading}>
@@ -226,14 +156,14 @@ const AdminManageWalletComponent: FC<{
                 {isLoading ? 'Submiting' : 'Redeem Transaction'}
               </Button>
 
-              <Button variant="contained" color="error" onClick={handleToggle}>
+              <Button variant="outlined" color="error" onClick={handleToggle}>
                 Cancel
               </Button>
             </CardActions>
           </CardContent>
         </Card>
       </form>
-    </>
+    </CenterComponent>
   )
 }
 
