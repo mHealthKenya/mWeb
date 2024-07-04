@@ -10,7 +10,7 @@ export interface FacilityBioData {
   pregnancy_period: number
   last_clinic_visit: Date
   facilityId: string
-  parity?: number
+  parity?: string
   gravidity?: number
   createdById: string
   updatedById: string
@@ -36,6 +36,6 @@ export interface AddBioData {
   pregnancy_period: string
   age: string
   gravidity: number
-  parity: number
+  parity: string
   expected_delivery_date: Date
 }
