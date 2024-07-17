@@ -1,8 +1,8 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-// export const baseURL = 'https://mimbaplus.mhealthkenya.org/'
-export const baseURL = 'http://localhost:8000/'
+export const baseURL = 'https://mimbaplus.mhealthkenya.org/'
+// export const baseURL = 'http://localhost:8000/'
 
 export const axiosConfig = async () => {
   const token = await Cookies.get('access-token')
