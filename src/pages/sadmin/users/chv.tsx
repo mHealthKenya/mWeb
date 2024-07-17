@@ -1,5 +1,4 @@
 import CHPsFromAdmin from '@components/Users/chvs/from-admin'
-import UsersByRoleComponent from '@components/Users/Role'
 import AdminLayout from '@layout/AdminLayout/AdminLayout'
 import axios from 'axios'
 import * as jwt from 'jsonwebtoken'
