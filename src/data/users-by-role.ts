@@ -43,6 +43,10 @@ export const colsWithFacilityCol: Col[] = [
     headerName: 'Phone'
   },
   {
+    field: 'national_id',
+    headerName: 'National ID'
+  },
+  {
     field: 'facility',
     headerName: 'Facility'
   },
@@ -74,6 +78,7 @@ export const rowsWithFacility = (users: UserByRole[]) => {
     name: user.f_name + ' ' + user.l_name,
     gender: user.gender,
     phone: user.phone_number,
+    national_id: user.national_id,
     facility: user.Facility?.name,
     date_added: dayjs(user.createdAt).format('ddd DD MMM, YYYY'),
     action: user,
