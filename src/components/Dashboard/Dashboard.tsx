@@ -152,7 +152,7 @@ const Home: FC<{
               <div>
                 <Box sx={{ m: 2 }}>
                   <div className="fs-4 fw-semibold">{total_sms_count.count.toLocaleString()}</div>
-                  <div>Total SMS Count</div>
+                  <div>Total SMS Counts</div>
                 </Box>
               </div>
             </Card.Body>
