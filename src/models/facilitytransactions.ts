@@ -5,6 +5,7 @@ export interface FacilityTransactions {
     user: User;
     approvedBy: User | null;
     createdBy: User;
+    rejected: boolean
 }
 
 export interface User {

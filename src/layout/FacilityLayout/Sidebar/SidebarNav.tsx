@@ -8,7 +8,8 @@ import {
   faMoneyBill,
   faPencil,
   faPersonPregnant,
-  faCalculator
+  faCalculator,
+  faPhone
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
@@ -134,6 +135,11 @@ export default function SidebarNav() {
       </SidebarNavItem>
       <SidebarNavItem icon={faCalculator} href="/facility/billing/transactions">
         Transactions
+      </SidebarNavItem>
+
+      <SidebarNavTitle>Emergency</SidebarNavTitle>
+      <SidebarNavItem icon={faPhone} href="/facility/emergency">
+        Contact
       </SidebarNavItem>
 
       {/* <SidebarNavTitle>Wallet</SidebarNavTitle> */}

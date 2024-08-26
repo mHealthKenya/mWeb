@@ -1,61 +1,47 @@
 import CenterComponent from '@components/Shared/Center'
 import { yupResolver } from '@hookform/resolvers/yup'
-import useTransact, { Transact } from '@services/bills/transact'
+import { AllTransactionsType } from '@models/alltransactions'
+import useReject from '@services/bills/reject'
 import { Button } from '@ui/ui/button'
 import { Card, CardContent, CardFooter, CardTitle } from '@ui/ui/card'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@ui/ui/form'
-import { Input } from '@ui/ui/input'
+import { Textarea } from '@ui/ui/textarea'
 import { useAtom } from 'jotai'
 import { Loader2 } from 'lucide-react'
-import { useCallback } from 'react'
+import { FC, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
-import billOpenAtom, { billAtom } from 'src/atoms/bill-open'
+import rejectAtom from 'src/atoms/rejectatom'
 import * as Yup from 'yup'
 
 interface FormProps {
-  code: string
-  points: string
+  reason: string
 }
 
 const billSchema = Yup.object().shape({
-  code: Yup.string()
-    .required()
-    .min(6, { message: 'Invalid code' })
-    .max(6, { message: 'Invalid code' }),
-
-  points: Yup.string()
-    .required()
-    .matches(/^(?!0$)(?!0\.0*$)\d+(\.\d+)?$/, {
-      message: 'Invalid points'
-    })
+  reason: Yup.string().required()
 })
 
-const BillSheet = () => {
-  const form = useForm({
+const RejectTransaction: FC<{ data: AllTransactionsType }> = ({ data }) => {
+  const form = useForm<FormProps>({
     resolver: yupResolver(billSchema),
     defaultValues: {
-      code: '',
-      points: ''
+      reason: ''
     }
   })
 
-  const [_, setOpen] = useAtom(billOpenAtom)
-  const [bill, __] = useAtom(billAtom)
+  const [_, setOpen] = useAtom(rejectAtom)
 
   const handleClose = useCallback(() => {
     setOpen((open) => !open)
   }, [setOpen])
 
-  const { mutate: transact, isLoading } = useTransact()
+  const { mutate: reject, isLoading } = useReject()
 
-  const handleSubmit = (data: FormProps) => {
-    const item: Transact = {
-      ...data,
-      userId: bill?.bioData?.user?.id || '',
-      clinicVisitId: bill?.id || ''
-    }
-
-    transact(item)
+  const handleSubmit = (form: FormProps) => {
+    reject({
+      id: data.id,
+      reason: form.reason
+    })
   }
 
   return (
@@ -64,26 +50,14 @@ const BillSheet = () => {
         <form className="min-w-[600px]" onSubmit={form.handleSubmit(handleSubmit)}>
           <Card>
             <CardContent className="gap-y-2">
-              <CardTitle className="my-4">{`Send bill for ${bill?.bioData?.user?.f_name} ${bill?.bioData?.user?.l_name}`}</CardTitle>
+              <CardTitle className="my-4">{`Reject Transaction made for ${data?.user.f_name} ${data?.user.l_name}`}</CardTitle>
               <FormField
-                name="code"
+                name="reason"
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input placeholder="code" {...field} className="my-2" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="points"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input placeholder="Points Used" {...field} className="my-2" />
+                      <Textarea placeholder="Reject Reason" {...field} className="my-2" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -95,7 +69,7 @@ const BillSheet = () => {
                 <div className="flex flex-row items-center justify-center">
                   {' '}
                   {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  <span>Send Bill</span>
+                  <span>Reject</span>
                 </div>
               </Button>
               <Button variant="destructive" onClick={handleClose}>
@@ -109,4 +83,4 @@ const BillSheet = () => {
   )
 }
 
-export default BillSheet
+export default RejectTransaction

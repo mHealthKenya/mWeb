@@ -6,6 +6,7 @@ export interface AllTransactionsType {
     approvedBy: User | null;
     facility: Facility;
     createdBy: User;
+    rejected: boolean;
 }
 
 export interface User {

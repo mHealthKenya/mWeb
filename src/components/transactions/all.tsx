@@ -9,6 +9,17 @@ import { useAtom } from 'jotai'
 import { FC } from 'react'
 import { approveAtom } from 'src/atoms/approve'
 import ApproveTransaction from './approve'
+import rejectAtom from 'src/atoms/rejectatom'
+import RejectTransaction from './reject'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '@ui/ui/dropdown-menu'
+import { MoreHorizontal } from 'lucide-react'
 
 export const columns: ColumnDef<AllTransactionsType>[] = [
   {
@@ -17,13 +28,23 @@ export const columns: ColumnDef<AllTransactionsType>[] = [
     header: 'Patient',
     cell: ({ row }) => {
       const patient = row.original.user
+      const approved = row.original.approvedBy
+      const rejected = row.original.rejected
 
       return (
         <div className="flex flex-col gap-2 justify-start">
-          <div className="font-medium">
+          <div
+            className={`font-medium ${
+              rejected ? 'text-red-600' : approved && !rejected ? 'text-gray-900' : 'text-blue-600'
+            }`}>
             {patient.f_name} {patient.l_name}
           </div>
-          <div className="font-medium">{patient.phone_number}</div>
+          <div
+            className={`font-medium ${
+              rejected ? 'text-red-600' : approved && !rejected ? 'text-gray-900' : 'text-blue-600'
+            }`}>
+            {patient.phone_number}
+          </div>
         </div>
       )
     }
@@ -34,13 +55,23 @@ export const columns: ColumnDef<AllTransactionsType>[] = [
     header: 'Attendant',
     cell: ({ row }) => {
       const attendant = row.original.createdBy
+      const approved = row.original.approvedBy
+      const rejected = row.original.rejected
 
       return (
         <div className="flex flex-col gap-2 justify-start">
-          <div className="font-medium">
+          <div
+            className={`font-medium ${
+              rejected ? 'text-red-600' : approved && !rejected ? 'text-gray-900' : 'text-blue-600'
+            }`}>
             {attendant.f_name} {attendant.l_name}
           </div>
-          <div className="font-medium">{attendant.phone_number}</div>
+          <div
+            className={`font-medium ${
+              rejected ? 'text-red-600' : approved && !rejected ? 'text-gray-900' : 'text-blue-600'
+            }`}>
+            {attendant.phone_number}
+          </div>
         </div>
       )
     }
@@ -49,9 +80,18 @@ export const columns: ColumnDef<AllTransactionsType>[] = [
   {
     accessorKey: 'name',
     accessorFn: (row) => row.facility.name,
-    header: 'Facility',
+    header: () => <div className="text-right">Facility</div>,
     cell: ({ row }) => {
-      return <div className={`text-right font-medium`}>{row.getValue('name')}</div>
+      const approved = row.original.approvedBy
+      const rejected = row.original.rejected
+      return (
+        <div
+          className={`text-right font-medium ${
+            rejected ? 'text-red-600' : approved && !rejected ? 'text-gray-900' : 'text-blue-600'
+          }`}>
+          {row.getValue('name')}
+        </div>
+      )
     }
   },
 
@@ -61,9 +101,13 @@ export const columns: ColumnDef<AllTransactionsType>[] = [
     header: () => <div className="text-right">Points</div>,
     cell: ({ row }) => {
       const approved = row.original.approvedBy
+      const rejected = row.original.rejected
 
       return (
-        <div className={`text-right font-medium ${approved ? 'text-green-600' : 'text-red-600'}`}>
+        <div
+          className={`text-right font-medium ${
+            rejected ? 'text-red-600' : approved && !rejected ? 'text-gray-900' : 'text-blue-600'
+          }`}>
           {row.getValue('points')}
         </div>
       )
@@ -73,20 +117,36 @@ export const columns: ColumnDef<AllTransactionsType>[] = [
   {
     accessorKey: 'approved',
     accessorFn: (row) => row.approvedBy,
-    header: () => <div className="text-right">Approved</div>,
+    header: () => <div className="text-right">Status</div>,
     cell: ({ row }) => {
       const approved = row.original.approvedBy
 
+      const rejected = row.original.rejected
+
       if (!approved) {
-        return <div className="text-right font-medium text-red-600">Pending</div>
+        return <div className="text-right font-medium text-blue-600">Pending</div>
       }
 
       return (
         <div className="flex flex-col gap-2 justify-end">
-          <div className="font-medium text-right">
+          <div
+            className={`font-medium text-right ${
+              rejected ? 'text-red-600' : approved && !rejected ? 'text-gray-900' : 'text-blue-600'
+            }`}>
+            {rejected ? 'Rejected' : 'Approved'}
+          </div>
+          <div
+            className={`font-medium text-right ${
+              rejected ? 'text-red-600' : approved && !rejected ? 'text-gray-900' : 'text-blue-600'
+            }`}>
             {approved.f_name} {approved.l_name}
           </div>
-          <div className="font-medium text-right">{approved.phone_number}</div>
+          <div
+            className={`font-medium text-right ${
+              rejected ? 'text-red-600' : approved && !rejected ? 'text-gray-900' : 'text-blue-600'
+            }`}>
+            {approved.phone_number}
+          </div>
         </div>
       )
     }
@@ -97,9 +157,18 @@ export const columns: ColumnDef<AllTransactionsType>[] = [
     accessorFn: (row) => row.createdAt,
     header: () => <div className="text-right">Date</div>,
     cell: ({ row }) => {
+      const approved = row.original.approvedBy
+      const rejected = row.original.rejected
       const date = dayjs(row.getValue('createdAt'))
       const formatted = date.format('dddd DD MMM, YYYY HH:mm A')
-      return <div className="text-right font-medium">{formatted}</div>
+      return (
+        <div
+          className={`text-right font-medium ${
+            rejected ? 'text-red-600' : approved && !rejected ? 'text-gray-900' : 'text-blue-600'
+          }`}>
+          {formatted}
+        </div>
+      )
     }
   },
 
@@ -120,10 +189,40 @@ export const columns: ColumnDef<AllTransactionsType>[] = [
         setApproved((approved) => ({ ...approved, data: data, open: true }))
       }
 
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const [__, setRejectOpen] = useAtom(rejectAtom)
+
+      const handleReject = () => {
+        setRejectOpen((rejectOpen) => !rejectOpen)
+        setApproved((approved) => ({ ...approved, data: data, open: false }))
+      }
+
       return (
-        <Button onClick={handleClick} disabled={!!data.approvedBy}>
-          {!!data.approvedBy ? 'Approved' : 'Approve'}
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="h-8 w-8 p-0"
+              disabled={!!data.approvedBy || data.rejected}>
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={handleClick}
+              className="cursor-pointer"
+              disabled={!!data.approvedBy}>
+              Approve Transaction
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="cursor-pointer" onClick={handleReject}>
+              Reject Transaction
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">View billing guidelines</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       )
     }
   }
@@ -138,8 +237,14 @@ const AllTransactions: FC<{
 
   const { open, data } = approved
 
+  const [rejectOpen, setRejectOpen] = useAtom(rejectAtom)
+
   const handleToggle = () => {
     setApproved((approved) => ({ ...approved, open: !approved.open }))
+  }
+
+  const handleRejectToggle = () => {
+    setRejectOpen((open) => !open)
   }
 
   return (
@@ -147,6 +252,9 @@ const AllTransactions: FC<{
       <DataTable columns={columns} data={initial} />
       <SharedModal items={{ open: open, handleToggle }}>
         <ApproveTransaction data={data!} />
+      </SharedModal>
+      <SharedModal items={{ open: rejectOpen, handleToggle: handleRejectToggle }}>
+        <RejectTransaction data={data!} />
       </SharedModal>
     </div>
   )
