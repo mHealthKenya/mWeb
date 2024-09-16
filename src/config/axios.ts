@@ -1,9 +1,6 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-// export const baseURL = 'https://mimbaplus.mhealthkenya.org/'
-// export const baseURL = 'http://localhost:8000/'
-// export const baseURL = 'https://mapitest.mhealthkenya.org/'
 export const baseURL = process.env.NEXT_PUBLIC_BASE_URL
 
 export const axiosConfig = async () => {

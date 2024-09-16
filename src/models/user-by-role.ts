@@ -13,9 +13,14 @@ export interface UserByRole {
   facilityAdmin: string | null
   facilityId?: string
   Facility?: Facility
+  biodata: BioData[]
 }
 
 export interface Facility {
   name: string
   id: string
+}
+
+export interface BioData {
+  age?: number
 }

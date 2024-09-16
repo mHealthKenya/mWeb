@@ -25,6 +25,7 @@ const CHPsFromAdmin: FC<{ data: UserByRole[]; facilities: Facility[] }> = ({
         )
       }
     },
+
     {
       accessorKey: 'phone',
       accessorFn: (row) => row.phone_number,
