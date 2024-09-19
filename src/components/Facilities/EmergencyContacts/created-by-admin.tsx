@@ -72,7 +72,7 @@ const EmergencyContactByAdmin: FC<{ facilities: Facility[] }> = ({ facilities })
                       <SelectContent>
                         {facilities.map((facility) => (
                           <SelectItem key={facility.id} value={facility.id}>
-                            {facility.name}
+                            {facility?.name}
                           </SelectItem>
                         ))}
                       </SelectContent>

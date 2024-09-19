@@ -170,7 +170,11 @@ const UsersByRoleComponent: React.FC<{
                   size="small"
                   onClick={() => handleDeactivate(params.value)}
                   disabled={params.value.id === user?.id && isLoading}>
-                  {isLoading && params.value.id === user?.id ? 'Editing...' : params.value.active ? 'Deactivate' : 'Activate'}
+                  {isLoading && params.value.id === user?.id
+                    ? 'Editing...'
+                    : params.value.active
+                    ? 'Deactivate'
+                    : 'Activate'}
                 </Button>
               </Box>
             )
@@ -206,6 +210,13 @@ const UsersByRoleComponent: React.FC<{
           field: col.field,
           headerName: col.headerName,
           width: 300
+        }
+      
+      case "national_id":
+        return {
+          field: col.field,
+          headerName: col.headerName,
+          width: 150
         }
 
       case 'date_added':

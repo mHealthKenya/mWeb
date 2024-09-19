@@ -8,7 +8,7 @@ import { FC } from 'react'
 export const columns: ColumnDef<Contact>[] = [
   {
     accessorKey: 'name',
-    accessorFn: (row) => row.facility.name,
+    accessorFn: (row) => row.facility?.name,
     header: 'Name'
   },
   {
