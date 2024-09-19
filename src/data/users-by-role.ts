@@ -51,16 +51,8 @@ export const colsWithFacilityCol: Col[] = [
     headerName: 'National ID'
   },
   {
-    field: 'age',
-    headerName: 'Age'
-  },
-  {
     field: 'facility',
     headerName: 'Facility'
-  },
-  {
-    field: 'national_id',
-    headerName: 'National ID'
   },
   {
     field: 'date_added',
