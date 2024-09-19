@@ -1,24 +1,17 @@
-import CHPsFromAdmin from '@components/Users/chvs/from-admin'
+import RegisteredMothersComponent from '@components/Users/Registered'
 import AdminLayout from '@layout/AdminLayout/AdminLayout'
+import { Registered } from '@models/registered'
+import { User } from '@models/user'
 import axios from 'axios'
 import * as jwt from 'jsonwebtoken'
 import { GetServerSideProps } from 'next'
 import nookies from 'nookies'
 import { baseURL } from 'src/config/axios'
-import useUsersByRole from 'src/services/users/by-role'
 
-const CHVUsers = ({ users, facilities }: any) => {
-  const { data } = useUsersByRole('CHV', users)
-
+const CHVUsers = ({ users, user }: { users: Registered; user: User }) => {
   return (
     <AdminLayout>
-      <CHPsFromAdmin data={data} facilities={facilities} />
-      {/* <UsersByRoleComponent
-        users={data}
-        facility={true}
-        facilities={facilities}
-        isFacility={false}
-      /> */}
+      <RegisteredMothersComponent data={users} user={user} />
     </AdminLayout>
   )
 }
@@ -27,6 +20,8 @@ export default CHVUsers
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookies = nookies.get(ctx)
+
+  const id = ctx?.params?.id
 
   const cookie = cookies['access-token']
 
@@ -42,23 +37,26 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       }
     }
 
-    const facilitiesD = axios.get(baseURL + 'facilities/all').then((res) => res.data)
-    const usersD = axios
-      .get(baseURL + 'users/roles?role=CHV', {
+    const uss = axios
+      .get(baseURL + 'users/mothers-registered?userId=' + id, {
         headers: {
           Authorization: `Bearer ${cookie}`
         }
       })
       .then((res) => res.data)
 
-    const [facilities, users] = await Promise.all([facilitiesD, usersD])
+    const us = axios
+      .get(baseURL + 'users/user?id=' + id, {
+        headers: {
+          Authorization: `Bearer ${cookie}`
+        }
+      })
+      .then((res) => res.data)
+
+    const [users, client] = await Promise.all([uss, us])
 
     return {
-      props: {
-        user,
-        facilities,
-        users
-      }
+      props: { users, user: client }
     }
   } catch (error) {
     console.log({error})

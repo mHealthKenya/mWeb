@@ -25,7 +25,7 @@ interface FormProps {
   height: number
   weight: number
   age: number
-  parity: number
+  parity: string
   gravidity: number
 }
 
@@ -33,8 +33,8 @@ const formSchema = Yup.object().shape({
   height: Yup.number().required('Height cannot be empty').min(56),
   weight: Yup.number().required('Weight cannot be empty').min(20),
   age: Yup.number().required('Age cannot be empty').min(10),
-  parity: Yup.number().required('Parity is a required field'),
-  gravidity: Yup.number().required('Parity is a required field')
+  parity: Yup.string().required('Parity is a required field'),
+  gravidity: Yup.number().required('Gravida is a required field')
 })
 
 export interface MotherDetailsProps {
@@ -158,7 +158,7 @@ const AddBiodata: FC<{ data: MotherDetailsProps }> = ({ data }) => {
             />
 
             <TextField
-              type="number"
+              type="text"
               label="Parity"
               {...textFieldProps}
               defaultValue={bio?.parity}

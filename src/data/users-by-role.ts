@@ -47,6 +47,14 @@ export const colsWithFacilityCol: Col[] = [
     headerName: 'Phone'
   },
   {
+    field: 'national_id',
+    headerName: 'National ID'
+  },
+  {
+    field: 'age',
+    headerName: 'Age'
+  },
+  {
     field: 'facility',
     headerName: 'Facility'
   },
@@ -82,9 +90,9 @@ export const rowsWithFacility = (users: UserByRole[]) => {
     name: user.f_name + ' ' + user.l_name,
     gender: user.gender,
     phone: user.phone_number,
+    national_id: user.national_id,
+    age: user.BioData.length > 0 ? user?.BioData[0].age : "N/A",
     facility: user.Facility?.name,
-    national_id: user?.national_id,
-    age: user?.BioData?.[0]?.age || "N/A",
     date_added: dayjs(user.createdAt).format('ddd DD MMM, YYYY'),
     action: user,
     user
