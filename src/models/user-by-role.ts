@@ -13,7 +13,8 @@ export interface UserByRole {
   facilityAdmin: string | null
   facilityId?: string
   Facility?: Facility
-  BioData: BioDatum[];
+  BioData: BioDatum[]
+  name?: string | null
 }
 
 export interface Facility {
@@ -21,7 +22,6 @@ export interface Facility {
   id: string
 }
 
-
 export interface BioDatum {
-  age: number;
+  age: number
 }

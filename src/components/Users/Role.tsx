@@ -226,6 +226,13 @@ const UsersByRoleComponent: React.FC<{
           width: 150
         }
 
+        case 'name':
+          return {
+            field: col.field,
+            headerName: col.headerName,
+            width: 150
+          }
+
       default:
         return {
           field: col.field,

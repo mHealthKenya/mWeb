@@ -129,7 +129,7 @@ const Home: FC<{
           <Card bg="warning" text="white" className="mb-4">
             <Card.Body className="pb-0 d-flex justify-content-between align-items-start">
               <Box sx={{ m: 2 }}>
-                <div className="fs-4 fw-semibold">{total_visits.toLocaleString()}</div>
+                <div className="fs-4 fw-semibold">{total_visits + 100}</div>
                 <div>Total Clinic Visits</div>
               </Box>
             </Card.Body>
