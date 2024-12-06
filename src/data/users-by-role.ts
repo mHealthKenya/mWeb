@@ -58,6 +58,11 @@ export const colsWithFacilityCol: Col[] = [
     field: 'date_added',
     headerName: 'Date Registered'
   },
+
+  {
+    field: 'added_by',
+    headerName: 'Registered By'
+  },
   {
     field: 'action',
     headerName: 'Action'
@@ -76,7 +81,26 @@ export const rowsWithoutFacility = (users: UserByRole[]) => {
   }))
 }
 
-export const rowsWithFacility = (users: UserByRole[]) => {
+export const rowsWithFacility = (users: UserByRole[], show?: boolean) => {
+
+  console.log({ name: users[0].name })
+
+  if (show) {
+    return users.map((user) => ({
+      id: user.id,
+      name: user.f_name + ' ' + user.l_name,
+      gender: user.gender,
+      phone: user.phone_number,
+      national_id: user.national_id,
+      age: user.BioData.length > 0 ? user?.BioData[0].age : "N/A",
+      facility: user.Facility?.name,
+      date_added: dayjs(user.createdAt).format('ddd DD MMM, YYYY'),
+      added_by: user?.name,
+      action: user,
+      user
+    }))
+  }
+
   return users.map((user) => ({
     id: user.id,
     name: user.f_name + ' ' + user.l_name,
@@ -86,7 +110,11 @@ export const rowsWithFacility = (users: UserByRole[]) => {
     age: user.BioData.length > 0 ? user?.BioData[0].age : "N/A",
     facility: user.Facility?.name,
     date_added: dayjs(user.createdAt).format('ddd DD MMM, YYYY'),
+    added_by: user?.name,
     action: user,
     user
   }))
+
+
+
 }
