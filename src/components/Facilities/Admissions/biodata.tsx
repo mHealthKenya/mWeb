@@ -9,8 +9,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger
+  DialogTitle
 } from '@ui/ui/dialog'
 import { Loader2 } from 'lucide-react'
 import { FC, useEffect, useState } from 'react'
@@ -22,8 +21,11 @@ const FacilityBioDataComponent: FC<{
 }> = ({ bioData, facilityId }) => {
   const [open, setOpen] = useState(false)
 
-  const handleToggle = () => {
+  const [bio, setBio] = useState<FacilityBioData | null>(null)
+
+  const handleToggle = (bio: FacilityBioData) => {
     setOpen((open) => !open)
+    setBio(bio)
   }
 
   const { mutate: admit, isLoading, isSuccess, isError, reset } = useAdmit()
@@ -88,35 +90,7 @@ const FacilityBioDataComponent: FC<{
       cell: ({ row }) => {
         return (
           <div className="flex justify-end font-medium">
-            <Dialog open={open} onOpenChange={handleToggle}>
-              <DialogTrigger asChild>
-                <Button>Admit</Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Admit {row.getValue('name')}</DialogTitle>
-                  <DialogDescription>
-                    Are you sure you want to admit {row.getValue('name')}?
-                  </DialogDescription>
-                </DialogHeader>
-
-                <DialogFooter>
-                  <Button variant="destructive" onClick={handleToggle}>
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={() =>
-                      handleAdmit({
-                        userId: row.original.userId
-                      })
-                    }
-                    disabled={isLoading}>
-                    {isLoading && <Loader2 className="animate-spin" />}
-                    Proceed
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+            <Button onClick={() => handleToggle(row.original)}>Admit</Button>
           </div>
         )
       }
@@ -126,6 +100,35 @@ const FacilityBioDataComponent: FC<{
   return (
     <div>
       <DataTable columns={columns} data={bioData} />
+      <Dialog open={open} onOpenChange={() => setOpen(false)}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>New Admission</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to admit{' '}
+              <b className="text-xl">
+                {bio?.user?.f_name} {bio?.user?.l_name}?
+              </b>
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter>
+            <Button variant="destructive" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              onClick={() =>
+                handleAdmit({
+                  userId: bio?.userId || ''
+                })
+              }
+              disabled={isLoading}>
+              {isLoading && <Loader2 className="animate-spin" />}
+              Proceed
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

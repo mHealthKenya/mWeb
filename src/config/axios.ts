@@ -3,13 +3,14 @@ import Cookies from 'js-cookie'
 
 export const baseURL = process.env.NEXT_PUBLIC_BASE_URL
 
-export const axiosConfig = async () => {
+export const axiosConfig = async (multipart?: boolean) => {
   const token = await Cookies.get('access-token')
   return await axios.create({
     baseURL,
     timeout: 100000,
     headers: {
-      Authorization: 'Bearer ' + token
+      Authorization: 'Bearer ' + token,
+      'Content-Type': multipart ? 'multipart/form-data' : 'application/json'
     }
   })
 }

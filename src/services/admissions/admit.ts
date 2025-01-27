@@ -31,7 +31,6 @@ const useAdmit = () => {
         },
         onError: async (error: any) => {
 
-            console.log(error)
             Swal.fire({
                 title: 'Error!',
                 text: error?.response?.data?.message || 'Could not admit patient',

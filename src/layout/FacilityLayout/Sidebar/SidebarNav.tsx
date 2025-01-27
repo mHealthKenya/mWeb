@@ -127,11 +127,17 @@ export default function SidebarNav() {
 
       <SidebarNavTitle>Visits</SidebarNavTitle>
       <SidebarNavItem icon={faHospital} href="/facility/visits/all">
-        All
+        All Visits
       </SidebarNavItem>
+
+      <SidebarNavTitle>Admissions</SidebarNavTitle>
 
       <SidebarNavItem icon={faPlusCircle} href="/facility/admissions/mothers">
         Admit
+      </SidebarNavItem>
+
+      <SidebarNavItem icon={faGauge} href="/facility/admissions/all">
+        All Admissions
       </SidebarNavItem>
 
       <SidebarNavTitle>Billing</SidebarNavTitle>
