@@ -23,7 +23,7 @@ export interface User {
   f_name: string;
   l_name: string;
   phone_number: string;
-  Wallet: Wallet[];
+  Wallet: Wallet;
 }
 
 export interface Wallet {
