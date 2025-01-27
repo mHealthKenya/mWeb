@@ -13,7 +13,9 @@ import {
   faWallet,
   faPlay,
   faDashboard,
-  faPhone
+  faPhone,
+  faHospital,
+  faCheck
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
@@ -136,6 +138,15 @@ export default function SidebarNav() {
       </SidebarNavItem>
       <SidebarNavItem icon={faUserCheck} href="/sadmin/users/mother">
         Mothers
+      </SidebarNavItem>
+
+      <SidebarNavTitle>Admissions</SidebarNavTitle>
+      <SidebarNavItem icon={faHospital} href="/sadmin/admissions/all">
+        All
+      </SidebarNavItem>
+
+      <SidebarNavItem icon={faCheck} href="/sadmin/users/mother">
+        Approvals
       </SidebarNavItem>
 
       <SidebarNavTitle>Billing</SidebarNavTitle>

@@ -1,13 +1,15 @@
 import { DataTable } from '@components/billing/table'
 import { Admission } from '@models/admission'
 import { ColumnDef } from '@tanstack/react-table'
+import { Button } from '@ui/ui/button'
 import dayjs from 'dayjs'
 import { FC } from 'react'
 // import ApproveTransaction from './approve'
 
 const AdmissionsMonitorComponent: FC<{
   admissions: Admission[]
-}> = ({ admissions }) => {
+  processing?: boolean
+}> = ({ admissions, processing }) => {
   const columns: ColumnDef<Admission>[] = [
     {
       accessorKey: 'name',
@@ -53,6 +55,18 @@ const AdmissionsMonitorComponent: FC<{
       }
     }
   ]
+
+  if (processing) {
+    columns.push({
+      accessorKey: 'action',
+      header: () => <div className="text-right">Action</div>,
+      cell: () => (
+        <div className="flex justify-end">
+          <Button>Process</Button>
+        </div>
+      )
+    })
+  }
 
   return (
     <div>
