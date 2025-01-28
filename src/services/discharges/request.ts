@@ -32,16 +32,17 @@ const useRequestDischarge = () => {
                 text: 'Discharge request has successfully been submitted',
                 icon: 'success',
                 confirmButtonText: 'OK'
-                
+
             })
         },
-        onError: (error: any) =>
+        onError: (error: any) => {
             Swal.fire({
                 title: 'Error!',
                 text: error?.response?.data?.message || 'Could not submit discharge request',
                 icon: 'error',
                 confirmButtonText: 'OK'
             })
+        }
     })
 }
 

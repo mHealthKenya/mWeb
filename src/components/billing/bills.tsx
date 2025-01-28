@@ -67,7 +67,7 @@ export const columns: ColumnDef<BillVisit>[] = [
     cell: ({ row }) => {
       const billed = row.original.WalletTransaction
 
-      if (billed.length > 0) {
+      if (billed?.length > 0) {
         return <div className="text-right font-medium text-green-600">{billed[0].points}</div>
       } else {
         return <div className="text-right font-medium">-</div>

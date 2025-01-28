@@ -6,13 +6,11 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger
 } from '@ui/ui/dialog'
 import dayjs from 'dayjs'
-import { Trash2 } from 'lucide-react'
 import { FC, useState } from 'react'
 import DischargeForm from './dischargeform'
 // import ApproveTransaction from './approve'
@@ -23,19 +21,19 @@ const AdmissionsComponent: FC<{
 }> = ({ admissions, facility }) => {
   const [open, setOpen] = useState(false)
 
-  const [openDelete, setOpenDelete] = useState(false)
+  // const [openDelete, setOpenDelete] = useState(false)
 
-  const handleToggleDelete = () => {
-    setOpen(false)
-    setOpenDelete((openDelete) => !openDelete)
-  }
+  // const handleToggleDelete = () => {
+  //   setOpen(false)
+  //   setOpenDelete((openDelete) => !openDelete)
+  // }
 
   const [admission, setAdmission] = useState<Admission | null>(null)
 
   const handleAdmit = (admission: Admission) => {
     setAdmission(admission)
     setOpen(true)
-    setOpenDelete(false)
+    // setOpenDelete(false)
   }
 
   const columns: ColumnDef<Admission>[] = [
@@ -89,34 +87,33 @@ const AdmissionsComponent: FC<{
       cell: ({ row }) => {
         return (
           <div className="flex flex-row gap-2 justify-end font-medium">
-            <Dialog open={openDelete} onOpenChange={handleToggleDelete}>
-              <DialogTrigger asChild>
-                <Button size="icon" variant="destructive">
-                  <Trash2 />
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Delete Admission</DialogTitle>
-                  <DialogDescription>
-                    Are you sure you want to delete the admission for{' '}
-                    <b>
-                      {row.original.user.f_name} {row.original.user.l_name}?
-                    </b>
-                  </DialogDescription>
-                </DialogHeader>
+            <>
+              {/* <Dialog open={openDelete} onOpenChange={handleToggleDelete}>
+                <DialogTrigger asChild>
+                  <Button size="icon" variant="destructive">
+                    <Trash2 />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Delete Admission</DialogTitle>
+                    <DialogDescription>
+                      Are you sure you want to delete the admission for{' '}
+                      <b>
+                        {row.original.user.f_name} {row.original.user.l_name}?
+                      </b>
+                    </DialogDescription>
+                  </DialogHeader>
 
-                <DialogFooter>
-                  <Button variant="destructive" onClick={handleToggleDelete}>
-                    Cancel
-                  </Button>
-                  <Button onClick={handleToggleDelete}>
-                    {/* {isLoading && <Loader2 className="animate-spin" />} */}
-                    Proceed
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+                  <DialogFooter>
+                    <Button variant="destructive" onClick={handleToggleDelete}>
+                      Cancel
+                    </Button>
+                    <Button onClick={handleToggleDelete}>Proceed</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog> */}
+            </>
 
             {facility && <Button onClick={() => handleAdmit(row.original)}>Discharge</Button>}
           </div>
@@ -134,8 +131,8 @@ const AdmissionsComponent: FC<{
           <DialogHeader>
             <DialogTitle>Discharge Patient</DialogTitle>
             <DialogDescription>
-              Discharge and bill Patient. Please note that you can only bill an amount upto the
-              patient's balance
+              {`Discharge and bill Patient. Please note that you can only bill an amount upto the
+              patient's balance`}
             </DialogDescription>
           </DialogHeader>
 

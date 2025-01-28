@@ -145,10 +145,6 @@ export default function SidebarNav() {
         All
       </SidebarNavItem>
 
-      <SidebarNavItem icon={faCheck} href="/sadmin/users/mother">
-        Approvals
-      </SidebarNavItem>
-
       <SidebarNavTitle>Billing</SidebarNavTitle>
       <SidebarNavItem icon={faDashboard} href="/sadmin/billing/dashboard">
         Dashboard
