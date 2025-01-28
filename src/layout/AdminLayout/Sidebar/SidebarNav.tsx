@@ -1,21 +1,20 @@
 import { IconDefinition } from '@fortawesome/free-regular-svg-icons'
 import {
   faAdd,
+  faDashboard,
   faGauge,
+  faHospital,
   faLocation,
   faMap,
+  faMoneyBill,
+  faMoneyBill1Wave,
+  faPhone,
+  faPlay,
   faUserAlt,
   faUserCheck,
   faUserCircle,
   faUserNurse,
-  faMoneyBill,
-  faMoneyBill1Wave,
-  faWallet,
-  faPlay,
-  faDashboard,
-  faPhone,
-  faHospital,
-  faCheck
+  faWallet
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'

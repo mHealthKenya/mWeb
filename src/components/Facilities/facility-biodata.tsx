@@ -24,7 +24,7 @@ const BioDataByFacility: React.FC<{
         //   ? dayjs(bio.last_monthly_period).format('YY-MM-DD HH:mm')
         //   : dayjs(bio.last_clinic_visit).format('YY-MM-DD HH:mm'),
         Action: bio,
-        Balance: bio.user?.Wallet[0]?.balance
+        Balance: bio?.user?.Wallet?.balance
       })),
     [bioData]
   )
