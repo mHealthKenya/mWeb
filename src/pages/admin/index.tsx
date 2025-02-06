@@ -55,8 +55,7 @@ const Admin = ({
         monthly_sms_count={monthly_sms_count}
         total_sms_count={total_sms_count}
         monthly_sms_cost={monthly_sms_cost}
-        monthly_clinic_visits={monthly_clinic_visits}
-      />
+        monthly_clinic_visits={monthly_clinic_visits} mothers_active_count={[]}      />
     </NAdminLayout>
   )
 }

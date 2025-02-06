@@ -23,6 +23,7 @@ const UsersByRoleComponent: React.FC<{
   facilities?: Facility[]
   visit?: boolean
   sadmin?: boolean
+  show?: boolean
 }> = ({ users, facility, isFacility, facilities, visit, sadmin }) => {
   const router = useRouter()
   const [open, setOpen] = useState(false)
@@ -211,8 +212,8 @@ const UsersByRoleComponent: React.FC<{
           headerName: col.headerName,
           width: 300
         }
-      
-      case "national_id":
+
+      case 'national_id':
         return {
           field: col.field,
           headerName: col.headerName,

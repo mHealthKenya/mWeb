@@ -34,13 +34,13 @@ export interface Wallet {
 export interface AddBioData {
   userId: string
   facilityId: string
-  height: string
-  weight: string
+  height?: string
+  weight?: string
   last_clinic_visit: Date
-  last_monthly_period: Date
-  pregnancy_period: string
+  last_monthly_period?: Date
+  pregnancy_period?: string
   age: string
-  gravidity: number
-  parity: string
-  expected_delivery_date: Date
+  gravidity?: number
+  parity?: string
+  expected_delivery_date?: Date
 }

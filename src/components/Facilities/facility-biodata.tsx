@@ -3,7 +3,6 @@ import { Add } from '@mui/icons-material'
 import { Button } from '@mui/material'
 import Box from '@mui/material/Box'
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid'
-import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { Col } from 'src/data/users-by-role'
@@ -20,7 +19,11 @@ const BioDataByFacility: React.FC<{
         Name: bio.user.f_name + ' ' + bio.user.l_name,
         Phone: bio.user.phone_number,
         Age: bio.age,
-        LMP: dayjs().format('YY-MM-DD HH:mm'),
+        // LMP: bio?.last_monthly_period
+        //   // ? dayjs(bio.last_monthly_period).format('YY-MM-DD HH:mm')
+        //   // : dayjs(bio.last_clinic_visit).format('YY-MM-DD HH:mm'),
+        //   ? dayjs(bio.last_monthly_period).format('YY-MM-DD')
+        //   : dayjs(bio.last_clinic_visit).format('YY-MM-DD'),
         Action: bio,
         Balance: bio.user?.Wallet[0]?.balance
       })),
@@ -43,10 +46,10 @@ const BioDataByFacility: React.FC<{
       headerName: 'Age'
     },
 
-    {
-      field: 'LMP',
-      headerName: 'LMP'
-    },
+    // {
+    //   field: 'LMP',
+    //   headerName: 'LMP'
+    // },
 
     {
       field: 'Balance',
@@ -123,7 +126,7 @@ const BioDataByFacility: React.FC<{
                   startIcon={<Add />}
                   size="small"
                   onClick={() => handleRedirectFacility(params.value)}
-                  disabled={params.value.user.Wallet[0].balance <= 0}>
+                  disabled={params.value.user.Wallet[0]?.balance <= 0}>
                   Record Visit
                 </Button>
               </Box>

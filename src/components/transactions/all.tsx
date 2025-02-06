@@ -20,6 +20,39 @@ import {
   DropdownMenuTrigger
 } from '@ui/ui/dropdown-menu'
 import { MoreHorizontal } from 'lucide-react'
+import { saveAs } from 'file-saver'
+
+const exportPendingCSV = (data: AllTransactionsType[]) => {
+  const pendingTransactions = data.filter((t) => !t.approvedBy && !t.rejected)
+
+  if (pendingTransactions.length === 0) {
+    alert('No pending transactions to export.')
+    return
+  }
+
+  const csvHeaders = [
+    'Patient Name',
+    'Phone Number',
+    'Attendant Name',
+    'Facility',
+    'Points',
+    'Date'
+  ]
+
+  const csvRows = pendingTransactions.map((t) => [
+    `${t.user.f_name} ${t.user.l_name}`,
+    t.user.phone_number,
+    `${t.createdBy.f_name} ${t.createdBy.l_name}`,
+    t.facility.name,
+    t.points,
+    dayjs(t.createdAt).format('YYYY-MM-DD')
+  ])
+
+  const csvContent = [csvHeaders, ...csvRows].map((e) => e.join(',')).join('\n')
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+  saveAs(blob, 'pending_transactions.csv')
+}
 
 export const columns: ColumnDef<AllTransactionsType>[] = [
   {
@@ -228,32 +261,58 @@ export const columns: ColumnDef<AllTransactionsType>[] = [
   }
 ]
 
-const AllTransactions: FC<{
-  bills: AllTransactionsType[]
-}> = ({ bills }) => {
+// const AllTransactions: FC<{
+//   bills: AllTransactionsType[]
+// }> = ({ bills }) => {
+//   const { data: initial } = useAllTransactions(bills)
+
+//   const [approved, setApproved] = useAtom(approveAtom)
+
+//   const { open, data } = approved
+
+//   const [rejectOpen, setRejectOpen] = useAtom(rejectAtom)
+
+//   const handleToggle = () => {
+//     setApproved((approved) => ({ ...approved, open: !approved.open }))
+//   }
+
+//   const handleRejectToggle = () => {
+//     setRejectOpen((open) => !open)
+//   }
+
+//   return (
+//     <div>
+//       <DataTable columns={columns} data={initial} />
+//       <SharedModal items={{ open: open, handleToggle }}>
+//         <ApproveTransaction data={data!} />
+//       </SharedModal>
+//       <SharedModal items={{ open: rejectOpen, handleToggle: handleRejectToggle }}>
+//         <RejectTransaction data={data!} />
+//       </SharedModal>
+//     </div>
+//   )
+// }
+
+const AllTransactions: FC<{ bills: AllTransactionsType[] }> = ({ bills }) => {
   const { data: initial } = useAllTransactions(bills)
-
   const [approved, setApproved] = useAtom(approveAtom)
-
   const { open, data } = approved
-
   const [rejectOpen, setRejectOpen] = useAtom(rejectAtom)
-
-  const handleToggle = () => {
-    setApproved((approved) => ({ ...approved, open: !approved.open }))
-  }
-
-  const handleRejectToggle = () => {
-    setRejectOpen((open) => !open)
-  }
 
   return (
     <div>
+      <div className="flex justify-end mb-4">
+        <Button onClick={() => exportPendingCSV(initial)}>Export Pending as CSV</Button>
+      </div>
       <DataTable columns={columns} data={initial} />
-      <SharedModal items={{ open: open, handleToggle }}>
+      <SharedModal
+        items={{
+          open,
+          handleToggle: () => setApproved((prev) => ({ ...prev, open: !prev.open }))
+        }}>
         <ApproveTransaction data={data!} />
       </SharedModal>
-      <SharedModal items={{ open: rejectOpen, handleToggle: handleRejectToggle }}>
+      <SharedModal items={{ open: rejectOpen, handleToggle: () => setRejectOpen((prev) => !prev) }}>
         <RejectTransaction data={data!} />
       </SharedModal>
     </div>
