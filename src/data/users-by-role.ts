@@ -23,6 +23,10 @@ export const colsWithOutFacilityCol: Col[] = [
     field: 'date_added',
     headerName: 'Date Registered'
   },
+  // {
+  //   field: 'added_by',
+  //   headerName: 'Registered By'
+  // },
   {
     field: 'action',
     headerName: 'Action'
@@ -80,6 +84,7 @@ export const rowsWithoutFacility = (users: UserByRole[]) => {
     gender: user.gender,
     email: user.email,
     date_added: dayjs(user.createdAt).format('ddd DD MMM, YYYY'),
+    // added_by: user?.name,
     action: user,
     user
   }))
