@@ -6,6 +6,7 @@ import {
   faHospital,
   faLocation,
   faMap,
+  faMessage,
   faMoneyBill,
   faMoneyBill1Wave,
   faPhone,
@@ -137,6 +138,11 @@ export default function SidebarNav() {
       </SidebarNavItem>
       <SidebarNavItem icon={faUserCheck} href="/sadmin/users/mother">
         Mothers
+      </SidebarNavItem>
+
+      <SidebarNavTitle>Communication</SidebarNavTitle>
+      <SidebarNavItem icon={faMessage} href="/sadmin/communication/sms">
+        SMS
       </SidebarNavItem>
 
       <SidebarNavTitle>Admissions</SidebarNavTitle>
