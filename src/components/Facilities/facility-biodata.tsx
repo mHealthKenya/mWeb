@@ -125,7 +125,7 @@ const BioDataByFacility: React.FC<{
                   startIcon={<Add />}
                   size="small"
                   onClick={() => handleRedirectFacility(params.value)}
-                  disabled={params.value.user.Wallet[0].balance <= 0}>
+                  disabled={params.value.user.Wallet?.balance <= 0}>
                   Record Visit
                 </Button>
               </Box>
