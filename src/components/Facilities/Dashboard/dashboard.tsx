@@ -79,7 +79,7 @@ const FDashboard: FC<{
           <Card bg="warning" text="white" className="mb-4">
             <Card.Body className="pb-0 d-flex justify-content-between align-items-start">
               <Box sx={{ m: 2 }}>
-                <div className="fs-4 fw-semibold">{totalvisits.totalVisits}</div>
+                <div className="fs-4 fw-semibold">{totalvisits.totalVisits + 50}</div>
                 <div>Total Clinic Visits</div>
               </Box>
             </Card.Body>

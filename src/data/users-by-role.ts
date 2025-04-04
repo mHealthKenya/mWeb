@@ -23,6 +23,10 @@ export const colsWithOutFacilityCol: Col[] = [
     field: 'date_added',
     headerName: 'Date Registered'
   },
+  // {
+  //   field: 'added_by',
+  //   headerName: 'Registered By'
+  // },
   {
     field: 'action',
     headerName: 'Action'
@@ -58,6 +62,10 @@ export const colsWithFacilityCol: Col[] = [
     field: 'date_added',
     headerName: 'Date Registered'
   },
+  {
+    field: 'active',
+    headerName: 'Status'
+  },
 
   {
     field: 'added_by',
@@ -76,13 +84,13 @@ export const rowsWithoutFacility = (users: UserByRole[]) => {
     gender: user.gender,
     email: user.email,
     date_added: dayjs(user.createdAt).format('ddd DD MMM, YYYY'),
+    // added_by: user?.name,
     action: user,
     user
   }))
 }
 
 export const rowsWithFacility = (users: UserByRole[], show?: boolean) => {
-
   console.log({ name: users[0].name })
 
   if (show) {
@@ -92,7 +100,7 @@ export const rowsWithFacility = (users: UserByRole[], show?: boolean) => {
       gender: user.gender,
       phone: user.phone_number,
       national_id: user.national_id,
-      age: user.BioData.length > 0 ? user?.BioData[0].age : "N/A",
+      age: user.BioData.length > 0 ? user?.BioData[0].age : 'N/A',
       facility: user.Facility?.name,
       date_added: dayjs(user.createdAt).format('ddd DD MMM, YYYY'),
       added_by: user?.name,
@@ -107,14 +115,13 @@ export const rowsWithFacility = (users: UserByRole[], show?: boolean) => {
     gender: user.gender,
     phone: user.phone_number,
     national_id: user.national_id,
-    age: user?.BioData?.length > 0 ? user?.BioData[0].age : "N/A",
+    age: user.BioData.length > 0 ? user?.BioData[0].age : 'N/A',
     facility: user.Facility?.name,
+    fullName: user.name,
     date_added: dayjs(user.createdAt).format('ddd DD MMM, YYYY'),
+    active: user.active ? 'Active' : 'Inactive',
     added_by: user?.name,
     action: user,
     user
   }))
-
-
-
 }

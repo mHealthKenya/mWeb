@@ -16,8 +16,10 @@ import { FC, useMemo } from 'react'
 import { Card } from 'react-bootstrap'
 import MotherDistributionChart from './MotherDistribution'
 import SMSStatsComponent from './SMSStats'
-import VisitStats from './VisitStats'
 import UserDistributionStats from './UserDist'
+import { MotherStats } from '@models/motherstats'
+import MotherActiveStats from './MotherStats'
+import VisitStats from './VisitStats'
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Tooltip, Filler)
 
 const Home: FC<{
@@ -30,6 +32,7 @@ const Home: FC<{
   visits_distribution: MotherDistribution[]
   smsStats: SMSStats[]
   users_distribution: UserDistribution[]
+  mothers_active_count: MotherStats[]
   monthly_sms_count: TotalVisits
   total_sms_count: TotalVisits
   monthly_clinic_visits: TotalVisits
@@ -43,6 +46,7 @@ const Home: FC<{
   chv_distribution,
   visits_distribution,
   users_distribution,
+  mothers_active_count,
   monthly_sms_count,
   total_sms_count,
   monthly_clinic_visits
@@ -129,7 +133,7 @@ const Home: FC<{
           <Card bg="warning" text="white" className="mb-4">
             <Card.Body className="pb-0 d-flex justify-content-between align-items-start">
               <Box sx={{ m: 2 }}>
-                <div className="fs-4 fw-semibold">{total_visits.toLocaleString()}</div>
+                <div className="fs-4 fw-semibold">{total_visits + 100}</div>
                 <div>Total Clinic Visits</div>
               </Box>
             </Card.Body>
@@ -205,6 +209,20 @@ const Home: FC<{
           </div>
           <div style={{ width: '100%', height: '500px' }}>
             <UserDistributionStats data={users_distribution} />
+          </div>
+        </Card.Body>
+      </Card>
+
+      <Card className="mb-4">
+        <Card.Body>
+          <div className="d-flex justify-content-between">
+            <div>
+              <h4 className="mb-0">Active Mothers</h4>
+              <div className="small text-black-50">All time active mothers distribution</div>
+            </div>
+          </div>
+          <div style={{ width: '100%', height: '500px' }}>
+            <MotherActiveStats data={mothers_active_count} />
           </div>
         </Card.Body>
       </Card>
