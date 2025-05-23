@@ -1,8 +1,8 @@
 import Home from '@components/Dashboard/Dashboard'
 import { baseURL } from '@config/axios'
 import AdminLayout from '@layout/AdminLayout/AdminLayout'
-import { Motherstats } from '@models/chvmothers'
-import { MotherStats } from '@models/motherstats'
+// import { Motherstats } from '@models/chvmothers'
+// import { MotherStats } from '@models/motherstats'
 import { SMSCost } from '@models/sms'
 import { SMSStats } from '@models/smsstats'
 import { MotherDistribution, TotalUsers, TotalVisits, UserDistribution } from '@models/user'
@@ -22,7 +22,7 @@ interface HomeAdmin {
   smsStats: SMSStats[]
   visits_distribution: MotherDistribution[]
   user_distribution: UserDistribution[]
-  mothers_active_count: MotherStats[]
+  // mothers_active_count: MotherStats[]
   monthly_sms_count: TotalVisits
   total_sms_count: TotalVisits
   monthly_sms_cost: number
@@ -42,7 +42,7 @@ const Admin = ({
   total_sms_count,
   monthly_sms_cost,
   monthly_clinic_visits,
-  mothers_active_count
+  // mothers_active_count
 }: HomeAdmin) => {
   return (
     <AdminLayout>
@@ -60,7 +60,7 @@ const Admin = ({
         total_sms_count={total_sms_count}
         monthly_sms_cost={monthly_sms_cost}
         monthly_clinic_visits={monthly_clinic_visits}
-        mothers_active_count={mothers_active_count}
+        mothers_active_count={[]}
       />
     </AdminLayout>
   )
@@ -138,11 +138,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         Authorization: `Bearer ${cookie}`
       }
     })
-    const motherActiveDist = axios.get(baseURL + 'users/motherstats', {
-      headers: {
-        Authorization: `Bearer ${cookie}`
-      }
-    })
+    // const motherActiveDist = axios.get(baseURL + 'users/motherstats', {
+    //   headers: {
+    //     Authorization: `Bearer ${cookie}`
+    //   }
+    // })
 
     const mSMSC = axios.get(baseURL + 'sms/count/month', {
       headers: {
@@ -172,7 +172,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       totalVisit1,
       vDist1,
       userDist1,
-      motherActiveDist1,
+      // motherActiveDist1,
       mSMSC1,
       smsC1,
       mVistC1
@@ -186,7 +186,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       tVisit,
       vDist,
       userDist,
-      motherActiveDist,
+      // motherActiveDist,
       mSMSC,
       smsC,
       mVistC
@@ -201,7 +201,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const visits_distribution = vDist1.data
     const total_visits: TotalVisits = totalVisit1.data
     const user_distribution: UserDistribution[] = userDist1.data
-    const mothers_active_count: Motherstats[] = motherActiveDist1.data
+    // const mothers_active_count: Motherstats[] = motherActiveDist1.data
     const monthly_sms_count: TotalVisits = mSMSC1.data
     const total_sms_count: TotalVisits = smsC1.data
     const monthly_clinic_visits: TotalVisits = mVistC1.data
@@ -218,13 +218,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         smsStats,
         visits_distribution,
         user_distribution,
-        mothers_active_count,
+        // mothers_active_count,
         monthly_sms_count,
         total_sms_count,
         monthly_clinic_visits
       }
     }
   } catch (error) {
+    console.log(error)
     return {
       redirect: {
         destination: '/login',
