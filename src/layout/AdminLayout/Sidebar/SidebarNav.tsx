@@ -145,9 +145,12 @@ export default function SidebarNav() {
         SMS
       </SidebarNavItem>
 
-      <SidebarNavTitle>Admissions</SidebarNavTitle>
+      <SidebarNavTitle>Check Ins</SidebarNavTitle>
       <SidebarNavItem icon={faHospital} href="/sadmin/admissions/all">
-        All
+        Inpatient
+      </SidebarNavItem>
+      <SidebarNavItem icon={faHospital} href="/sadmin/admissions/all">
+        Outpatient
       </SidebarNavItem>
 
       <SidebarNavTitle>Billing</SidebarNavTitle>

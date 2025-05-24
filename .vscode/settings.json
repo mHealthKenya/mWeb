@@ -28,6 +28,7 @@
     "unbilled",
     "updatebalance",
     "userwallet",
-    "vespaiach"
+    "vespaiach",
+    "visitcount"
   ]
 }
