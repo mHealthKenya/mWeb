@@ -1,8 +1,11 @@
 import AllWallets from '@components/wallet/tabs/allwallets'
 import { baseURL } from '@config/axios'
 import AdminLayout from '@layout/AdminLayout/AdminLayout'
+import { Facility } from '@models/facility'
 import { FacilityWallet } from '@models/facilitywallets'
+import { MotherBalances } from '@models/mother-balances'
 import { UserWallet } from '@models/userwallet'
+import { allFacilities } from '@services/locations/all'
 import axios, { AxiosRequestConfig } from 'axios'
 import * as jwt from 'jsonwebtoken'
 import { GetServerSideProps } from 'next'
@@ -11,14 +14,23 @@ import { Users } from 'src/helpers/enums/users.enum'
 
 const AllTransactionsMade = ({
   allFacilityWallets,
-  wallets
+  wallets,
+  facilities,
+  balances
 }: {
   allFacilityWallets: FacilityWallet[]
   wallets: UserWallet[]
+  facilities: Facility[]
+  balances: MotherBalances[]
 }) => {
   return (
     <AdminLayout>
-      <AllWallets allFacilityWallets={allFacilityWallets} wallets={wallets} />
+      <AllWallets
+        allFacilityWallets={allFacilityWallets}
+        wallets={wallets}
+        facilities={facilities}
+        balances={balances}
+      />
     </AdminLayout>
   )
 }
@@ -54,14 +66,25 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
     const fac = axios(config(baseURL + 'wallet/facility/all')).then((res) => res.data)
 
+    const facs = allFacilities()
+
     const wall = axios(config(baseURL + 'wallet/all')).then((res) => res.data)
 
-    const [allFacilityWallets, wallets] = await Promise.all([fac, wall])
+    const bals = axios(config(baseURL + 'wallet/balances')).then((res) => res.data)
+
+    const [allFacilityWallets, wallets, facilities, balances] = await Promise.all([
+      fac,
+      wall,
+      facs,
+      bals
+    ])
 
     return {
       props: {
         allFacilityWallets,
-        wallets
+        wallets,
+        facilities,
+        balances
       }
     }
   } catch (error) {
