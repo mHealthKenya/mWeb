@@ -149,7 +149,7 @@ export default function SidebarNav() {
       <SidebarNavItem icon={faHospital} href="/sadmin/admissions/all">
         Inpatient
       </SidebarNavItem>
-      <SidebarNavItem icon={faHospital} href="/sadmin/admissions/all">
+      <SidebarNavItem icon={faHospital} href="/sadmin/outpatient">
         Outpatient
       </SidebarNavItem>
 

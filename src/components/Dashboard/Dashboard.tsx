@@ -18,8 +18,9 @@ import MotherDistributionChart from './MotherDistribution'
 import SMSStatsComponent from './SMSStats'
 import UserDistributionStats from './UserDist'
 import { MotherStats } from '@models/motherstats'
-import MotherActiveStats from './MotherStats'
+// import MotherActiveStats from './MotherStats'
 import VisitStats from './VisitStats'
+import AgeDistributionStats, { AgeDist } from './AgeDistribution'
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Tooltip, Filler)
 
 const Home: FC<{
@@ -36,6 +37,7 @@ const Home: FC<{
   monthly_sms_count: TotalVisits
   total_sms_count: TotalVisits
   monthly_clinic_visits: TotalVisits
+  age_distribution: AgeDist[]
 }> = ({
   total_users,
   monthly_sms_cost,
@@ -46,10 +48,11 @@ const Home: FC<{
   chv_distribution,
   visits_distribution,
   users_distribution,
-  mothers_active_count,
+  // mothers_active_count,
   monthly_sms_count,
   total_sms_count,
-  monthly_clinic_visits
+  monthly_clinic_visits,
+  age_distribution
 }) => {
   const months = [
     'January',
@@ -217,6 +220,20 @@ const Home: FC<{
         <Card.Body>
           <div className="d-flex justify-content-between">
             <div>
+              <h4 className="mb-0">Age Group Distribution</h4>
+              <div className="small text-black-50">All time age group distribution of mothers</div>
+            </div>
+          </div>
+          <div style={{ width: '100%', height: '500px' }}>
+            <AgeDistributionStats data={age_distribution} />
+          </div>
+        </Card.Body>
+      </Card>
+
+      {/* <Card className="mb-4">
+        <Card.Body>
+          <div className="d-flex justify-content-between">
+            <div>
               <h4 className="mb-0">Active Mothers</h4>
               <div className="small text-black-50">All time active mothers distribution</div>
             </div>
@@ -225,7 +242,7 @@ const Home: FC<{
             <MotherActiveStats data={mothers_active_count} />
           </div>
         </Card.Body>
-      </Card>
+      </Card> */}
 
       <Card className="mb-4">
         <Card.Body>
