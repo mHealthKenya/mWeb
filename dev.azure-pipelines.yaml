@@ -18,40 +18,38 @@ stages:
         pool:
           vmImage: ubuntu-latest
         steps:
-          # Create .env
           - task: Bash@3
-            displayName: Create an .env file
+            displayName: Create .env file
             inputs:
               targetType: 'inline'
               script: |
                 cat <<EOT > .env
-                NEXT_GOOGLE_CLIENT_ID= $(NEXT_GOOGLE_CLIENT_ID)
-                NEXT_PUBLIC_POKEMON_LIST_API_BASE_URL= $(NEXT_PUBLIC_POKEMON_LIST_API_BASE_URL)
-                NEXT_PUBLIC_API_RETRY_INTERVAL_IN_SECONDS= $(NEXT_PUBLIC_API_RETRY_INTERVAL_IN_SECONDS)
-                NEXT_PUBLIC_API_MAX_RETRY= $(NEXT_PUBLIC_API_MAX_RETRY)
-                NEXT_PUBLIC_JWT_SECRET= $(NEXT_PUBLIC_JWT_SECRET)
-                NEXT_PUBLIC_GOOGLE_MAPS_KEY= $(NEXT_PUBLIC_GOOGLE_MAPS_KEY)
-                NEXT_PUBLIC_BASE_URL= $(NEXT_PUBLIC_BASE_URL)
-
-                // put the rest of your env vars here
+                NEXT_GOOGLE_CLIENT_ID=$(NEXT_GOOGLE_CLIENT_ID)
+                NEXT_PUBLIC_POKEMON_LIST_API_BASE_URL=$(NEXT_PUBLIC_POKEMON_LIST_API_BASE_URL)
+                NEXT_PUBLIC_API_RETRY_INTERVAL_IN_SECONDS=$(NEXT_PUBLIC_API_RETRY_INTERVAL_IN_SECONDS)
+                NEXT_PUBLIC_API_MAX_RETRY=$(NEXT_PUBLIC_API_MAX_RETRY)
+                NEXT_PUBLIC_JWT_SECRET=$(NEXT_PUBLIC_JWT_SECRET)
+                NEXT_PUBLIC_GOOGLE_MAPS_KEY=$(NEXT_PUBLIC_GOOGLE_MAPS_KEY)
+                NEXT_PUBLIC_BASE_URL=$(NEXT_PUBLIC_BASE_URL)
+                # more vars here
                 EOT
 
-          # Set image tag with timestamp
-          - script: |
-              echo "Building Docker image for frontend with tag: $(tag)"
-              docker build -f Dockerfile -t devmhk/mpluswebdev:$(tag) .
-            displayName: Build Frontend Docker Image
-            env:
-              DOCKER_BUILDKIT: 1
-
           - task: Docker@2
+            displayName: Build and Push Docker Image
+            condition: succeeded()
             inputs:
               containerRegistry: 'docker'
               repository: 'devmhk/mpluswebdev'
-              command: 'push'
+              command: 'buildAndPush'
+              Dockerfile: '**/Dockerfile'
               tags: '$(tag)'
+              buildContext: '.'
+
+          - script: |
+              rm -f .env
+            displayName: Remove .env File
 
           - script: |
               echo "Docker images list after frontend build:"
               docker images
-            displayName: List Frontend Docker Images
+            displayName: List Docker Images
