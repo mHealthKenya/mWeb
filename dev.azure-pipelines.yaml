@@ -1,0 +1,62 @@
+trigger:
+  - walldev
+
+resources:
+  - repo: self
+
+variables:
+  - group: Secrets
+  - name: tag
+    value: $(Build.BuildId)
+
+stages:
+  - stage: BuildAndPushFrontend
+    displayName: Build and Push Frontend Docker Image
+    jobs:
+      - job: BuildAndPushFrontendImage
+        displayName: Build and Push Frontend Image
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          # # Create .env
+          # - task: Bash@3
+          #   displayName: Create an .env file
+          #   inputs:
+          #     targetType: 'inline'
+          #     script: |
+          #       cat <<EOT > .env
+          #       NEXT_GOOGLE_CLIENT_ID= $(NEXT_GOOGLE_CLIENT_ID)
+          #       NEXT_GOOGLE_CLIENT_SECRET= $(NEXT_GOOGLE_CLIENT_SECRET)
+          #       NEXT_PUBLIC_API_URL= $(NEXT_PUBLIC_API_URL)
+          #       NEXT_PUBLIC_DOMAIN= $(NEXT_PUBLIC_DOMAIN)
+          #       NEXT_PUBLIC_INVENTORY_URL= $(NEXT_PUBLIC_INVENTORY_URL)
+          #       NEXT_PUBLIC_PER_PAGE= $(NEXT_PUBLIC_PER_PAGE)
+          #       NEXTAUTH_SECRET= $(NEXTAUTH_SECRET)
+          #       NEXTAUTH_URL= $(NEXTAUTH_URL)
+          #       NEXT_GOOGLE_ANALYTICS_ID= $(NEXT_GOOGLE_ANALYTICS_ID)
+          #       NEXT_PUBLIC_GOOGLE_API_KEY= $(NEXT_PUBLIC_GOOGLE_API_KEY)
+          #       NEXT_PUBLIC_PAYMENTS_URL= $(NEXT_PUBLIC_PAYMENTS_URL)
+          #       NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY= $(NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY)
+
+          #       // put the rest of your env vars here
+          #       EOT
+
+          # Set image tag with timestamp
+          - script: |
+              echo "Building Docker image for frontend with tag: $(tag)"
+              docker build -f Dockerfile -t devmhk/mpluswebdev:$(tag) .
+            displayName: Build Frontend Docker Image
+            env:
+              DOCKER_BUILDKIT: 1
+
+          - task: Docker@2
+            inputs:
+              containerRegistry: 'docker'
+              repository: 'devmhk/mpluswebdev'
+              command: 'push'
+              tags: '$(tag)'
+
+          - script: |
+              echo "Docker images list after frontend build:"
+              docker images
+            displayName: List Frontend Docker Images

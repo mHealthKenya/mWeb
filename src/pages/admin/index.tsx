@@ -1,3 +1,4 @@
+import { AgeDist } from '@components/Dashboard/AgeDistribution'
 import Home from '@components/Dashboard/Dashboard'
 import { baseURL } from '@config/axios'
 import NAdminLayout from '@layout/NAdminLayout/NAdminLayout'
@@ -24,6 +25,7 @@ interface HomeAdmin {
   total_sms_count: TotalVisits
   monthly_sms_cost: number
   monthly_clinic_visits: TotalVisits
+  age_distribution: AgeDist[]
 }
 
 const Admin = ({
@@ -38,7 +40,8 @@ const Admin = ({
   monthly_sms_count,
   total_sms_count,
   monthly_sms_cost,
-  monthly_clinic_visits
+  monthly_clinic_visits,
+  age_distribution
 }: HomeAdmin) => {
   return (
     <NAdminLayout>
@@ -55,7 +58,10 @@ const Admin = ({
         monthly_sms_count={monthly_sms_count}
         total_sms_count={total_sms_count}
         monthly_sms_cost={monthly_sms_cost}
-        monthly_clinic_visits={monthly_clinic_visits} mothers_active_count={[]}      />
+        monthly_clinic_visits={monthly_clinic_visits}
+        mothers_active_count={[]}
+        age_distribution={age_distribution}
+      />
     </NAdminLayout>
   )
 }
@@ -151,6 +157,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       }
     })
 
+    const ageDist = axios.get(baseURL + 'users/age-group', {
+      headers: {
+        Authorization: `Bearer ${cookie}`
+      }
+    })
+
     const [
       smsCost1,
       smsMCost1,
@@ -161,6 +173,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       totalVisit1,
       vDist1,
       userDist1,
+      ageDist1,
       mSMSC1,
       smsC1,
       mVistC1
@@ -174,6 +187,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       tVisit,
       vDist,
       userDist,
+      ageDist,
       mSMSC,
       smsC,
       mVistC
@@ -191,6 +205,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const monthly_sms_count: TotalVisits = mSMSC1.data
     const total_sms_count: TotalVisits = smsC1.data
     const monthly_clinic_visits: TotalVisits = mVistC1.data
+    const age_distribution: AgeDist[] = ageDist1.data
 
     return {
       props: {
@@ -204,6 +219,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         smsStats,
         visits_distribution,
         user_distribution,
+        age_distribution,
         monthly_sms_count,
         total_sms_count,
         monthly_clinic_visits
