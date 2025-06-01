@@ -5,7 +5,7 @@ resources:
   - repo: self
 
 variables:
-  - group: MProd
+  - group: webProd
   - name: tag
     value: $(Build.BuildId)
 
@@ -39,7 +39,7 @@ stages:
             condition: succeeded()
             inputs:
               containerRegistry: 'docker'
-              repository: 'devmhk/mpluswebdev'
+              repository: 'devmhk/mplusweb'
               command: 'buildAndPush'
               Dockerfile: '**/Dockerfile'
               tags: '$(tag)'
