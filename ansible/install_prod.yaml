@@ -4,49 +4,49 @@
   vars_files:
     - vars.yaml
   tasks:
-    - name: Get latest dev docker image
+    - name: Get latest prod docker image
       uri:
         url: 'https://hub.docker.com/v2/repositories/devmhk/mplusweb/tags?page_size=1'
         method: GET
         return_content: yes
       register: docker_tags
 
-    - name: Get latest dev docker tag
+    - name: Get latest prod docker tag
       set_fact:
-        dev_tag: '{{ docker_tags.json.results[0].name }}'
+        prod_tag: '{{ docker_tags.json.results[0].name }}'
 
-    - name: Show latest dev docker tag
+    - name: Show latest prod docker tag
       debug:
-        msg: 'Latest dev docker tag is {{ dev_tag }}'
+        msg: 'Latest prod docker tag is {{ prod_tag }}'
 
-    - name: Ensure compose directory exists for dev
+    - name: Ensure compose directory exists for prod
       file:
-        path: /opt/mplus/web/dev
+        path: /opt/mplus/web/prod
         state: directory
 
-    - name: Copy dev compose file
+    - name: Copy prod compose file
       copy:
-        src: ../compose.yaml
-        dest: /opt/mplus/web/dev/docker-compose.yaml
+        src: ./compose.yaml
+        dest: /opt/mplus/web/prod/docker-compose.yaml
 
     - name: Update tag on docker compose file
       replace:
-        path: /opt/mplus/web/dev/docker-compose.yaml
+        path: /opt/mplus/web/prod/docker-compose.yaml
         regexp: 'devmhk/mplusweb:latest'
-        replace: 'devmhk/mplusweb:{{ dev_tag }}'
+        replace: 'devmhk/mplusweb:{{ prod_tag }}'
 
-    - name: Ensure dev env file exists
+    - name: Ensure prod env file exists
       file:
-        path: /opt/mplus/web/dev/.env
+        path: /opt/mplus/web/prod/.env
         state: touch
 
-    - name: Copy dev env file
-      copy:
-        src: ../.env.local
-        dest: /opt/mplus/web/dev/.env
-        mode: '0744'
+    - name: Generate .env file
+      template:
+        src: ./env.j2
+        dest: /opt/mplus/web/prod/.env
+        mode: 0744
 
-    - name: Get the currently running image tag for dev
+    - name: Get the currently running image tag for prod
       shell: |
         docker ps --format "{{ '{{.Image}}' }}" | grep '^devmhk/mplusweb:' | awk -F ':' '{print $2}'
       register: current_tag
@@ -57,28 +57,28 @@
       debug:
         msg: "Current running image tag: {{ current_tag.stdout | default('N/A') }}"
 
-    - name: Stop web dev if running
+    - name: Stop web prod if running
       community.docker.docker_compose_v2:
-        project_src: /opt/mplus/web/dev
-        project_name: mplus-web-dev
+        project_src: /opt/mplus/web/prod
+        project_name: mplus-web-prod
         files:
           - docker-compose.yaml
         state: absent
       ignore_errors: true
 
-    - name: Start web dev
+    - name: Start web prod
       community.docker.docker_compose_v2:
-        project_src: /opt/mplus/web/dev
-        project_name: mplus-web-dev
+        project_src: /opt/mplus/web/prod
+        project_name: mplus-web-prod
         files:
           - docker-compose.yaml
         state: present
         recreate: always
 
-    - name: Wait for web dev to start
+    - name: Wait for web prod to start
       wait_for:
         host: localhost
-        port: 3600
+        port: 3100
         delay: 5
         timeout: 60
         state: started
@@ -91,9 +91,9 @@
 
     - name: Rollback to previous version if start fails
       block:
-        - name: Stop failed dev
+        - name: Stop failed prod
           community.docker.docker_compose_v2:
-            project_src: /opt/mplus/web/dev
+            project_src: /opt/mplus/web/prod
             files:
               - docker-compose.yaml
             state: absent
@@ -101,14 +101,14 @@
 
         - name: Restore previous image tag in compose file
           replace:
-            path: /opt/mplus/web/dev/docker-compose.yaml
+            path: /opt/mplus/web/prod/docker-compose.yaml
             regexp: 'devmhk/mplusweb:.*'
             replace: 'devmhk/mplusweb:{{ current_tag.stdout }}'
           when: current_tag.stdout | length > 0
 
-        - name: Restart dev with previous version
+        - name: Restart prod with previous version
           community.docker.docker_compose_v2:
-            project_src: /opt/mplus/web/dev
+            project_src: /opt/mplus/web/prod
             files:
               - docker-compose.yaml
             state: present
