@@ -9,18 +9,14 @@ import {
   CardContent,
   CardHeader,
   FormControl,
-  FormControlLabel,
   InputLabel,
   MenuItem,
-  Radio,
-  RadioGroup,
   Select,
   Stack,
   TextField
 } from '@mui/material'
 import useEditUser from '@services/users/edit-user'
 import { FC } from 'react'
-import { FormLabel } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
@@ -39,7 +35,8 @@ export enum Gender {
 export interface EditForm {
   f_name: string
   l_name: string
-  email: string
+  email?: string
+  phone_number: string
   role: string
   gender: string
   facilityId?: string
@@ -50,7 +47,10 @@ const roles = [Roles.ADMIN, Roles.FACILITY, Roles.CHV, Roles.MOTHER]
 const validationSchema: any = Yup.object().shape({
   f_name: Yup.string().required('First name is required'),
   l_name: Yup.string().required('Last name is required'),
-  email: Yup.string().email('Invalid email address').required('Email is required'),
+  email: Yup.string().email('Invalid email address').optional(),
+  phone_number: Yup.string()
+    .matches(/^254\d{9}$/, 'Invalid phone number format. Use this format 254xxxxxxxxx')
+    .required('Phone number is a required field'),
   role: Yup.string().required('Role is required'),
   gender: Yup.string().required('Gender is required'),
   facilityId: Yup.string().optional()
@@ -72,6 +72,7 @@ const EditUserWithRoleComponent: FC<{
   const { mutate, isLoading } = useEditUser(handleToggle)
 
   const onSubmit = (data: EditForm) => {
+    console.log(data)
     mutate({
       id: '' + user?.id,
       ...data
@@ -106,6 +107,18 @@ const EditUserWithRoleComponent: FC<{
                 inputProps={{ 'data-testid': 'l_name_input' }}
               />
               <TextField
+                size="small"
+                fullWidth
+                label="Phone Number"
+                defaultValue={user?.phone_number}
+                {...register('phone_number')}
+                placeholder="254*********"
+                required
+                helperText={errors?.phone_number?.message}
+                error={!!errors?.phone_number?.message}
+                inputProps={{ 'data-testid': 'phone_input' }}
+              />
+              <TextField
                 label="Email"
                 size="small"
                 fullWidth
@@ -129,12 +142,16 @@ const EditUserWithRoleComponent: FC<{
                   inputProps={{ 'data-testid': 'role_input' }}>
                   {roles.map((role) => (
                     <MenuItem key={role} value={role}>
-                      {role === Roles.FACILITY ? 'Facility Admin' : role}
+                      {role === Roles.FACILITY
+                        ? 'Facility Admin'
+                        : role === Roles.CHV
+                        ? 'CHP'
+                        : role}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
-              {facilities ? (
+              {facilities && (
                 <FormControl fullWidth size="small">
                   <InputLabel id="demo-simple-select-facility">Facility</InputLabel>
                   <Select
@@ -142,7 +159,7 @@ const EditUserWithRoleComponent: FC<{
                     id="demo-simple-select-facility"
                     label="Facility"
                     size="small"
-                    defaultValue={user?.facilityId || ''}
+                    defaultValue={user?.facilityId}
                     {...register('facilityId')}
                     error={!!errors.facilityId?.message}
                     inputProps={{ 'data-testid': 'facility_input' }}>
@@ -153,15 +170,37 @@ const EditUserWithRoleComponent: FC<{
                     ))}
                   </Select>
                 </FormControl>
-              ) : null}
-              <FormControl required>
+              )}
+
+              <FormControl fullWidth size="small" required>
+                <InputLabel id="demo-simple-select-facility">Gender</InputLabel>
+                <Select
+                  labelId="demo-simple-select-facility"
+                  id="demo-simple-select-facility"
+                  label="Gender"
+                  size="small"
+                  defaultValue={user?.gender}
+                  {...register('gender')}
+                  error={!!errors.gender?.message}
+                  inputProps={{ 'data-testid': 'gender_input' }}>
+                  {gender?.map((item, index) => (
+                    <MenuItem key={index} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              {/* <FormControl required>
                 <FormLabel id="gender-radio">Gender</FormLabel>
-                <RadioGroup aria-labelledby="gender" defaultValue="Female" {...register('gender')}>
+                <RadioGroup
+                  aria-labelledby="gender"
+                  defaultValue={user?.gender}
+                  {...register('gender')}>
                   {gender.map((item, index) => (
                     <FormControlLabel value={item} control={<Radio />} label={item} key={index} />
                   ))}
                 </RadioGroup>
-              </FormControl>
+              </FormControl> */}
             </Stack>
           </CardContent>
 

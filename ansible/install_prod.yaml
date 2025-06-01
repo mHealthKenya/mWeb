@@ -1,0 +1,122 @@
+---
+- hosts: commercial
+  become: yes
+  vars_files:
+    - vars.yaml
+  tasks:
+    - name: Get latest dev docker image
+      uri:
+        url: 'https://hub.docker.com/v2/repositories/devmhk/mplusweb/tags?page_size=1'
+        method: GET
+        return_content: yes
+      register: docker_tags
+
+    - name: Get latest dev docker tag
+      set_fact:
+        dev_tag: '{{ docker_tags.json.results[0].name }}'
+
+    - name: Show latest dev docker tag
+      debug:
+        msg: 'Latest dev docker tag is {{ dev_tag }}'
+
+    - name: Ensure compose directory exists for dev
+      file:
+        path: /opt/mplus/web/dev
+        state: directory
+
+    - name: Copy dev compose file
+      copy:
+        src: ../compose.yaml
+        dest: /opt/mplus/web/dev/docker-compose.yaml
+
+    - name: Update tag on docker compose file
+      replace:
+        path: /opt/mplus/web/dev/docker-compose.yaml
+        regexp: 'devmhk/mplusweb:latest'
+        replace: 'devmhk/mplusweb:{{ dev_tag }}'
+
+    - name: Ensure dev env file exists
+      file:
+        path: /opt/mplus/web/dev/.env
+        state: touch
+
+    - name: Copy dev env file
+      copy:
+        src: ../.env.local
+        dest: /opt/mplus/web/dev/.env
+        mode: '0744'
+
+    - name: Get the currently running image tag for dev
+      shell: |
+        docker ps --format "{{ '{{.Image}}' }}" | grep '^devmhk/mplusweb:' | awk -F ':' '{print $2}'
+      register: current_tag
+      changed_when: false
+      ignore_errors: true
+
+    - name: Display the currently running image tag
+      debug:
+        msg: "Current running image tag: {{ current_tag.stdout | default('N/A') }}"
+
+    - name: Stop web dev if running
+      community.docker.docker_compose_v2:
+        project_src: /opt/mplus/web/dev
+        project_name: mplus-web-dev
+        files:
+          - docker-compose.yaml
+        state: absent
+      ignore_errors: true
+
+    - name: Start web dev
+      community.docker.docker_compose_v2:
+        project_src: /opt/mplus/web/dev
+        project_name: mplus-web-dev
+        files:
+          - docker-compose.yaml
+        state: present
+        recreate: always
+
+    - name: Wait for web dev to start
+      wait_for:
+        host: localhost
+        port: 3600
+        delay: 5
+        timeout: 60
+        state: started
+      register: service_status
+      failed_when: service_status is failed
+
+    - name: Display service status
+      debug:
+        msg: 'Service status: {{ service_status }}'
+
+    - name: Rollback to previous version if start fails
+      block:
+        - name: Stop failed dev
+          community.docker.docker_compose_v2:
+            project_src: /opt/mplus/web/dev
+            files:
+              - docker-compose.yaml
+            state: absent
+          when: service_status.failed is defined and service_status.failed
+
+        - name: Restore previous image tag in compose file
+          replace:
+            path: /opt/mplus/web/dev/docker-compose.yaml
+            regexp: 'devmhk/mplusweb:.*'
+            replace: 'devmhk/mplusweb:{{ current_tag.stdout }}'
+          when: current_tag.stdout | length > 0
+
+        - name: Restart dev with previous version
+          community.docker.docker_compose_v2:
+            project_src: /opt/mplus/web/dev
+            files:
+              - docker-compose.yaml
+            state: present
+            recreate: always
+          when: current_tag.stdout | length > 0
+
+        - name: Fail the playbook if rollback is triggered
+          fail:
+            msg: 'Deployment failed! Rolled back to previous version: {{ current_tag.stdout }}'
+          when: current_tag.stdout | length > 0
+      when: service_status.failed is defined and service_status.failed

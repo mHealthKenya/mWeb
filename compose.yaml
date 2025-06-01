@@ -1,0 +1,12 @@
+services:
+  api:
+    image: 'devmhk/mpluswebdev:latest'
+
+    container_name: mplus-web-dev
+
+    ports:
+      - '3600:3600'
+
+    env_file: .env
+
+    restart: unless-stopped

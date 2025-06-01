@@ -1,10 +1,8 @@
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
-import { faCreditCard, faFile, faUser } from '@fortawesome/free-regular-svg-icons'
-import { faGear, faPowerOff } from '@fortawesome/free-solid-svg-icons'
+import { faPowerOff } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Cookies from 'js-cookie'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { PropsWithChildren } from 'react'
 import Dropdown from 'react-bootstrap/Dropdown'
@@ -40,14 +38,15 @@ export default function HeaderProfileNav() {
         <Dropdown.Toggle
           variant="link"
           bsPrefix="hide-caret"
-          className="py-0 px-2 rounded-0"
+          className="py-0 px-2"
           id="dropdown-profile">
           <div className="avatar position-relative">
             <Image
-              fill
               className="rounded-circle"
-              src="/assets/img/avatars/8.jpg"
+              src="/assets/arrow.png"
               alt="user@email.com"
+              width={50}
+              height={50}
             />
           </div>
         </Dropdown.Toggle>
@@ -94,7 +93,7 @@ export default function HeaderProfileNav() {
             </Dropdown.Item>
           </Link> */}
 
-          <Dropdown.Header className="bg-light fw-bold">Settings</Dropdown.Header>
+          {/* <Dropdown.Header className="bg-light fw-bold">Settings</Dropdown.Header>
 
           <Link href="#" passHref legacyBehavior>
             <Dropdown.Item>
@@ -117,7 +116,7 @@ export default function HeaderProfileNav() {
             </Dropdown.Item>
           </Link>
 
-          <Dropdown.Divider />
+          <Dropdown.Divider /> */}
 
           {/* <Link href="#" passHref legacyBehavior>
             <Dropdown.Item>

@@ -65,6 +65,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       }
     }
   } catch (error) {
+    console.log({
+      error
+    })
+
     return {
       redirect: {
         destination: '/login',

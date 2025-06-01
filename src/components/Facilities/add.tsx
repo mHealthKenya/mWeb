@@ -9,6 +9,7 @@ import {
   CardHeader,
   TextField
 } from '@mui/material'
+import { parseCookies } from 'nookies'
 import { useForm } from 'react-hook-form'
 import useAddFacility from 'src/services/locations/add'
 import * as Yup from 'yup'
@@ -22,6 +23,9 @@ const schema = Yup.object().shape({
 })
 
 const NewFacilityComponent = () => {
+  const cookies = parseCookies()
+
+  console.log('cookies', cookies['access-token'])
   const {
     register,
     handleSubmit,

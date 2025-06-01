@@ -5,6 +5,7 @@ import { Add, Delete, Edit, Visibility } from '@mui/icons-material'
 import { Button } from '@mui/material'
 import Box from '@mui/material/Box'
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid'
+import useEditUser, { EditUser } from '@services/users/edit-user'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import {
@@ -22,6 +23,7 @@ const UsersByRoleComponent: React.FC<{
   facilities?: Facility[]
   visit?: boolean
   sadmin?: boolean
+  show?: boolean
 }> = ({ users, facility, isFacility, facilities, visit, sadmin }) => {
   const router = useRouter()
   const [open, setOpen] = useState(false)
@@ -41,6 +43,26 @@ const UsersByRoleComponent: React.FC<{
 
   const handleEdit = (user: UserByRole) => {
     setOpen(true)
+    setUser(user)
+  }
+
+  const { mutate: editUser, isLoading } = useEditUser(() => {})
+
+  const handleDeactivate = (user: UserByRole) => {
+    const person: EditUser = {
+      id: user.id,
+      f_name: user.f_name,
+      l_name: user.l_name,
+      email: user.email,
+      phone_number: user.phone_number,
+      gender: user.gender,
+      role: user.role,
+      facilityId: user.facilityId,
+      active: !user.active
+    }
+
+    editUser(person)
+
     setUser(user)
   }
 
@@ -126,7 +148,7 @@ const UsersByRoleComponent: React.FC<{
         return {
           field: col.field,
           headerName: col.headerName,
-          width: 200,
+          width: 250,
           renderCell: (params) => {
             return (
               <Box
@@ -144,11 +166,16 @@ const UsersByRoleComponent: React.FC<{
                 </Button>
                 <Button
                   variant="contained"
-                  color="error"
-                  onClick={() => console.log(params.value)}
+                  color={params.value.active ? 'error' : 'success'}
                   startIcon={<Delete />}
-                  size="small">
-                  Delete
+                  size="small"
+                  onClick={() => handleDeactivate(params.value)}
+                  disabled={params.value.id === user?.id && isLoading}>
+                  {isLoading && params.value.id === user?.id
+                    ? 'Editing...'
+                    : params.value.active
+                    ? 'Deactivate'
+                    : 'Activate'}
                 </Button>
               </Box>
             )
@@ -183,8 +210,30 @@ const UsersByRoleComponent: React.FC<{
         return {
           field: col.field,
           headerName: col.headerName,
-          width: 200
+          width: 300
         }
+
+      case 'national_id':
+        return {
+          field: col.field,
+          headerName: col.headerName,
+          width: 150
+        }
+
+      case 'date_added':
+        return {
+          field: col.field,
+          headerName: col.headerName,
+          width: 150
+        }
+
+        case 'name':
+          return {
+            field: col.field,
+            headerName: col.headerName,
+            width: 150
+          }
+
       default:
         return {
           field: col.field,
@@ -196,11 +245,16 @@ const UsersByRoleComponent: React.FC<{
 
   return (
     <>
-      <Box sx={{ height: 450, width: '100%' }}>
+      <Box sx={{ height: '100%', width: '100%' }}>
         <DataGrid
           rows={rows}
           slots={{ toolbar: GridToolbar }}
           columns={columns}
+          slotProps={{
+            toolbar: {
+              showQuickFilter: true
+            }
+          }}
           initialState={{
             pagination: {
               paginationModel: {

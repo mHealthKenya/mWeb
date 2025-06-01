@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -18,24 +22,70 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "paths": {
-      "@components": ["src/components"],
-      "@components/*": ["src/components/*"],
-      "@hooks": ["src/hooks"],
-      "@hooks/*": ["src/hooks/*"],
-      "@layout": ["src/layout"],
-      "@layout/*": ["src/layout/*"],
-      "@lib": ["src/lib"],
-      "@lib/*": ["src/lib/*"],
-      "@models": ["src/models"],
-      "@models/*": ["src/models/*"],
-      "@pages": ["src/pages"],
-      "@store": ["src/store"],
-      "@styles/*": ["src/styles/*"],
-      "@services/*": ["src/services/*"],
-      "@config/*": ["src/config/*"],
-      "@data/*": ["src/data/*"]
-    }
+      "@components": [
+        "src/components"
+      ],
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@hooks": [
+        "src/hooks"
+      ],
+      "@hooks/*": [
+        "src/hooks/*"
+      ],
+      "@layout": [
+        "src/layout"
+      ],
+      "@layout/*": [
+        "src/layout/*"
+      ],
+      "@lib": [
+        "src/lib"
+      ],
+      "@lib/*": [
+        "src/lib/*"
+      ],
+      "@models": [
+        "src/models"
+      ],
+      "@models/*": [
+        "src/models/*"
+      ],
+      "@pages": [
+        "src/pages"
+      ],
+      "@store": [
+        "src/store"
+      ],
+      "@styles/*": [
+        "src/styles/*"
+      ],
+      "@services/*": [
+        "src/services/*"
+      ],
+      "@config/*": [
+        "src/config/*"
+      ],
+      "@data/*": [
+        "src/data/*"
+      ]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/Users/Add.spec.tsx", "src/components/Dashboard/Dashboard.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/components/Users/Add.spec.tsx",
+    "src/components/Dashboard/Dashboard.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

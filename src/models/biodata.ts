@@ -10,7 +10,8 @@ export interface FacilityBioData {
   pregnancy_period: number
   last_clinic_visit: Date
   facilityId: string
-  previous_pregnancies: number
+  parity?: string
+  gravidity?: number
   createdById: string
   updatedById: string
   createdAt: Date
@@ -19,20 +20,27 @@ export interface FacilityBioData {
 }
 
 export interface User {
-  f_name: string
-  l_name: string
-  phone_number: string
-  national_id: string
+  f_name: string;
+  l_name: string;
+  phone_number: string;
+  Wallet: Wallet;
 }
+
+export interface Wallet {
+  balance: number;
+}
+
 
 export interface AddBioData {
   userId: string
   facilityId: string
-  height: string
-  weight: string
+  height?: string
+  weight?: string
   last_clinic_visit: Date
-  last_monthly_period: Date
-  pregnancy_period: string
+  last_monthly_period?: Date
+  pregnancy_period?: string
   age: string
-  expected_delivery_date: Date
+  gravidity?: number
+  parity?: string
+  expected_delivery_date?: Date
 }

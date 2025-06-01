@@ -18,8 +18,8 @@ import React, { FC } from 'react'
 
 export const ViewTargetComponent: FC<{
   handleToggle: () => void
-  target: Target | undefined
-}> = ({ handleToggle }) => {
+  target: Target
+}> = ({ handleToggle, target }) => {
   return (
     <CenterComponent>
       <Card sx={{ minWidth: 400, mt: 3, mb: 3 }}>
@@ -36,13 +36,11 @@ export const ViewTargetComponent: FC<{
               <TableBody>
                 <TableRow>
                   <TableCell>Set Target</TableCell>
-                  <TableCell>0</TableCell>
-                  {/* <TableCell>{target?.setTarget}</TableCell> */}
+                  <TableCell>{target?.setTarget}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>Current</TableCell>
-                  <TableCell>13</TableCell>
-                  {/* <TableCell>{target?.current}</TableCell> */}
+                  <TableCell>{target?.current}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>

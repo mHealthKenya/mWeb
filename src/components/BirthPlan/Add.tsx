@@ -33,26 +33,23 @@ export interface FormProps {
   preferred_transport: string
   support_person_name: string
   support_person_phone: string
-  alternative_facility_id: string
-  preferred_attendant_name: string | null | undefined
-  preferred_attendant_phone: string | null | undefined
-  blood_donor_name: string | null | undefined
-  blood_donor_phone: string | null | undefined
+  other_facility: string
+  preferred_attendant_name?: string | null | undefined
+  preferred_attendant_phone?: string | null | undefined
+  blood_donor_name?: string | null | undefined
+  blood_donor_phone?: string | null | undefined
   emergency_decision_maker_name: string
   emergency_decision_maker_phone: string
-  emergency_cs_plan: string | null | undefined
+  emergency_cs_plan?: string | null | undefined
   savings_plan: string
   delivery_bag: string
 }
 
 const delivery_modes = [
-  'Natural',
+  'Skilled Virginal Delivery',
   'Cesarean Section',
   'Assisted Vaginal Delivery',
-  'Water Birth',
-  'Home Birth',
-  'VBAC (Vaginal Birth After Cesarean)',
-  'Scheduled Induction'
+  'VBAC (Vaginal Birth After Cesarean)'
 ]
 
 const delivery_bag_options = ['Patient Has One', 'Patient Has None']
@@ -60,11 +57,11 @@ const delivery_bag_options = ['Patient Has One', 'Patient Has None']
 const formSchema = Yup.object().shape({
   delivery_mode: Yup.string().required('A delivery mode is required'),
   preferred_transport: Yup.string().required('Preferred transport mode is required'),
-  support_person_name: Yup.string().required('Support person name is required'),
+  support_person_name: Yup.string().required('Birth companion name is required'),
   support_person_phone: Yup.string()
-    .required('Please provide contacts for a support person')
+    .required('Please provide contacts for a birth companion')
     .matches(/^254\d{9}$/, 'Invalid phone number format. Use 254*********'),
-  alternative_facility_id: Yup.string().required('Please select an alternative facility'),
+  other_facility: Yup.string().required('Please select an alternative facility'),
   preferred_attendant_name: Yup.string().nullable().optional(),
   preferred_attendant_phone: Yup.string().nullable().optional(),
 
@@ -84,7 +81,7 @@ const AddBirthPlanComponent: FC<{
   facilities: Facility[]
   user?: User
   facilityId: string
-}> = ({ birthPlan, facilities, user, facilityId }) => {
+}> = ({ birthPlan, user, facilityId }) => {
   const textFieldProps: TextFieldProps = {
     size: 'small',
     fullWidth: true
@@ -156,7 +153,7 @@ const AddBirthPlanComponent: FC<{
               {...register('support_person_name')}
               error={!!errors.support_person_name?.message}
               helperText={errors.support_person_name?.message}
-              label="Support Person Name"
+              label="Birth Companion Name"
               required
               defaultValue={plan?.support_person_name}
             />
@@ -165,7 +162,7 @@ const AddBirthPlanComponent: FC<{
               {...register('support_person_phone')}
               error={!!errors.support_person_phone?.message}
               helperText={errors.support_person_phone?.message}
-              label="Support Person Phone"
+              label="Birth Companion Phone"
               required
               defaultValue={plan?.support_person_phone}
             />
@@ -258,7 +255,17 @@ const AddBirthPlanComponent: FC<{
                 </>
               )}
             />
-            <FormControl fullWidth size="small">
+
+            <TextField
+              {...textFieldProps}
+              {...register('other_facility')}
+              error={!!errors.other_facility?.message}
+              helperText={errors.other_facility?.message}
+              label="Alternative Facility"
+              required
+              defaultValue={plan?.savings_plan}
+            />
+            {/* <FormControl fullWidth size="small">
               <InputLabel id="facility">Alternative Facility</InputLabel>
               <Select
                 labelId="facility-label"
@@ -275,7 +282,7 @@ const AddBirthPlanComponent: FC<{
                 ))}
               </Select>
               <FormHelperText>{errors?.alternative_facility_id?.message}</FormHelperText>
-            </FormControl>
+            </FormControl> */}
           </Stack>
         </CardContent>
         <CardActionArea>

@@ -25,4 +25,5 @@ export interface Mother {
   f_name: string
   l_name: string
   phone_number: string
+  createdById: string | null
 }

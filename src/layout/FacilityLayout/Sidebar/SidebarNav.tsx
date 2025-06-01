@@ -4,9 +4,12 @@ import {
   faHospital,
   faLocation,
   faMap,
+  faMoneyBill,
   faPencil,
-  faPerson,
-  faPersonPregnant
+  faPersonPregnant,
+  faCalculator,
+  faPhone,
+  faPlusCircle
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
@@ -116,14 +119,45 @@ export default function SidebarNav() {
       <SidebarNavItem icon={faPersonPregnant} href="/facility/mothers">
         Mothers
       </SidebarNavItem>
-      <SidebarNavItem icon={faPerson} href="/facility/chv">
-        CHVs
-      </SidebarNavItem>
+      {/* <SidebarNavItem icon={faPerson} href="/facility/chv">
+        CHPs
+      </SidebarNavItem> */}
 
       <SidebarNavTitle>Visits</SidebarNavTitle>
       <SidebarNavItem icon={faHospital} href="/facility/visits/all">
-        All
+        All Visits
       </SidebarNavItem>
+
+      <SidebarNavTitle>Admissions</SidebarNavTitle>
+
+      <SidebarNavItem icon={faPlusCircle} href="/facility/admissions/mothers">
+        Admit
+      </SidebarNavItem>
+
+      <SidebarNavItem icon={faGauge} href="/facility/admissions/all">
+        All Admissions
+      </SidebarNavItem>
+
+      <SidebarNavTitle>Billing</SidebarNavTitle>
+      <SidebarNavItem icon={faMoneyBill} href="/facility/billing">
+        Send Bills
+      </SidebarNavItem>
+      <SidebarNavItem icon={faCalculator} href="/facility/billing/transactions">
+        Transactions
+      </SidebarNavItem>
+
+      <SidebarNavTitle>Emergency</SidebarNavTitle>
+      <SidebarNavItem icon={faPhone} href="/facility/emergency">
+        Contact
+      </SidebarNavItem>
+
+      {/* <SidebarNavTitle>Wallet</SidebarNavTitle> */}
+      {/* <SidebarNavItem icon={faDatabase} href="">
+        Wallet Stats
+      </SidebarNavItem>
+      <SidebarNavItem icon={faWallet} href="/facility/wallet/all">
+        Manage Wallet
+      </SidebarNavItem> */}
       <SidebarNavTitle>Coverage</SidebarNavTitle>
       <SidebarNavItem icon={faLocation} href="/facility/facilities">
         Facilities

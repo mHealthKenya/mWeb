@@ -24,6 +24,7 @@ const SchedulesListComponent: React.FC<{ schedules?: UserSchedule[]; chvs: User[
   const scheduleValue = useScheduler()
 
   const handleComingSoon = (schedule: UserSchedule) => {
+    console.log(schedule)
     scheduleValue?.handleSchedule(schedule)
     setOpen((open) => !open)
   }
@@ -95,15 +96,20 @@ const SchedulesListComponent: React.FC<{ schedules?: UserSchedule[]; chvs: User[
 
   return (
     <>
-      <Box sx={{ height: 500, width: '100%' }}>
+      <Box sx={{ height: '100%', width: '100%' }}>
         <DataGrid
           rows={nRows}
           columns={fCol}
           slots={{ toolbar: GridToolbar }}
+          slotProps={{
+            toolbar: {
+              showQuickFilter: true
+            }
+          }}
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 5
+                pageSize: 15
               }
             }
           }}

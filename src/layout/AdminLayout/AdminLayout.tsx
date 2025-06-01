@@ -1,8 +1,8 @@
-import React, { PropsWithChildren, useCallback, useEffect, useState } from 'react'
-import Head from 'next/head'
-import Sidebar, { SidebarOverlay } from '@layout/AdminLayout/Sidebar/Sidebar'
-import Header from '@layout/AdminLayout/Header/Header'
 import Footer from '@layout/AdminLayout/Footer/Footer'
+import Header from '@layout/AdminLayout/Header/Header'
+import Sidebar, { SidebarOverlay } from '@layout/AdminLayout/Sidebar/Sidebar'
+import Head from 'next/head'
+import { PropsWithChildren, useCallback, useEffect, useState } from 'react'
 import Container from 'react-bootstrap/Container'
 import { useResizeDetector } from 'react-resize-detector/build'
 

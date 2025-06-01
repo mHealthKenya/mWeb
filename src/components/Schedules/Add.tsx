@@ -105,6 +105,8 @@ const AddScheduleComponent: FC<{
             />
 
             <DateTimePicker
+              minDate={dayjs(new Date())}
+              format="YYYY-MM-DD HH:mm"
               label="Date of Visit"
               onChange={(i) => handleDateChange(i!)}
               slotProps={{ textField: { size: 'small', required: true } }}

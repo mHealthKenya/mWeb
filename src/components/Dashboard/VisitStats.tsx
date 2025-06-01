@@ -18,6 +18,7 @@ const VisitStats: FC<{ visit: MotherDistribution; total_visits: number; variant:
           <ProgressBar
             className="progress-thin mt-2"
             variant={variant}
+            // now={Math.floor((visit.count / total_visits) * 100)}
             now={Math.floor((visit.count / total_visits) * 100)}
           />
         </Tooltip>

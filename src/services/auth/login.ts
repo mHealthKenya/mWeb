@@ -1,9 +1,10 @@
+import { LoginCredentials } from '@components/Auth/login'
 import { LoginSuccess } from '@models/login'
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
-import { LoginCredentials } from '../../pages/login'
+// import { LoginCredentials } from '../../pages/login'
 import { baseURL } from 'src/config/axios'
 import Swal from 'sweetalert2'
 

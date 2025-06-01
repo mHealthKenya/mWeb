@@ -3,7 +3,6 @@ import { Add } from '@mui/icons-material'
 import { Button } from '@mui/material'
 import Box from '@mui/material/Box'
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid'
-import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { Col } from 'src/data/users-by-role'
@@ -20,9 +19,13 @@ const BioDataByFacility: React.FC<{
         Name: bio.user.f_name + ' ' + bio.user.l_name,
         Phone: bio.user.phone_number,
         Age: bio.age,
-        LMP: dayjs().format('YY-MM-DD HH:mm'),
+        // LMP: bio?.last_monthly_period
+        //   // ? dayjs(bio.last_monthly_period).format('YY-MM-DD HH:mm')
+        //   // : dayjs(bio.last_clinic_visit).format('YY-MM-DD HH:mm'),
+        //   ? dayjs(bio.last_monthly_period).format('YY-MM-DD')
+        //   : dayjs(bio.last_clinic_visit).format('YY-MM-DD'),
         Action: bio,
-        bio
+        Balance: bio?.user?.Wallet?.balance
       })),
     [bioData]
   )
@@ -43,9 +46,14 @@ const BioDataByFacility: React.FC<{
       headerName: 'Age'
     },
 
+    // {
+    //   field: 'LMP',
+    //   headerName: 'LMP'
+    // },
+
     {
-      field: 'LMP',
-      headerName: 'LMP'
+      field: 'Balance',
+      headerName: 'Available Points'
     },
 
     {
@@ -64,6 +72,16 @@ const BioDataByFacility: React.FC<{
 
   const columns: GridColDef[] = columnTypes1.map((col) => {
     switch (col.field) {
+      case 'Balance':
+        return {
+          field: col.field,
+          headerName: col.headerName,
+          width: 200,
+          renderCell: (params) => {
+            return <>{JSON.stringify(params.value)}</>
+          }
+        }
+
       case 'Action':
         if (admin) {
           return {
@@ -107,7 +125,9 @@ const BioDataByFacility: React.FC<{
                   sx={{ mr: 1 }}
                   startIcon={<Add />}
                   size="small"
-                  onClick={() => handleRedirectFacility(params.value)}>
+                  onClick={() => handleRedirectFacility(params.value)}
+                  disabled={params.value.user.Wallet?.balance <= 0}>
+                  {/* disabled={params.value.user.Wallet[0]?.balance <= 0}> */}
                   Record Visit
                 </Button>
               </Box>
@@ -126,10 +146,15 @@ const BioDataByFacility: React.FC<{
 
   return (
     <>
-      <Box sx={{ height: 450, width: '100%' }}>
+      <Box sx={{ height: '100%', width: '100%' }}>
         <DataGrid
           rows={rows}
           slots={{ toolbar: GridToolbar }}
+          slotProps={{
+            toolbar: {
+              showQuickFilter: true
+            }
+          }}
           columns={columns}
           initialState={{
             pagination: {

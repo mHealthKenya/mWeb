@@ -29,7 +29,7 @@ interface FormProps {
   title: string
   description: string
   status: string
-  chvId: string | undefined
+  chvId?: string | undefined
 }
 
 const formSchema = Yup.object().shape({
@@ -59,6 +59,8 @@ const EditScheduleComponent: FC<{
   handleToggle: () => void
 }> = ({ data, handleToggle }) => {
   const { userId, facilityId, chvs } = data
+
+  console.log({ userId })
 
   const [chv, setChv] = useState(false)
 
@@ -174,7 +176,7 @@ const EditScheduleComponent: FC<{
 
               {chv && (
                 <FormControl fullWidth size="small">
-                  <InputLabel id="demo-simple-select-label">Select CHV</InputLabel>
+                  <InputLabel id="demo-simple-select-label">Select CHP</InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
@@ -182,12 +184,17 @@ const EditScheduleComponent: FC<{
                     size="small"
                     {...register('chvId')}
                     error={!!errors.chvId?.message}
+                    defaultValue={scheduler?.schedule?.mother?.createdById}
                     inputProps={{ 'data-testid': 'role_input' }}>
-                    {chvs?.map((item, index) => (
-                      <MenuItem key={index} value={item.id}>
-                        {`${item.f_name} ${item.l_name}`}
-                      </MenuItem>
-                    ))}
+                    {chvs?.map((item, index) => {
+                      console.log(item)
+
+                      return (
+                        <MenuItem key={index} value={item.id}>
+                          {`${item.f_name} ${item.l_name}`}
+                        </MenuItem>
+                      )
+                    })}
                   </Select>
                 </FormControl>
               )}

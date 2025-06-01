@@ -86,9 +86,9 @@ const PrintableVisit: FC<{ visit: ClinicalVisit; title: string; subHeader: strin
                   </ListItemIcon>
                   <ListItemText
                     primary="LMP"
-                    secondary={dayjs(
-                      new Date(visit.bioData.last_monthly_period)
-                    ).format('YYYY-MM-DD HH:mm')}
+                    secondary={dayjs(new Date(visit.bioData.last_monthly_period)).format(
+                      'YYYY-MM-DD HH:mm'
+                    )}
                   />
                 </ListItemButton>
               </ListItem>
@@ -100,9 +100,9 @@ const PrintableVisit: FC<{ visit: ClinicalVisit; title: string; subHeader: strin
                   </ListItemIcon>
                   <ListItemText
                     primary="EDD"
-                    secondary={dayjs(
-                      new Date(visit.bioData.expected_delivery_date)
-                    ).format('YYYY-MM-DD HH:mm')}
+                    secondary={dayjs(new Date(visit.bioData.expected_delivery_date)).format(
+                      'YYYY-MM-DD HH:mm'
+                    )}
                   />
                 </ListItemButton>
               </ListItem>
@@ -147,6 +147,16 @@ const PrintableVisit: FC<{ visit: ClinicalVisit; title: string; subHeader: strin
                   <ListItemText primary="TB" secondary={visit.TB} />
                 </ListItemButton>
               </ListItem>
+
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <HealthAndSafety />
+                  </ListItemIcon>
+                  <ListItemText primary="Tetanus" secondary={visit.tetanus} />
+                </ListItemButton>
+              </ListItem>
+
               <ListItem disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
@@ -206,6 +216,16 @@ const PrintableVisit: FC<{ visit: ClinicalVisit; title: string; subHeader: strin
               <ListItemText primary="Urinalysis" secondary={visit.urinalysis} />
             </ListItemButton>
           </ListItem>
+
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <HealthAndSafety />
+              </ListItemIcon>
+              <ListItemText primary="Treatment" secondary={visit.treatment} />
+            </ListItemButton>
+          </ListItem>
+
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>

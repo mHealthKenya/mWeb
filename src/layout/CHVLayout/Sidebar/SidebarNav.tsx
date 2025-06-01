@@ -1,7 +1,8 @@
 import { IconDefinition } from '@fortawesome/free-regular-svg-icons'
 import {
   faArrows,
-  faEnvelope,
+  faGauge,
+  faMap,
   faPersonPregnant,
   faQuestion
 } from '@fortawesome/free-solid-svg-icons'
@@ -43,32 +44,28 @@ const SidebarNavTitle = (props: PropsWithChildren) => {
 export default function SidebarNav() {
   return (
     <ul className="list-unstyled">
-      {/* <SidebarNavItem icon={faGauge} href="/sadmin">
+      <SidebarNavItem icon={faGauge} href="/chp">
         Dashboard
-        <small className="ms-auto">
-          <Badge bg="info" className="ms-auto">
-            NEW
-          </Badge>
-        </small>
-      </SidebarNavItem> */}
+      </SidebarNavItem>
 
       <SidebarNavTitle>Records</SidebarNavTitle>
-      <SidebarNavItem icon={faPersonPregnant} href="/chv/mothers">
+      <SidebarNavItem icon={faPersonPregnant} href="/chp/mothers">
         Mothers
       </SidebarNavItem>
-      <SidebarNavItem icon={faArrows} href="/chv/followup">
+      <SidebarNavItem icon={faArrows} href="/chp/followup">
         Follow Up
       </SidebarNavItem>
-      <SidebarNavItem icon={faEnvelope} href="/chv/appointments">
+      {/* <SidebarNavItem icon={faEnvelope} href="/chp/appointments">
         Appointments
-      </SidebarNavItem>
-      <SidebarNavTitle>Coverage</SidebarNavTitle>
-      <SidebarNavItem icon={faQuestion} href="/chv/enquiry">
+      </SidebarNavItem> */}
+      <SidebarNavItem icon={faQuestion} href="/chp/enquiry">
         Enquiries
       </SidebarNavItem>
-      {/* <SidebarNavItem icon={faMap} href="/admin/coverage">
+      <SidebarNavTitle>Coverage</SidebarNavTitle>
+
+      <SidebarNavItem icon={faMap} href="/chp/coverage">
         Map View
-      </SidebarNavItem> */}
+      </SidebarNavItem>
     </ul>
   )
 }

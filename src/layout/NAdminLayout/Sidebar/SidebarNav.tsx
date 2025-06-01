@@ -63,8 +63,8 @@ export default function SidebarNav() {
       <SidebarNavItem icon={faUserNurse} href="/admin/users/facility">
         Facility Admins
       </SidebarNavItem>
-      <SidebarNavItem icon={faUserAlt} href="/admin/users/chv">
-        CHVs
+      <SidebarNavItem icon={faUserAlt} href="/admin/users/chp">
+        CHPs
       </SidebarNavItem>
       <SidebarNavItem icon={faUserCheck} href="/admin/users/mother">
         Mothers

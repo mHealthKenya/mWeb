@@ -1,14 +1,21 @@
 import { IconDefinition } from '@fortawesome/free-regular-svg-icons'
 import {
   faAdd,
+  faDashboard,
   faGauge,
   faHospital,
   faLocation,
   faMap,
+  faMessage,
+  faMoneyBill,
+  faMoneyBill1Wave,
+  faPhone,
+  faPlay,
   faUserAlt,
   faUserCheck,
   faUserCircle,
-  faUserNurse
+  faUserNurse,
+  faWallet
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
@@ -127,14 +134,46 @@ export default function SidebarNav() {
         Facility Admins
       </SidebarNavItem>
       <SidebarNavItem icon={faUserAlt} href="/sadmin/users/chv">
-        CHVs
+        CHPs
       </SidebarNavItem>
       <SidebarNavItem icon={faUserCheck} href="/sadmin/users/mother">
         Mothers
       </SidebarNavItem>
 
-      <SidebarNavItem icon={faHospital} href="/sadmin/visits/all">
-        Visits
+      <SidebarNavTitle>Communication</SidebarNavTitle>
+      <SidebarNavItem icon={faMessage} href="/sadmin/communication/sms">
+        SMS
+      </SidebarNavItem>
+
+      <SidebarNavTitle>Check Ins</SidebarNavTitle>
+      <SidebarNavItem icon={faHospital} href="/sadmin/admissions/all">
+        Inpatient
+      </SidebarNavItem>
+      <SidebarNavItem icon={faHospital} href="/sadmin/outpatient">
+        Outpatient
+      </SidebarNavItem>
+
+      <SidebarNavTitle>Billing</SidebarNavTitle>
+      <SidebarNavItem icon={faDashboard} href="/sadmin/billing/dashboard">
+        Dashboard
+      </SidebarNavItem>
+      <SidebarNavItem icon={faMoneyBill} href="/sadmin/billing">
+        Approve Transactions
+      </SidebarNavItem>
+      <SidebarNavItem icon={faMoneyBill1Wave} href="/sadmin/billing/multiapprove">
+        Multi Approve Transactions
+      </SidebarNavItem>
+      <SidebarNavItem icon={faWallet} href="/sadmin/billing/wallets">
+        Wallets
+      </SidebarNavItem>
+
+      <SidebarNavItem icon={faPlay} href="/sadmin/billing/base">
+        Base
+      </SidebarNavItem>
+
+      <SidebarNavTitle>Emergency</SidebarNavTitle>
+      <SidebarNavItem icon={faPhone} href="/sadmin/emergency">
+        Contacts
       </SidebarNavItem>
 
       <SidebarNavTitle>Coverage</SidebarNavTitle>

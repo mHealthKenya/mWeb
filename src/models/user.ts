@@ -37,4 +37,3 @@ export interface UserDistribution {
 export interface Count {
   role: number
 }
-

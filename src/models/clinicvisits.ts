@@ -13,6 +13,10 @@ export interface ClinicalVisit {
   TB: string
   hepatitisB: string
   notes: null
+  treatment: string
+  tetanus: string
+  hivTestDate: Date
+  tetanusInjectionDate: Date
   createdAt: Date
   updatedAt: Date
   facility: Facility
@@ -41,3 +45,5 @@ export interface User {
 export interface Facility {
   name: string
 }
+
+
