@@ -40,11 +40,11 @@
         path: /opt/mplus/web/dev/.env
         state: touch
 
-    - name: Copy dev env file
-      copy:
-        src: ../.env.local
-        dest: /opt/mplus/web/dev/.env
-        mode: '0744'
+    - name: Generate .env file
+      template:
+        src: ./env_dev.j2
+        dest: /opt/mplus/web/prod/.env
+        mode: 0744
 
     - name: Get the currently running image tag for dev
       shell: |
