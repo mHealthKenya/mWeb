@@ -49,7 +49,6 @@ const Admin = ({
 HomeAdmin) => {
   return (
     <AdminLayout>
-      {' '}
       <Home
         total_sms_cost={total_sms_cost}
         total_users={total_users}
