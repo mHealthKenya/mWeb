@@ -49,8 +49,6 @@ const Admin = ({
 HomeAdmin) => {
   return (
     <AdminLayout>
-      {' '}
-      <p>Dev deploy was successful</p>
       <Home
         total_sms_cost={total_sms_cost}
         total_users={total_users}
