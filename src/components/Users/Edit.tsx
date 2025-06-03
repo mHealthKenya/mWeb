@@ -1,7 +1,9 @@
+'use client'
+
 import CenterComponent from '@components/Shared/Center'
 import { gender } from '@data/gender'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Facility, UserByRole } from '@models/user-by-role'
+import type { Facility, UserByRole } from '@models/user-by-role'
 import {
   Button,
   Card,
@@ -16,9 +18,11 @@ import {
   TextField
 } from '@mui/material'
 import useEditUser from '@services/users/edit-user'
-import { FC } from 'react'
+import useAddBioData from '@services/biodata/add-biodata'
+import { type FC, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
+import Swal from 'sweetalert2'
 
 export enum Roles {
   ADMIN = 'Admin',
@@ -40,6 +44,7 @@ export interface EditForm {
   role: string
   gender: string
   facilityId?: string
+  age?: string
 }
 
 const roles = [Roles.ADMIN, Roles.FACILITY, Roles.CHV, Roles.MOTHER]
@@ -53,7 +58,8 @@ const validationSchema: any = Yup.object().shape({
     .required('Phone number is a required field'),
   role: Yup.string().required('Role is required'),
   gender: Yup.string().required('Gender is required'),
-  facilityId: Yup.string().optional()
+  facilityId: Yup.string().optional(),
+  age: Yup.string().matches(/^\d+$/, 'Age must be a valid number').optional()
 })
 
 const EditUserWithRoleComponent: FC<{
@@ -61,6 +67,8 @@ const EditUserWithRoleComponent: FC<{
   handleToggle: () => void
   facilities?: Facility[]
 }> = ({ user, handleToggle, facilities }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   const {
     register,
     handleSubmit,
@@ -69,15 +77,103 @@ const EditUserWithRoleComponent: FC<{
     resolver: yupResolver(validationSchema)
   })
 
-  const { mutate, isLoading } = useEditUser(handleToggle)
+  // Pass handleToggle to useEditUser to automatically close modal on success
+  const { mutate: editUser, isLoading: isEditingUser } = useEditUser(handleToggle)
+  const { mutate: addBioData, isLoading: isAddingBioData } = useAddBioData()
 
-  const onSubmit = (data: EditForm) => {
-    console.log(data)
-    mutate({
-      id: '' + user?.id,
-      ...data
-    })
+  const onSubmit = async (data: EditForm) => {
+    console.log('Form data:', data)
+    setIsSubmitting(true)
+
+    try {
+      // Separate age from other user data
+      const { age, ...userData } = data
+
+      // Track which operations we need to perform
+      const operations = []
+
+      // Always update user data
+      operations.push(
+        new Promise((resolve, reject) => {
+          editUser(
+            {
+              id: '' + user?.id,
+              ...userData
+            },
+            {
+              onSuccess: (data) => {
+                console.log('User data updated successfully:', data)
+                resolve(data)
+              },
+              onError: (error) => {
+                console.error('Error updating user data:', error)
+                reject(new Error('Failed to update user information'))
+              }
+            }
+          )
+        })
+      )
+
+      // Add biodata update operation if age is provided and changed
+      if (age !== undefined && age !== '' && age !== String(user?.BioData?.age || '')) {
+        console.log('Adding biodata update operation for age:', age)
+
+        const bioDataPayload = {
+          userId: user?.id || '',
+          age: age,
+          facilityId: user?.facilityId || '',
+          last_clinic_visit: new Date()
+        }
+
+        operations.push(
+          new Promise((resolve, reject) => {
+            addBioData(bioDataPayload, {
+              onSuccess: (responseData) => {
+                console.log('Bio data updated successfully:', responseData)
+                resolve(responseData)
+              },
+              onError: (error) => {
+                console.error('Error updating bio data:', error)
+                reject(new Error('Failed to update age information'))
+              }
+            })
+          })
+        )
+      }
+
+      // Wait for ALL operations to complete successfully
+      console.log(`Executing ${operations.length} operations...`)
+      await Promise.all(operations)
+
+      // If we reach here, all operations succeeded
+      console.log('All operations completed successfully')
+
+      // Show single success message
+      Swal.fire({
+        title: 'Success!',
+        text: 'User information has been updated successfully',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      })
+
+      // Modal will close automatically via useEditUser(handleToggle)
+    } catch (error) {
+      console.error('Error during form submission:', error)
+
+      // Show single error message for any failure
+      Swal.fire({
+        title: 'Error!',
+        text: error instanceof Error ? error.message : 'Failed to update user information',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
+
+  // Combined loading state
+  const isLoading = isEditingUser || isAddingBioData || isSubmitting
 
   return (
     <CenterComponent>
@@ -130,10 +226,10 @@ const EditUserWithRoleComponent: FC<{
                 inputProps={{ 'data-testid': 'email_input' }}
               />
               <FormControl fullWidth size="small">
-                <InputLabel id="demo-simple-select-label">Role</InputLabel>
+                <InputLabel id="role-select-label">Role</InputLabel>
                 <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
+                  labelId="role-select-label"
+                  id="role-select"
                   label="Role"
                   size="small"
                   defaultValue={user?.role}
@@ -151,12 +247,13 @@ const EditUserWithRoleComponent: FC<{
                   ))}
                 </Select>
               </FormControl>
+
               {facilities && (
                 <FormControl fullWidth size="small">
-                  <InputLabel id="demo-simple-select-facility">Facility</InputLabel>
+                  <InputLabel id="facility-select-label">Facility</InputLabel>
                   <Select
-                    labelId="demo-simple-select-facility"
-                    id="demo-simple-select-facility"
+                    labelId="facility-select-label"
+                    id="facility-select"
                     label="Facility"
                     size="small"
                     defaultValue={user?.facilityId}
@@ -173,10 +270,10 @@ const EditUserWithRoleComponent: FC<{
               )}
 
               <FormControl fullWidth size="small" required>
-                <InputLabel id="demo-simple-select-facility">Gender</InputLabel>
+                <InputLabel id="gender-select-label">Gender</InputLabel>
                 <Select
-                  labelId="demo-simple-select-facility"
-                  id="demo-simple-select-facility"
+                  labelId="gender-select-label"
+                  id="gender-select"
                   label="Gender"
                   size="small"
                   defaultValue={user?.gender}
@@ -190,17 +287,22 @@ const EditUserWithRoleComponent: FC<{
                   ))}
                 </Select>
               </FormControl>
-              {/* <FormControl required>
-                <FormLabel id="gender-radio">Gender</FormLabel>
-                <RadioGroup
-                  aria-labelledby="gender"
-                  defaultValue={user?.gender}
-                  {...register('gender')}>
-                  {gender.map((item, index) => (
-                    <FormControlLabel value={item} control={<Radio />} label={item} key={index} />
-                  ))}
-                </RadioGroup>
-              </FormControl> */}
+
+              <TextField
+                label="Age"
+                size="small"
+                fullWidth
+                type="number"
+                defaultValue={String(user?.BioData?.age || '')}
+                {...register('age')}
+                error={!!errors.age?.message}
+                helperText={errors?.age?.message || 'Age will be updated in biodata'}
+                inputProps={{
+                  'data-testid': 'age_input',
+                  min: 0,
+                  max: 150
+                }}
+              />
             </Stack>
           </CardContent>
 
@@ -211,9 +313,9 @@ const EditUserWithRoleComponent: FC<{
               type="submit"
               disabled={isLoading}
               data-testid="submit_button">
-              {isLoading ? 'Editing...' : 'Edit'}
+              {isLoading ? 'Updating...' : 'Update User'}
             </Button>
-            <Button variant="contained" color="error" onClick={handleToggle}>
+            <Button variant="contained" color="error" onClick={handleToggle} disabled={isLoading}>
               Cancel
             </Button>
           </CardActions>
