@@ -16,6 +16,8 @@ export interface UserByRole {
   // BioData?: BioDatum[]
   BioData?: BioDatum
   name?: string | null
+  hasWallet?: boolean
+  hasDelivered?: boolean
 }
 
 export interface Facility {
