@@ -1,5 +1,3 @@
-'use client'
-
 import CenterComponent from '@components/Shared/Center'
 import { gender } from '@data/gender'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -23,6 +21,7 @@ import { type FC, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 import Swal from 'sweetalert2'
+import { delivered } from '@data/delivered'
 
 export enum Roles {
   ADMIN = 'Admin',
@@ -36,6 +35,11 @@ export enum Gender {
   FEMALE = 'Female'
 }
 
+export enum Delivered {
+  YES = 'Yes',
+  NO = 'No'
+}
+
 export interface EditForm {
   f_name: string
   l_name: string
@@ -45,6 +49,7 @@ export interface EditForm {
   gender: string
   facilityId?: string
   age?: string
+  hasDelivered?: string | boolean
 }
 
 const roles = [Roles.ADMIN, Roles.FACILITY, Roles.CHV, Roles.MOTHER]
@@ -59,7 +64,8 @@ const validationSchema: any = Yup.object().shape({
   role: Yup.string().required('Role is required'),
   gender: Yup.string().required('Gender is required'),
   facilityId: Yup.string().optional(),
-  age: Yup.string().matches(/^\d+$/, 'Age must be a valid number').optional()
+  age: Yup.string().optional(),
+  hasDelivered: Yup.string().optional(),
 })
 
 const EditUserWithRoleComponent: FC<{
@@ -86,8 +92,14 @@ const EditUserWithRoleComponent: FC<{
     setIsSubmitting(true)
 
     try {
+      // Convert hasDelivered to boolean if it's a string
+      const hasDelivered =
+        typeof data.hasDelivered === 'string' ? data.hasDelivered === 'Yes' : data.hasDelivered
+
       // Separate age from other user data
       const { age, ...userData } = data
+      // Update userData with boolean hasDelivered
+      userData.hasDelivered = hasDelivered
 
       // Track which operations we need to perform
       const operations = []
@@ -303,6 +315,25 @@ const EditUserWithRoleComponent: FC<{
                   max: 150
                 }}
               />
+
+              <FormControl fullWidth size="small" required>
+                <InputLabel id="delivered-select-label">Delivered</InputLabel>
+                <Select
+                  labelId="delivered-select-label"
+                  id="delivered-select"
+                  label="Delivered"
+                  size="small"
+                  defaultValue={user?.hasDelivered ? 'Yes' : 'No'}
+                  {...register('hasDelivered')}
+                  error={!!errors.hasDelivered?.message}
+                  inputProps={{ 'data-testid': 'hasDelivered_input' }}>
+                  {delivered?.map((item, index) => (
+                    <MenuItem key={index} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Stack>
           </CardContent>
 

@@ -23,10 +23,6 @@ export const colsWithOutFacilityCol: Col[] = [
     field: 'date_added',
     headerName: 'Date Registered'
   },
-  // {
-  //   field: 'added_by',
-  //   headerName: 'Registered By'
-  // },
   {
     field: 'action',
     headerName: 'Action'
@@ -72,6 +68,10 @@ export const colsWithFacilityCol: Col[] = [
     headerName: 'Registered By'
   },
   {
+    field: 'hasDelivered',
+    headerName: 'Delivered'
+  },
+  {
     field: 'action',
     headerName: 'Action'
   }
@@ -105,6 +105,7 @@ export const rowsWithFacility = (users: UserByRole[], show?: boolean) => {
       facility: user.Facility?.name,
       date_added: dayjs(user.createdAt).format('ddd DD MMM, YYYY'),
       added_by: user?.name,
+      hasDelivered: user.hasDelivered,
       action: user,
       user
     }))
@@ -123,6 +124,8 @@ export const rowsWithFacility = (users: UserByRole[], show?: boolean) => {
     date_added: dayjs(user.createdAt).format('ddd DD MMM, YYYY'),
     active: user.active ? 'Active' : 'Inactive',
     added_by: user?.name,
+    // hasDelivered: user.role === 'Mother' ? (user.hasDelivered ? 'Yes' : 'No') : '',
+    hasDelivered: user.hasDelivered ? 'Yes' : 'No',
     action: user,
     user
   }))
