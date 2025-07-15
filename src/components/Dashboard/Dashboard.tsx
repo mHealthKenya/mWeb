@@ -21,6 +21,7 @@ import { MotherStats } from '@models/motherstats'
 // import MotherActiveStats from './MotherStats'
 import VisitStats from './VisitStats'
 import AgeDistributionStats, { AgeDist } from './AgeDistribution'
+import MotherActiveStats from './MotherStats'
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Tooltip, Filler)
 
 const Home: FC<{
@@ -48,7 +49,7 @@ const Home: FC<{
   chv_distribution,
   visits_distribution,
   users_distribution,
-  // mothers_active_count,
+  mothers_active_count,
   monthly_sms_count,
   total_sms_count,
   monthly_clinic_visits,
@@ -229,7 +230,7 @@ const Home: FC<{
         </Card.Body>
       </Card>
 
-      {/* <Card className="mb-4">
+      <Card className="mb-4">
         <Card.Body>
           <div className="d-flex justify-content-between">
             <div>
@@ -241,7 +242,7 @@ const Home: FC<{
             <MotherActiveStats data={mothers_active_count} />
           </div>
         </Card.Body>
-      </Card> */}
+      </Card>
 
       <Card className="mb-4">
         <Card.Body>
