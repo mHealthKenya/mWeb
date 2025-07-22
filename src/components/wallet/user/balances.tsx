@@ -36,6 +36,12 @@ export function MothersBalances({
     })
   }, [searchTerm, selectedFacility, balances])
 
+  const initialBalance = useMemo(() => {
+    return (
+      filteredData.length * 7000 - filteredData.reduce((sum, account) => sum + account.balance, 0)
+    )
+  }, [filteredData])
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-KE', {
       style: 'currency',
@@ -76,6 +82,10 @@ export function MothersBalances({
 
       <div className="text-sm text-gray-600">
         Showing {filteredData.length} of {balances.length} accounts
+      </div>
+      <div className="text-sm font-semibold">
+        Total Balance:
+        <span className="text-lg text-green-600">{formatCurrency(initialBalance)}</span>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
