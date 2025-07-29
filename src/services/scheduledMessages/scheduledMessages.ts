@@ -1,9 +1,9 @@
-import { Message } from "@components/ScheduleMessages/ScheduledMessages";
+
 import { axiosConfig } from "@config/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 
-const addScheduledMessage = async (message: Message) => {
+const addScheduledMessage = async (message: any) => {
     const axiosInstance = await axiosConfig();
     const newScheduledMessage = await axiosInstance.post('scheduled-messages', message).then((res) => res.data);
     return newScheduledMessage;
@@ -13,7 +13,7 @@ const useAddScheduledMessage = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: addScheduledMessage,
-        onSuccess: async (data) => {
+        onSuccess: async () => {
             await queryClient.invalidateQueries(['scheduled-messages']);
             Swal.fire({
                 title: 'Success!',

@@ -7,7 +7,7 @@ import { GetServerSideProps } from 'next'
 import nookies from 'nookies'
 import { baseURL } from 'src/config/axios'
 
-const ScheduledMessages = ({ users }: any) => {
+const ScheduledMessages = () => {
   return (
     <AdminLayout>
       <ScheduledMessagesComponent />

@@ -28,19 +28,19 @@ export type Message = {
 }
 
 export default function ScheduledMessagesComponent() {
-  const { data: apiMessages = [], isLoading, isError } = useAllScheduledMessages()
+  const { data: allScheduledMessages = [], isLoading, isError } = useAllScheduledMessages()
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null)
   const [showCreateForm, setShowCreateForm] = useState(false)
   const [activeTab, setActiveTab] = useState("all")
   const { toast } = useToast()
 
   // Transform API data to match your component's expected format
-  const messages = apiMessages.map((msg: any) => ({
+  const messages = allScheduledMessages.map((msg: any) => ({
     id: msg.id,
     userId: msg.userId,
     message: msg.message,
     scheduledAt: msg.scheduledAt,
-    status: msg.sent ? "sent" : "pending", // Convert boolean to string status
+    status: msg.sent,
     sentAt: msg.sent ? msg.scheduledAt : null,
     user: {
       id: msg.user.id,
@@ -51,38 +51,38 @@ export default function ScheduledMessagesComponent() {
     }
   }))
 
-  const handleCreateMessage = async (messageData: Omit<Message, 'id' | 'status' | 'sentAt' | 'user'>) => {
-    try {
-      const newMessage = {
-        id: Date.now().toString(),
-        ...messageData,
-        status: "pending",
-        sentAt: null,
-        user: {
-          id: "temp-id",
-          f_name: "New",
-          l_name: "User",
-          email: null,
-          phone_number: "0000000000"
-        }
-      }
-      // In a real app, you would call your API here to create the message
-      // and then update the local state with the response
-      toast({
-        title: "Message Scheduled",
-        description: "Your message has been scheduled successfully.",
-      })
-      setShowCreateForm(false)
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to schedule message. Please try again.",
-        variant: "destructive",
-      })
-    }
-  }
+  // const handleCreateMessage = async (messageData: Omit<Message, 'id' | 'status' | 'sentAt' | 'user'>) => {
+  //   try {
+  //     const newMessage = {
+  //       id: Date.now().toString(),
+  //       ...messageData,
+  //       status: "pending",
+  //       sentAt: null,
+  //       user: {
+  //         id: "temp-id",
+  //         f_name: "New",
+  //         l_name: "User",
+  //         email: null,
+  //         phone_number: "0000000000"
+  //       }
+  //     }
+  //     // In a real app, you would call your API here to create the message
+  //     // and then update the local state with the response
+  //     toast({
+  //       title: "Message Scheduled",
+  //       description: "Your message has been scheduled successfully.",
+  //     })
+  //     setShowCreateForm(false)
+  //   } catch (error) {
+  //     toast({
+  //       title: "Error",
+  //       description: "Failed to schedule message. Please try again.",
+  //       variant: "destructive",
+  //     })
+  //   }
+  // }
 
-  const handleDeleteMessage = async (id: string) => {
+  const handleDeleteMessage = async () => {
     try {
       // In a real app, you would call your API here to delete the message
       // and then update the local state
@@ -103,9 +103,9 @@ export default function ScheduledMessagesComponent() {
   const getFilteredMessages = () => {
     switch (activeTab) {
       case "sent":
-        return messages.filter((msg) => msg.status === "sent")
+        return messages.filter((msg: any) => msg.status === "sent")
       case "unsent":
-        return messages.filter((msg) => msg.status === "pending")
+        return messages.filter((msg: any) => msg.status === "pending")
       default:
         return messages
     }
@@ -113,8 +113,8 @@ export default function ScheduledMessagesComponent() {
 
   const stats = {
     total: messages.length,
-    sent: messages.filter((msg) => msg.status === "sent").length,
-    pending: messages.filter((msg) => msg.status === "pending").length,
+    sent: messages.filter((msg: any) => msg.status === "sent").length,
+    pending: messages.filter((msg: any) => msg.status === "pending").length,
   }
 
   if (isLoading) {
@@ -190,7 +190,7 @@ export default function ScheduledMessagesComponent() {
                   <TabsContent value={activeTab} className="mt-4">
                     <MessagesTable
                       messages={getFilteredMessages()}
-                      onSelectMessage={(message) => setSelectedMessage(message)}
+                      onSelectMessage={(message) => setSelectedMessage(messages.find((m: any) => m.id === message.id) || null)}
                       onDeleteMessage={handleDeleteMessage}
                       selectedMessageId={selectedMessage?.id || ''}
                     />

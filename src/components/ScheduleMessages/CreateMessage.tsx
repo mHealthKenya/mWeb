@@ -50,7 +50,7 @@ type CreateMessageFormProps = {
 export function CreateMessageForm({ onCancel, role }: CreateMessageFormProps) {
   const { data: users = [], isLoading: isUsersLoading } = useUsersByRole(role, [])
   console.log("Users:", users)
-  const { mutate, isLoading, isPending } = useAddScheduledMessage()
+  const { mutate, isLoading } = useAddScheduledMessage()
 
   const [formData, setFormData] = useState<{
     userId: string[];
@@ -226,7 +226,7 @@ export function CreateMessageForm({ onCancel, role }: CreateMessageFormProps) {
                 <Select 
                   value={selectedUser} 
                   onValueChange={addUserFromDropdown} 
-                  disabled={users.length === 0 || isPending}
+                  disabled={users.length === 0}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder={users.length === 0 ? "No users available" : "Select a user to add..."} />
@@ -266,7 +266,6 @@ export function CreateMessageForm({ onCancel, role }: CreateMessageFormProps) {
                     type="button" 
                     onClick={addUserId} 
                     variant="outline"
-                    disabled={isPending}
                   >
                     <Plus className="w-4 h-4" />
                   </Button>
@@ -287,7 +286,7 @@ export function CreateMessageForm({ onCancel, role }: CreateMessageFormProps) {
                           type="button"
                           onClick={() => removeUserId(userId)}
                           className="text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full p-1"
-                          disabled={isPending}
+                          
                         >
                           <X className="w-3 h-3" />
                         </button>
@@ -308,7 +307,6 @@ export function CreateMessageForm({ onCancel, role }: CreateMessageFormProps) {
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 rows={4}
                 className="resize-none"
-                disabled={isPending}
               />
               {errors.message && <p className="text-sm text-red-600">{errors.message}</p>}
               <p className="text-sm text-gray-500">{formData.message.length} characters</p>
@@ -326,7 +324,6 @@ export function CreateMessageForm({ onCancel, role }: CreateMessageFormProps) {
                 value={formData.scheduledAt}
                 onChange={(e) => setFormData({ ...formData, scheduledAt: e.target.value })}
                 min={new Date().toISOString().slice(0, 16)}
-                disabled={isPending}
               />
               {errors.scheduledAt && <p className="text-sm text-red-600">{errors.scheduledAt}</p>}
             </div>

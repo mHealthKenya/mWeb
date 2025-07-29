@@ -7,7 +7,6 @@ import { MessageSquare } from "lucide-react" // Import MessageSquare
 import { Badge } from "@ui/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@ui/ui/table"
 import { Button } from "@ui/ui/button"
-import { Dispatch, SetStateAction } from "react"
 
 type Message = {
   id: string

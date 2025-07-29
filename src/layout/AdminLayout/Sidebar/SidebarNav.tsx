@@ -2,7 +2,6 @@ import { IconDefinition } from '@fortawesome/free-regular-svg-icons'
 import {
   faAdd,
   faComment,
-  faCommentSms,
   faDashboard,
   faGauge,
   faHospital,
