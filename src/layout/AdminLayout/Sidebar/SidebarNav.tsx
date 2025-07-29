@@ -1,6 +1,8 @@
 import { IconDefinition } from '@fortawesome/free-regular-svg-icons'
 import {
   faAdd,
+  faComment,
+  faCommentSms,
   faDashboard,
   faGauge,
   faHospital,
@@ -143,6 +145,9 @@ export default function SidebarNav() {
       <SidebarNavTitle>Communication</SidebarNavTitle>
       <SidebarNavItem icon={faMessage} href="/sadmin/communication/sms">
         SMS
+      </SidebarNavItem>
+      <SidebarNavItem icon={faComment} href="/sadmin/communication/scheduledMessages">
+        Scheduled Messages
       </SidebarNavItem>
 
       <SidebarNavTitle>Check Ins</SidebarNavTitle>
