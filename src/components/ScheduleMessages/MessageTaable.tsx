@@ -1,7 +1,7 @@
 "use client"
 
 
-import { Trash2, Eye, Users, Calendar } from "lucide-react"
+import { Eye, Calendar } from "lucide-react"
 import { format } from "date-fns"
 import { MessageSquare } from "lucide-react" // Import MessageSquare
 import { Badge } from "@ui/ui/badge"
@@ -23,7 +23,7 @@ interface MessagesTableProps {
   selectedMessageId: string
 }
 
-export function MessagesTable({ messages, onSelectMessage, onDeleteMessage, selectedMessageId }: MessagesTableProps) {
+export function MessagesTable({ messages, onSelectMessage, selectedMessageId }: MessagesTableProps) {
   const formatDate = (dateString: string) => {
     try {
       return format(new Date(dateString), "MMM dd, yyyy HH:mm")
@@ -34,13 +34,13 @@ export function MessagesTable({ messages, onSelectMessage, onDeleteMessage, sele
 
   const getStatusBadge = (status: any) => {
     switch (status) {
-      case "sent":
+      case true:
         return (
           <Badge variant="default" className="bg-green-100 text-green-800">
             Sent
           </Badge>
         )
-      case "pending":
+      case false:
         return (
           <Badge variant="secondary" className="bg-orange-100 text-orange-800">
             Pending
@@ -66,7 +66,7 @@ export function MessagesTable({ messages, onSelectMessage, onDeleteMessage, sele
         <TableHeader>
           <TableRow>
             <TableHead>Message</TableHead>
-            <TableHead>Recipients</TableHead>
+            {/* <TableHead>Recipients</TableHead> */}
             <TableHead>Scheduled</TableHead>
             <TableHead>Status</TableHead>
             <TableHead className="text-right">Actions</TableHead>
@@ -84,12 +84,12 @@ export function MessagesTable({ messages, onSelectMessage, onDeleteMessage, sele
                   {message.message.length > 50 ? `${message.message.substring(0, 50)}...` : message.message}
                 </div>
               </TableCell>
-              <TableCell>
+              {/* <TableCell>
                 <div className="flex items-center gap-1">
                   <Users className="w-4 h-4 text-gray-400" />
                   <span className="text-sm">{message.userId.length}</span>
                 </div>
-              </TableCell>
+              </TableCell> */}
               <TableCell>
                 <div className="flex items-center gap-1 text-sm text-gray-600">
                   <Calendar className="w-4 h-4" />
@@ -109,7 +109,7 @@ export function MessagesTable({ messages, onSelectMessage, onDeleteMessage, sele
                   >
                     <Eye className="w-4 h-4" />
                   </Button>
-                  <Button
+                  {/* <Button
                     variant="ghost"
                     size="icon"
                     onClick={(e) => {
@@ -119,7 +119,7 @@ export function MessagesTable({ messages, onSelectMessage, onDeleteMessage, sele
                     className="text-red-600 hover:text-red-700 hover:bg-red-50"
                   >
                     <Trash2 className="w-4 h-4" />
-                  </Button>
+                  </Button> */}
                 </div>
               </TableCell>
             </TableRow>

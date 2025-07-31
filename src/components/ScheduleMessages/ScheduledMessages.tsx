@@ -101,21 +101,24 @@ export default function ScheduledMessagesComponent() {
   }
 
   const getFilteredMessages = () => {
-    switch (activeTab) {
-      case "sent":
-        return messages.filter((msg: any) => msg.status === "sent")
-      case "unsent":
-        return messages.filter((msg: any) => msg.status === "pending")
-      default:
-        return messages
-    }
+  switch (activeTab) {
+    case "sent":
+      return messages.filter((msg: any) => msg.status === true)
+    case "unsent":
+      return messages.filter((msg: any) => msg.status === false)
+    default:
+      return messages
   }
+}
+
 
   const stats = {
-    total: messages.length,
-    sent: messages.filter((msg: any) => msg.status === "sent").length,
-    pending: messages.filter((msg: any) => msg.status === "pending").length,
-  }
+  total: messages.length,
+  sent: messages.filter((msg: any) => msg.status === true).length,
+  pending: messages.filter((msg: any) => msg.status === false).length,
+};
+
+
 
   if (isLoading) {
     return <div className="min-h-screen bg-gray-50 p-4">Loading messages...</div>
@@ -205,7 +208,6 @@ export default function ScheduledMessagesComponent() {
             <div className="lg:col-span-1">
               <MessageDetails 
                 messageId={selectedMessage.id}
-                onDelete={handleDeleteMessage} 
               />
             </div>
           )}

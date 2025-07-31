@@ -62,7 +62,7 @@ export function CreateMessageForm({ onCancel, role }: CreateMessageFormProps) {
     scheduledAt: "",
   })
 
-  const [userIdInput, setUserIdInput] = useState("")
+  const [phone_number, setPhoneNumber] = useState("")
   const [selectedUser, setSelectedUser] = useState("")
   const [errors, setErrors] = useState<{
     userId?: string;
@@ -71,12 +71,12 @@ export function CreateMessageForm({ onCancel, role }: CreateMessageFormProps) {
   }>({})
 
   const addUserId = () => {
-    if (userIdInput.trim() && !formData.userId.includes(userIdInput.trim())) {
+    if (phone_number.trim() && !formData.userId.includes(phone_number.trim())) {
       setFormData({
         ...formData,
-        userId: [...formData.userId, userIdInput.trim()],
+        userId: [...formData.userId, phone_number.trim()],
       })
-      setUserIdInput("")
+      setPhoneNumber("")
     }
   }
 
@@ -255,9 +255,9 @@ export function CreateMessageForm({ onCancel, role }: CreateMessageFormProps) {
                 <Label className="text-sm text-gray-600">Or add manually:</Label>
                 <div className="flex gap-2">
                   <Input
-                    placeholder="Enter user ID"
-                    value={userIdInput}
-                    onChange={(e) => setUserIdInput(e.target.value)}
+                    placeholder="Enter Phone Number"
+                    value={phone_number}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
                     onKeyPress={handleKeyPress}
                     className="flex-1"
                     disabled={isLoading}

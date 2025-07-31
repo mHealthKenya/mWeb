@@ -1,18 +1,16 @@
 "use client"
 
-import { MessageSquare, Users, Calendar, Clock, Trash2, Send } from "lucide-react"
+import { MessageSquare, Users, Calendar, Clock, Send } from "lucide-react"
 import { format } from "date-fns"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@ui/ui/card"
 import { Badge } from "@ui/ui/badge"
-import { Button } from "@ui/ui/button"
 import useScheduledMessageById from "@services/scheduledMessages/scheduledessagesById"
 
 interface MessageDetailsProps {
   messageId: string | null
-  onDelete: (id: string) => void
 }
 
-export function MessageDetails({ messageId, onDelete }: MessageDetailsProps) {
+export function MessageDetails({ messageId}: MessageDetailsProps) {
   const { data: message, isLoading, isError } = useScheduledMessageById(messageId || "")
 
   if (!messageId) {
@@ -164,7 +162,7 @@ export function MessageDetails({ messageId, onDelete }: MessageDetailsProps) {
         </div>
 
         {/* Actions */}
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
           <Button
             variant="destructive"
             size="sm"
@@ -174,7 +172,7 @@ export function MessageDetails({ messageId, onDelete }: MessageDetailsProps) {
             <Trash2 className="w-4 h-4" />
             Delete Message
           </Button>
-        </div>
+        </div> */}
       </CardContent>
     </Card>
   )
