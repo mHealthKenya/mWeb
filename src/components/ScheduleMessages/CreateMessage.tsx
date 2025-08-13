@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { X, Plus, Calendar, Users, MessageSquare } from "lucide-react"
 import { Checkbox } from "@ui/ui/checkbox"
 import { Label } from "@ui/ui/label"
@@ -12,34 +12,38 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@ui/u
 import useUsersByRole from 'src/services/users/by-role'
 import useAddScheduledMessage from "@services/scheduledMessages/scheduledMessages"
 
-interface Facility {
-  name: string
-  id: string
-}
+// Import the UserByRole interface from your models
+import type { UserByRole as ModelUserByRole } from 'src/models/user-by-role'
+import useGetAllBioData from "@services/biodata/all-biodata"
+
 
 interface BioDatum {
-  age: number
-}
-
-export interface UserByRole {
   id: string
-  f_name: string
-  l_name: string
-  gender: string
-  email: string
-  phone_number: string
-  national_id: string
-  role: string
-  active?: boolean
+  userId: string
+  height: number | null
+  weight: number | null
+  active: boolean
+  age: number
+  last_monthly_period: Date | null
+  expected_delivery_date: Date | null
+  pregnancy_period: number | null
+  last_clinic_visit: Date
+  facilityId: string
+  gravidity: number
+  createdById: string
+  updatedById: string
   createdAt: Date
   updatedAt: Date
-  facilityAdmin: string | null
-  facilityId?: string
-  Facility?: Facility
-  BioData?: BioDatum
-  name?: string | null
-  hasWallet?: boolean
-  hasDelivered?: boolean
+  parity: null | string
+}
+
+interface EnhancedBioDatum extends BioDatum {
+  timeToDelivery?: number | null
+}
+
+// Extend the model interface with our enhanced properties
+export interface UserByRole extends ModelUserByRole {
+  BioData?: EnhancedBioDatum
 }
 
 type CreateMessageFormProps = {
@@ -47,9 +51,11 @@ type CreateMessageFormProps = {
   role: 'Mother'
 }
 
+type TddOption = 'all' | '2' | '6' | '8'
+
 export function CreateMessageForm({ onCancel, role }: CreateMessageFormProps) {
   const { data: users = [], isLoading: isUsersLoading } = useUsersByRole(role, [])
-  console.log("Users:", users)
+  const { data: bioData = [], isLoading: isBioDataLoading } = useGetAllBioData()
   const { mutate, isLoading } = useAddScheduledMessage()
 
   const [formData, setFormData] = useState<{
@@ -64,11 +70,64 @@ export function CreateMessageForm({ onCancel, role }: CreateMessageFormProps) {
 
   const [phone_number, setPhoneNumber] = useState("")
   const [selectedUser, setSelectedUser] = useState("")
+  const [tddFilter, setTddFilter] = useState<TddOption>('all')
   const [errors, setErrors] = useState<{
     userId?: string;
     message?: string;
     scheduledAt?: string;
   }>({})
+
+  // Combine users with their bio data and calculate time to delivery
+const usersWithBioData = useMemo<UserByRole[]>(() => {
+  if (!Array.isArray(bioData)) return users as UserByRole[]
+  
+  return users.map(user => {
+    const userBioData = bioData.find((bio: BioDatum) => bio.userId === user.id)
+    const enhancedBioData: EnhancedBioDatum | undefined = userBioData ? {
+      ...userBioData,
+      timeToDelivery: userBioData.expected_delivery_date 
+        ? Math.floor((new Date(userBioData.expected_delivery_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24 * 7))
+        : null
+    } : undefined
+
+    // Create a new object with all properties from user and add our enhanced BioData
+    const enhancedUser: UserByRole = {
+      ...user,
+      BioData: enhancedBioData
+    }
+    
+    return enhancedUser
+  })
+}, [users, bioData])
+
+  // Filter users based on TDD selection
+  const filteredUsers = useMemo(() => {
+    return usersWithBioData.filter(user => {
+      if (tddFilter === 'all') return true
+      if (!user.BioData?.timeToDelivery) return false
+      
+      const weeksToDelivery = user.BioData.timeToDelivery
+      
+      switch(tddFilter) {
+        case '2':
+          return weeksToDelivery >= 6 && weeksToDelivery <= 10
+        case '6':
+          return weeksToDelivery >= 22 && weeksToDelivery <= 26
+        case '8':
+          return weeksToDelivery >= 30 && weeksToDelivery <= 34
+        default:
+          return true
+      }
+    })
+  }, [usersWithBioData, tddFilter])
+
+  // Reset selected users when TDD filter changes
+  useEffect(() => {
+    setFormData(prev => ({
+      ...prev,
+      userId: []
+    }))
+  }, [tddFilter])
 
   const addUserId = () => {
     if (phone_number.trim() && !formData.userId.includes(phone_number.trim())) {
@@ -99,7 +158,7 @@ export function CreateMessageForm({ onCancel, role }: CreateMessageFormProps) {
 
   const toggleSelectAll = (checked: boolean) => {
     if (checked) {
-      const allUserIds = users.map((user) => user.id)
+      const allUserIds = filteredUsers.map((user) => user.id)
       setFormData({
         ...formData,
         userId: allUserIds,
@@ -113,7 +172,7 @@ export function CreateMessageForm({ onCancel, role }: CreateMessageFormProps) {
   }
 
   const getUserDisplayName = (userId: string) => {
-    const user = users.find((u) => u.id === userId)
+    const user = usersWithBioData.find((u) => u.id === userId)
     return user ? `${user.f_name} ${user.l_name} (${user.email})` : userId
   }
 
@@ -166,15 +225,15 @@ export function CreateMessageForm({ onCancel, role }: CreateMessageFormProps) {
     }
   }
 
-  const availableUsers = users.filter((user) => !formData.userId.includes(user.id))
-  const isAllSelected = formData.userId.length === users.length && users.length > 0
+  const availableUsers = filteredUsers.filter((user) => !formData.userId.includes(user.id))
+  const isAllSelected = formData.userId.length === filteredUsers.length && filteredUsers.length > 0
 
-  if (isUsersLoading) {
+  if (isUsersLoading || isBioDataLoading) {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
         <Card className="w-full max-w-2xl">
           <CardHeader>
-            <CardTitle>Loading users...</CardTitle>
+            <CardTitle>Loading users and pregnancy data...</CardTitle>
           </CardHeader>
         </Card>
       </div>
@@ -205,17 +264,85 @@ export function CreateMessageForm({ onCancel, role }: CreateMessageFormProps) {
                 Recipients
               </Label>
 
+              {/* Time to Delivery Filter */}
+              <div className="space-y-2">
+                <Label className="text-sm text-gray-600">Filter by Time to Delivery:</Label>
+                <div className="flex flex-wrap gap-4">
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="radio"
+                      id="tdd-all"
+                      name="tdd-filter"
+                      checked={tddFilter === 'all'}
+                      onChange={() => setTddFilter('all')}
+                      className="h-4 w-4 text-primary focus:ring-primary"
+                    />
+                    <Label htmlFor="tdd-all" className="text-sm font-medium">
+                      All Mothers ({usersWithBioData.length})
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="radio"
+                      id="tdd-2"
+                      name="tdd-filter"
+                      checked={tddFilter === '2'}
+                      onChange={() => setTddFilter('2')}
+                      className="h-4 w-4 text-primary focus:ring-primary"
+                    />
+                    <Label htmlFor="tdd-2" className="text-sm font-medium">
+                      2 Months ({usersWithBioData.filter(u => {
+                        const weeks = u.BioData?.timeToDelivery
+                        return weeks && weeks >= 6 && weeks <= 10
+                      }).length})
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="radio"
+                      id="tdd-6"
+                      name="tdd-filter"
+                      checked={tddFilter === '6'}
+                      onChange={() => setTddFilter('6')}
+                      className="h-4 w-4 text-primary focus:ring-primary"
+                    />
+                    <Label htmlFor="tdd-6" className="text-sm font-medium">
+                      6 Months ({usersWithBioData.filter(u => {
+                        const weeks = u.BioData?.timeToDelivery
+                        return weeks && weeks >= 22 && weeks <= 26
+                      }).length})
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="radio"
+                      id="tdd-8"
+                      name="tdd-filter"
+                      checked={tddFilter === '8'}
+                      onChange={() => setTddFilter('8')}
+                      className="h-4 w-4 text-primary focus:ring-primary"
+                    />
+                    <Label htmlFor="tdd-8" className="text-sm font-medium">
+                      8 Months ({usersWithBioData.filter(u => {
+                        const weeks = u.BioData?.timeToDelivery
+                        return weeks && weeks >= 30 && weeks <= 34
+                      }).length})
+                    </Label>
+                  </div>
+                </div>
+              </div>
+
               {/* Select All Checkbox */}
-              {users.length > 0 && (
+              {filteredUsers.length > 0 && (
                 <div className="flex items-center space-x-2">
                   <Checkbox 
                     id="select-all" 
                     checked={isAllSelected} 
                     onCheckedChange={toggleSelectAll} 
-                    disabled={users.length === 0 || isLoading}
+                    disabled={filteredUsers.length === 0 || isLoading}
                   />
                   <Label htmlFor="select-all" className="text-sm font-medium">
-                    Select all users ({users.length})
+                    Select all filtered users ({filteredUsers.length})
                   </Label>
                 </div>
               )}
@@ -226,50 +353,33 @@ export function CreateMessageForm({ onCancel, role }: CreateMessageFormProps) {
                 <Select 
                   value={selectedUser} 
                   onValueChange={addUserFromDropdown} 
-                  disabled={users.length === 0}
+                  disabled={filteredUsers.length === 0}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder={users.length === 0 ? "No users available" : "Select a user to add..."} />
+                    <SelectValue placeholder={filteredUsers.length === 0 ? "No users available" : "Select a user to add..."} />
                   </SelectTrigger>
                   <SelectContent>
                     {availableUsers.length === 0 ? (
                       <SelectItem value="no-users" disabled>
-                        All users already selected
+                        All filtered users already selected
                       </SelectItem>
                     ) : (
                       availableUsers.map((user) => (
                         <SelectItem key={user.id} value={user.id}>
                           <div className="flex flex-col">
                             <span className="font-medium">{user.f_name} {user.l_name}</span>
-                            <span className="text-sm text-gray-500">{user.phone_number}</span>
+                            <span className="text-sm text-gray-500">
+                              {user.phone_number} • 
+                              {user.BioData?.timeToDelivery ? 
+                                ` ${user.BioData.timeToDelivery} weeks to delivery` : 
+                                ' No delivery date'}
+                            </span>
                           </div>
                         </SelectItem>
                       ))
                     )}
                   </SelectContent>
                 </Select>
-              </div>
-
-              {/* Manual Input */}
-              <div className="space-y-2">
-                <Label className="text-sm text-gray-600">Or add manually:</Label>
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="Enter Phone Number"
-                    value={phone_number}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    className="flex-1"
-                    disabled={isLoading}
-                  />
-                  <Button 
-                    type="button" 
-                    onClick={addUserId} 
-                    variant="outline"
-                  >
-                    <Plus className="w-4 h-4" />
-                  </Button>
-                </div>
               </div>
 
               {errors.userId && <p className="text-sm text-red-600">{errors.userId}</p>}
@@ -286,7 +396,6 @@ export function CreateMessageForm({ onCancel, role }: CreateMessageFormProps) {
                           type="button"
                           onClick={() => removeUserId(userId)}
                           className="text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full p-1"
-                          
                         >
                           <X className="w-3 h-3" />
                         </button>
@@ -316,11 +425,11 @@ export function CreateMessageForm({ onCancel, role }: CreateMessageFormProps) {
             <div className="space-y-2">
               <Label htmlFor="scheduledAt" className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
-                Scheduled Date & Time
+                Scheduled Date
               </Label>
               <Input
                 id="scheduledAt"
-                type="datetime-local"
+                type="date"
                 value={formData.scheduledAt}
                 onChange={(e) => setFormData({ ...formData, scheduledAt: e.target.value })}
                 min={new Date().toISOString().slice(0, 16)}
