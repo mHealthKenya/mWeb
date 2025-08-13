@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useMemo } from "react"
-import { X, Plus, Calendar, Users, MessageSquare } from "lucide-react"
+import { X, Calendar, Users, MessageSquare } from "lucide-react"
 import { Checkbox } from "@ui/ui/checkbox"
 import { Label } from "@ui/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/ui/select"
@@ -68,7 +68,7 @@ export function CreateMessageForm({ onCancel, role }: CreateMessageFormProps) {
     scheduledAt: "",
   })
 
-  const [phone_number, setPhoneNumber] = useState("")
+
   const [selectedUser, setSelectedUser] = useState("")
   const [tddFilter, setTddFilter] = useState<TddOption>('all')
   const [errors, setErrors] = useState<{
@@ -128,16 +128,6 @@ const usersWithBioData = useMemo<UserByRole[]>(() => {
       userId: []
     }))
   }, [tddFilter])
-
-  const addUserId = () => {
-    if (phone_number.trim() && !formData.userId.includes(phone_number.trim())) {
-      setFormData({
-        ...formData,
-        userId: [...formData.userId, phone_number.trim()],
-      })
-      setPhoneNumber("")
-    }
-  }
 
   const addUserFromDropdown = (userId: string) => {
     if (userId && !formData.userId.includes(userId)) {
@@ -215,13 +205,6 @@ const usersWithBioData = useMemo<UserByRole[]>(() => {
         status: "",
         sentAt: null
       })
-    }
-  }
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      e.preventDefault()
-      addUserId()
     }
   }
 
