@@ -1,13 +1,15 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { Plus, MessageSquare, Send, Clock, Search, Loader2, Trash2, BadgeCheck, Hourglass } from "lucide-react"
+import { Plus, MessageSquare, Send, Clock, Search, Loader2, Trash2, BadgeCheck, Hourglass, EyeIcon } from "lucide-react"
 import { useToast } from "@ui/ui/use-toast"
 import { Button } from "@ui/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@ui/ui/card"
 import { Tabs, TabsList, TabsTrigger } from "@ui/ui/tabs"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@ui/ui/dialog"
 import { Input } from "@ui/ui/input"
+import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid'
+import { Badge } from "@ui/ui/badge"
 
 import { CreateMessageForm } from "./CreateMessage"
 import { MessageDetails } from "./MessageDetails"
@@ -16,7 +18,6 @@ import useAllScheduledMessages from "@services/scheduledMessages/allScheduledMes
 import { MessageListItem } from "@models/scheduledMesages"
 import { useDeleteScheduledMessage } from "@services/scheduledMessages/deleteScheduledMessages"
 import Swal from "sweetalert2"
-import { Badge } from "@ui/ui/badge"
 
 export default function ScheduledMessagesComponent() {
   const { data: allScheduledMessages = [], isLoading, isError, refetch } = useAllScheduledMessages()
@@ -27,9 +28,16 @@ export default function ScheduledMessagesComponent() {
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const { toast } = useToast()
 
+  const messagesData = useMemo(() => {
+    if (!allScheduledMessages) return [];
+    return Array.isArray(allScheduledMessages) 
+      ? allScheduledMessages 
+      : allScheduledMessages.data || [];
+  }, [allScheduledMessages])
+
   const messages: MessageListItem[] = useMemo(
     () =>
-      (allScheduledMessages || []).map((m: any) => ({
+      messagesData.map((m: any) => ({
         id: m.id,
         message: m.message,
         category: m.category,
@@ -37,22 +45,22 @@ export default function ScheduledMessagesComponent() {
         sent: Boolean(m.sent),
         sentAt: m.sentAt ?? null,
       })),
-    [allScheduledMessages]
+    [messagesData]
   )
 
   const filtered = useMemo(() => {
-    let list = messages
-    if (activeTab === "sent") list = list.filter((x) => x.sent)
-    if (activeTab === "unsent") list = list.filter((x) => !x.sent)
+    let list = messages;
+    if (activeTab === "sent") list = list.filter((x) => x.sent);
+    if (activeTab === "unsent") list = list.filter((x) => !x.sent);
     if (q.trim()) {
-      const term = q.toLowerCase()
+      const term = q.toLowerCase();
       list = list.filter(
         (x) =>
           x.message.toLowerCase().includes(term) ||
           x.category.toLowerCase().includes(term)
-      )
+      );
     }
-    return list
+    return list;
   }, [messages, activeTab, q])
 
   const stats = useMemo(
@@ -77,24 +85,114 @@ export default function ScheduledMessagesComponent() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        setDeletingId(id)
+        setDeletingId(id);
         deleteMessage(id, {
           onSuccess: () => {
-            toast({ title: "Deleted", description: "Message removed successfully." })
-            refetch()
-            if (selectedMessageId === id) setSelectedMessageId(null)
+            toast({ title: "Deleted", description: "Message removed successfully." });
+            refetch();
+            if (selectedMessageId === id) setSelectedMessageId(null);
           },
           onError: (error: any) => {
-            toast({ title: "Error", description: error?.message || "Failed to delete.", variant: "destructive" })
+            toast({ title: "Error", description: error?.message || "Failed to delete.", variant: "destructive" });
           },
           onSettled: () => setDeletingId(null),
-        })
+        });
       }
-    })
+    });
   }
 
-  if (isLoading) return <div className="min-h-screen flex items-center justify-center">Loading messages...</div>
-  if (isError) return <div className="min-h-screen flex items-center justify-center">Error loading messages</div>
+  const handleViewMessage = (id: string) => {
+    setSelectedMessageId(id);
+  }
+
+  // DataGrid columns configuration
+  const columns: GridColDef[] = [
+    {
+      field: 'message',
+      headerName: 'Message',
+      flex: 1,
+      minWidth: 200,
+      renderCell: (params) => (
+        <div className="truncate font-medium">{params.value}</div>
+      ),
+    },
+    {
+      field: 'category',
+      headerName: 'Category',
+      width: 150,
+      renderCell: (params) => (
+        <Badge>{params.value}</Badge>
+      ),
+    },
+    {
+      field: 'scheduledAt',
+      headerName: 'Scheduled At',
+      width: 200,
+      valueFormatter: (params) => {
+        if (!params.value) return "-";
+        try {
+          return new Date(params.value).toLocaleString();
+        } catch {
+          return "Invalid";
+        }
+      },
+    },
+    {
+      field: 'sent',
+      headerName: 'Status',
+      width: 150,
+      renderCell: (params) => (
+        params.value ? (
+          <div className="flex flex-row items-center gap-2">
+            <BadgeCheck className="w-4 h-4 text-green-600" />
+            <span className="text-green-600 font-semibold">Sent</span>
+          </div>
+        ) : (
+          <div className="flex flex-row items-center gap-2">
+            <Hourglass className="animate-spin w-4 h-4 text-orange-600" />
+            <span className="text-orange-600 font-semibold">Pending</span>
+          </div>
+        )
+      ),
+    },
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      width: 180,
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => (
+        <div className="flex justify-end gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleViewMessage(params.row.id)}
+          >
+            <EyeIcon className="w-4 h-4 mr-1" />
+          </Button>
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() => handleDeleteMessage(params.row.id)}
+            disabled={deletingId === params.row.id}
+          >
+            {deletingId === params.row.id ? (
+              <span className="flex items-center">
+                <Loader2 className="animate-spin w-4 h-4 mr-1" />
+              </span>
+            ) : (
+              <span className="flex items-center">
+                <Trash2 className="w-4 h-4 mr-1" />
+              </span>
+            )}
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
+  if (isLoading) return <div className="min-h-screen flex items-center justify-center">Loading messages...</div>;
+  if (isError) return <div className="min-h-screen flex items-center justify-center">Error loading messages</div>;
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
@@ -139,7 +237,7 @@ export default function ScheduledMessagesComponent() {
           </Tabs>
         </div>
 
-        {/* Table */}
+        {/* DataGrid Table */}
         <Card>
           <CardHeader>
             <CardTitle>Messages</CardTitle>
@@ -147,63 +245,43 @@ export default function ScheduledMessagesComponent() {
           </CardHeader>
           <CardContent>
             {filtered.length > 0 ? (
-              <table className="w-full border rounded-md">
-                <thead className="bg-gray-100">
-                  <tr>
-                    <th className="p-2 text-left">Message</th>
-                    <th className="p-2">Category</th>
-                    <th className="p-2">Scheduled At</th>
-                    <th className="p-2">Status</th>
-                    <th className="p-2 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filtered.map((msg) => (
-                    <tr key={msg.id} className="border-b hover:bg-gray-50">
-                      <td className="p-2">{msg.message}</td>
-                      <td className="p-2"><Badge>{msg.category}</Badge></td>
-                      <td className="p-2">{msg.scheduledAt ? new Date(msg.scheduledAt).toLocaleString() : "-"}</td>
-                      <td className="p-2">
-                        {msg.sent ? (
-                          <div className="flex flex-row items-center gap-2">
-                            <BadgeCheck className="w-4 h-4 text-green-600" />
-                            <span className="text-green-600 font-semibold">Sent</span>
-                          </div>
-                        ) : (
-                          <div className="flex flex-row items-center gap-2">
-                            <Hourglass className="w-4 h-4 text-orange-600" />
-                            <span className="text-orange-600 font-semibold">Pending</span>
-                          </div>
-
-                        )}
-                      </td>
-                      <td className="p-2 text-right flex justify-end gap-2">
-                        <Button variant="outline" size="sm" onClick={() => setSelectedMessageId(msg.id)}>
-                          View
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => handleDeleteMessage(msg.id)}
-                          disabled={deletingId === msg.id}
-                        >
-                          {deletingId === msg.id ? (
-                            <span className="flex items-center">
-                              <Loader2 className="animate-spin w-4 h-4 mr-1" /> Deleting...
-                            </span>
-                          ) : (
-                            <span className="flex items-center">
-                              <Trash2 className="w-4 h-4 mr-1" /> Delete
-                            </span>
-                          )}
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <div style={{ height: 400, width: '100%' }}>
+                <DataGrid
+                  rows={filtered}
+                  columns={columns}
+                  pageSizeOptions={[5, 10, 25]}
+                  initialState={{
+                    pagination: {
+                      paginationModel: { page: 0, pageSize: 10 },
+                    },
+                  }}
+                  slots={{
+                    toolbar: GridToolbar,
+                  }}
+                  slotProps={{
+                    toolbar: {
+                      showQuickFilter: true,
+                      quickFilterProps: { debounceMs: 500 },
+                    },
+                  }}
+                  disableRowSelectionOnClick
+                  sx={{
+                    '& .MuiDataGrid-cell:hover': {
+                      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                    },
+                    '& .MuiDataGrid-row:hover': {
+                      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                    },
+                  }}
+                />
+              </div>
             ) : (
-              <div className="text-center py-10 text-gray-500">No messages found</div>
+              <div className="flex flex-col items-center justify-center space-y-4">
+                <div className="text-center py-10 text-gray-500">No messages found</div>
+                <Button onClick={() => setShowCreateForm(true)} className="flex items-center gap-2 bg-primary">
+                  <Plus className="w-4 h-4" /> Schedule Message
+                </Button>
+              </div>
             )}
           </CardContent>
         </Card>
@@ -223,8 +301,8 @@ export default function ScheduledMessagesComponent() {
           <CreateMessageForm
             onCancel={() => setShowCreateForm(false)}
             onSuccess={() => {
-              setShowCreateForm(false)
-              refetch()
+              setShowCreateForm(false);
+              refetch();
             }}
           />
         )}
