@@ -9,6 +9,7 @@ export interface UserByRole {
   role: string
   active?: boolean
   createdAt: Date
+  createdById?: string
   updatedAt: Date
   facilityAdmin: string | null
   facilityId?: string

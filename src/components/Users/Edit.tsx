@@ -94,6 +94,8 @@ const EditUserWithRoleComponent: FC<{
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
+    watch
   } = useForm<EditForm>({
     resolver: yupResolver(validationSchema),
     defaultValues: {
@@ -104,11 +106,19 @@ const EditUserWithRoleComponent: FC<{
       role: user?.role || '',
       gender: user?.gender || '',
       facilityId: user?.facilityId || '',
-      chpId: user?.facilityAdmin || '',
-      age: user?.BioData?.age?.toString() || '',
-      hasDelivered: user?.hasDelivered ? 'Yes' : 'No'
+      age: user?.BioData?.age ? String(user.BioData.age) : '',
+      hasDelivered: user?.hasDelivered ? 'Yes' : 'No',
+      facilityAdmin: user?.facilityAdmin || '',
+      chpId: user?.facilityAdmin || ''
     }
   })
+
+  // Set the CHP value when component mounts or when user/chps changes
+  useEffect(() => {
+    if (user?.createdById && chps.length > 0) {
+      setValue('chpId', user.createdById)
+    }
+  }, [user, chps, setValue])
 
   // Pass handleToggle to useEditUser to automatically close modal on success
   const { mutate: editUser, isLoading: isEditingUser } = useEditUser(handleToggle)
@@ -333,68 +343,6 @@ const EditUserWithRoleComponent: FC<{
                 </FormControl>
               )}
 
-              {/* <FormControl fullWidth size="small" required={user?.role === Roles.MOTHER}>
-                <InputLabel id="chp-select-label">CHP</InputLabel>
-                <Select
-                  labelId="chp-select-label"
-                  id="chp-select"
-                  label="CHP"
-                  size="small"
-                  defaultValue={user?.facilityAdmin || ''}
-                  {...register('facilityAdmin')}
-                  error={!!errors.facilityAdmin?.message}
-                  inputProps={{ 'data-testid': 'chp_select' }}>
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {chps.map((chp) => (
-                    <MenuItem key={chp.id} value={chp.id}>
-                      {`${chp.f_name} ${chp.l_name}`}
-                      {chp.Facility?.name && ` (${chp.Facility.name})`}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl> */}
-
-               {user?.role === Roles.MOTHER && (
-              <TextField
-                label="Age"
-                size="small"
-                fullWidth
-                type="number"
-                defaultValue={String(user?.BioData?.age || '')}
-                {...register('age')}
-                error={!!errors.age?.message}
-                helperText={errors?.age?.message || 'Age will be updated in biodata'}
-                inputProps={{
-                  'data-testid': 'age_input',
-                  min: 0,
-                  max: 150
-                }}
-              />
-              )}
-              
-              {user?.role === Roles.MOTHER && (
-              <FormControl fullWidth size="small" required>
-                <InputLabel id="delivered-select-label">Delivered</InputLabel>
-                <Select
-                  labelId="delivered-select-label"
-                  id="delivered-select"
-                  label="Delivered"
-                  size="small"
-                  defaultValue={user?.hasDelivered ? 'Yes' : 'No'}
-                  {...register('hasDelivered')}
-                  error={!!errors.hasDelivered?.message}
-                  inputProps={{ 'data-testid': 'hasDelivered_input' }}>
-                  {delivered?.map((item, index) => (
-                    <MenuItem key={index} value={item}>
-                      {item}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-               )}
-
               {user?.role === Roles.MOTHER && (
                 <FormControl fullWidth size="small">
                   <InputLabel id="chp-select-label">Assign CHP</InputLabel>
@@ -403,9 +351,20 @@ const EditUserWithRoleComponent: FC<{
                     id="chp-select"
                     label="Assign CHP"
                     size="small"
-                    defaultValue={user?.facilityAdmin || ''}
-                    {...register('chpId')}
-                    inputProps={{ 'data-testid': 'chp_select' }}>
+                    value={watch('chpId') || ''}
+                    onChange={(e) => setValue('chpId', e.target.value)}
+                    inputProps={{ 'data-testid': 'chp_select' }}
+                    renderValue={(selected) => {
+                      if (!selected) return <em>None</em>
+                      const selectedChp = chps.find((chp) => chp.id === selected)
+                      return selectedChp ? (
+                        `${selectedChp.f_name} ${selectedChp.l_name}${
+                          selectedChp.Facility?.name ? ` (${selectedChp.Facility.name})` : ''
+                        }`
+                      ) : (
+                        <em>None</em>
+                      )
+                    }}>
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
@@ -413,6 +372,45 @@ const EditUserWithRoleComponent: FC<{
                       <MenuItem key={chp.id} value={chp.id}>
                         {`${chp.f_name} ${chp.l_name}`}
                         {chp.Facility?.name && ` (${chp.Facility.name})`}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              )}
+
+              {user?.role === Roles.MOTHER && (
+                <TextField
+                  label="Age"
+                  size="small"
+                  fullWidth
+                  type="number"
+                  defaultValue={String(user?.BioData?.age || '')}
+                  {...register('age')}
+                  error={!!errors.age?.message}
+                  helperText={errors?.age?.message || 'Age will be updated in biodata'}
+                  inputProps={{
+                    'data-testid': 'age_input',
+                    min: 0,
+                    max: 150
+                  }}
+                />
+              )}
+
+              {user?.role === Roles.MOTHER && (
+                <FormControl fullWidth size="small" required>
+                  <InputLabel id="delivered-select-label">Delivered</InputLabel>
+                  <Select
+                    labelId="delivered-select-label"
+                    id="delivered-select"
+                    label="Delivered"
+                    size="small"
+                    defaultValue={user?.hasDelivered ? 'Yes' : 'No'}
+                    {...register('hasDelivered')}
+                    error={!!errors.hasDelivered?.message}
+                    inputProps={{ 'data-testid': 'hasDelivered_input' }}>
+                    {delivered?.map((item, index) => (
+                      <MenuItem key={index} value={item}>
+                        {item}
                       </MenuItem>
                     ))}
                   </Select>
