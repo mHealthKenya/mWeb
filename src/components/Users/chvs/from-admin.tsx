@@ -13,7 +13,7 @@ const CHPsFromAdmin: FC<{ data: UserByRole[]; facilities: Facility[] }> = ({
   facilities
 }) => {
   const columns: ColumnDef<UserByRole>[] = [
-    {
+    { 
       accessorKey: 'name',
       accessorFn: (row) => row.f_name + ' ' + row.l_name,
       header: 'Name',
