@@ -387,7 +387,7 @@ const EditUserWithRoleComponent: FC<{
                   defaultValue={String(user?.BioData?.age || '')}
                   {...register('age')}
                   error={!!errors.age?.message}
-                  helperText={errors?.age?.message || 'Age will be updated in biodata'}
+                  helperText={errors?.age?.message || 'Age will be updated in biodata record'}
                   inputProps={{
                     'data-testid': 'age_input',
                     min: 0,
