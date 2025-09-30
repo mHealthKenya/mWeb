@@ -349,7 +349,7 @@ const EditUserWithRoleComponent: FC<{
                   <Select
                     labelId="chp-select-label"
                     id="chp-select"
-                    label="Assign CHP"
+                    label="Assign CHP."
                     size="small"
                     value={watch('chpId') || ''}
                     onChange={(e) => setValue('chpId', e.target.value)}
