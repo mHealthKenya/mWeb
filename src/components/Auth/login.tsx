@@ -55,92 +55,99 @@ const LoginComponent = () => {
   }
 
   return (
-    <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
-      <div className="flex items-center justify-center py-12">
-        <Form {...form}>
-          <form className="mx-auto grid w-[350px] gap-6" onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="grid gap-2 text-center">
-              <h1 className="text-3xl font-bold">Login</h1>
-              <p className="text-balance text-muted-foreground">
-                Enter your email or phone number below to login to your account
-              </p>
-            </div>
-            <div className="grid gap-4">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email or Phone</FormLabel>
-                    <FormControl>
-                      <Input placeholder="m@example.com or 254712345678" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+    <div className="w-full min-h-screen grid lg:grid-cols-2">
+      {/* Left - Login Form */}
+      <div className="flex items-center justify-center px-6 py-12">
+        <div className="w-full max-w-md bg-background rounded-xl shadow-lg p-10">
+          <Form {...form}>
+            <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
+              {/* Title */}
+              <div className="text-center space-y-3">
+                <h1 className="text-4xl font-bold tracking-tight">Login</h1>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  Enter your email or phone number below to login to your account
+                </p>
+              </div>
 
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password </FormLabel>
+              {/* Fields */}
+              <div className="space-y-6">
+                {/* Email / Phone */}
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email or Phone</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="h-11 rounded-md focus:ring-2 focus:ring-primary"
+                          placeholder="m@example.com or 254712345678"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                    <FormControl>
-                      <Input
-                        placeholder="Enter your password"
-                        {...field}
-                        type={!show ? 'password' : 'text'}
-                        Icon={
-                          show ? (
-                            <Eye
-                              className="text-muted-foreground mr-2 cursor-pointer"
-                              size={18}
-                              onClick={handleToggle}
-                            />
-                          ) : (
-                            <EyeOff
-                              className="text-muted-foreground mr-2 cursor-pointer"
-                              size={18}
-                              onClick={handleToggle}
-                            />
-                          )
-                        }
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                {/* Password */}
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <div className="relative">
+                        <FormControl>
+                          <Input
+                            className="h-11 rounded-md pr-10 focus:ring-2 focus:ring-primary"
+                            placeholder="Enter your password"
+                            {...field}
+                            type={!show ? 'password' : 'text'}
+                          />
+                        </FormControl>
+                        <span
+                          onClick={handleToggle}
+                          className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-muted-foreground hover:text-foreground">
+                          {show ? <Eye size={18} /> : <EyeOff size={18} />}
+                        </span>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
 
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                <div className="flex flex-row items-center justify-center">
-                  {' '}
-                  {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  <span>Login</span>
+                {/* Button */}
+                <Button type="submit" className="w-full h-11 rounded-md" disabled={isLoading}>
+                  <div className="flex items-center justify-center">
+                    {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    <span>Login</span>
+                  </div>
+                </Button>
+
+                {/* Forgot password */}
+                <div className="text-right">
+                  <Link
+                    href="/passwordreset/otp-request"
+                    className="text-xs text-muted-foreground hover:underline">
+                    Forgot your password?
+                  </Link>
                 </div>
-              </Button>
-
-              <Link
-                href="/passwordreset/otp-request"
-                className="ml-auto inline-block text-sm underline">
-                Forgot your password?
-              </Link>
-            </div>
-          </form>
-        </Form>
-      </div>
-      <div className="hidden bg-muted lg:block ">
-        <div className="flex flex-col h-full items-center justify-center">
-          <Image
-            src="/assets/brand/logo.png"
-            alt="Image"
-            width="400"
-            height="400"
-            className="object-fit dark:brightness-[0.2] dark:grayscale items-center justify-center mt-10 ml-10"
-          />
+              </div>
+            </form>
+          </Form>
         </div>
+      </div>
+
+      {/* Right - Logo */}
+      <div className="hidden lg:flex items-center justify-center bg-muted">
+        <Image
+          src="/assets/brand/logo.png"
+          alt="Image"
+          width={400}
+          height={400}
+          className="object-contain"
+        />
       </div>
     </div>
   )
