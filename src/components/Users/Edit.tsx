@@ -46,6 +46,7 @@ export interface EditForm {
   l_name: string
   email?: string
   phone_number: string
+  national_id: string
   role: string
   gender: string
   facilityId?: string
@@ -69,7 +70,8 @@ const validationSchema: any = Yup.object().shape({
   gender: Yup.string().required('Gender is required'),
   facilityId: Yup.string().optional(),
   age: Yup.string().optional(),
-  hasDelivered: Yup.string().optional()
+  hasDelivered: Yup.string().optional(),
+  national_id: Yup.string().optional()
 })
 
 const EditUserWithRoleComponent: FC<{
@@ -109,7 +111,8 @@ const EditUserWithRoleComponent: FC<{
       age: user?.BioData?.age ? String(user.BioData.age) : '',
       hasDelivered: user?.hasDelivered ? 'Yes' : 'No',
       facilityAdmin: user?.facilityAdmin || '',
-      chpId: user?.facilityAdmin || ''
+      chpId: user?.facilityAdmin || '',
+      national_id: user?.national_id || ''
     }
   })
 
@@ -268,6 +271,18 @@ const EditUserWithRoleComponent: FC<{
                 helperText={errors?.phone_number?.message}
                 error={!!errors?.phone_number?.message}
                 inputProps={{ 'data-testid': 'phone_input' }}
+              />
+
+              <TextField
+                size="small"
+                fullWidth
+                label="National ID"
+                defaultValue={user?.national_id}
+                {...register('national_id')}
+                placeholder="National ID"
+                helperText={errors?.national_id?.message}
+                error={!!errors?.national_id?.message}
+                inputProps={{ 'data-testid': 'national_id_input' }}
               />
               <TextField
                 label="Email"
