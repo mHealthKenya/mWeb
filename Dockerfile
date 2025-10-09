@@ -9,17 +9,20 @@ WORKDIR /mweb
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+  if [ -f yarn.lock ]; then yarn install --frozen-lockfile; \
   elif [ -f package-lock.json ]; then npm ci; \
   elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i --frozen-lockfile; \
   else echo "Lockfile not found." && exit 1; \
-  fi
-
+  fi && \
+  # Verify node_modules was created
+  ls -la /mweb/node_modules || (echo "node_modules not created" && exit 1)
 
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /mweb
+RUN mkdir -p node_modules  # Ensure the target directory exists
 COPY --from=deps /mweb/node_modules ./node_modules
+RUN ls -la /mweb/node_modules || (echo "Failed to copy node_modules" && exit 1)
 COPY . .
 
 # Next.js collects completely anonymous telemetry data about general usage.
@@ -59,4 +62,3 @@ EXPOSE 3600
 ENV PORT 3600
 
 CMD ["node", "server.js"]
-
