@@ -58,7 +58,8 @@ const UsersByRoleComponent: React.FC<{
       gender: user.gender,
       role: user.role,
       facilityId: user.facilityId,
-      active: !user.active
+      active: !user.active,
+      national_id: user.national_id
     }
 
     editUser(person)
