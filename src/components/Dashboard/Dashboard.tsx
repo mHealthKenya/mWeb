@@ -22,6 +22,9 @@ import { MotherStats } from '@models/motherstats'
 import VisitStats from './VisitStats'
 import AgeDistributionStats, { AgeDist } from './AgeDistribution'
 import MotherActiveStats from './MotherStats'
+import MonthlySMSChart from './MonthlySMSChartData'
+import { MonthlySMSStats } from '@models/smsmonthstats'
+
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Tooltip, Filler)
 
 const Home: FC<{
@@ -39,6 +42,7 @@ const Home: FC<{
   total_sms_count: TotalVisits
   monthly_clinic_visits: TotalVisits
   age_distribution: AgeDist[]
+  monthly_sms_stats: MonthlySMSStats[]
 }> = ({
   total_users,
   monthly_sms_cost,
@@ -53,7 +57,8 @@ const Home: FC<{
   monthly_sms_count,
   total_sms_count,
   monthly_clinic_visits,
-  age_distribution
+  age_distribution,
+  monthly_sms_stats
 }) => {
   const months = [
     'January',
@@ -271,6 +276,20 @@ const Home: FC<{
             ))}
           </div>
         </Card.Footer>
+      </Card>
+
+      <Card className="mb-4">
+        <Card.Body>
+          <div className="d-flex justify-content-between">
+            <div>
+              <h4 className="mb-0">Monthly SMS Statistics</h4>
+              <div className="small text-black-50">SMS distribution by month and year</div>
+            </div>
+          </div>
+          <div style={{ width: '100%', height: '500px' }}>
+            <MonthlySMSChart data={monthly_sms_stats} />
+          </div>
+        </Card.Body>
       </Card>
 
       <Card className="mb-4">
