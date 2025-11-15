@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 node:20-alpine AS base
+FROM --platform=linux/amd64 node:18-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -46,10 +46,9 @@ ENV NODE_ENV production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /mweb/public ./public 
-RUN mkdir -p .next && \
-  chown -R nextjs:nodejs .next
-
+COPY --from=builder /mweb/public ./public
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
