@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 node:18-alpine AS base
+FROM --platform=linux/amd64 node:20-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -46,19 +46,23 @@ ENV NODE_ENV production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /mweb/public ./public
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
+# First copy package.json and install production dependencies
+COPY --from=builder /mweb/package.json ./
+RUN yarn install --production
 
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /mweb/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /mweb/.next/static ./.next/static
+# Copy the rest of the application 
+COPY --from=builder /mweb/public ./public 
+COPY --from=builder /mweb/.next/standalone ./
+COPY --from=builder /mweb/.next/static ./.next/static
+
+# Create and set permissions for .next directory
+RUN mkdir -p .next && \
+  chown -R nextjs:nodejs .next 
 
 USER nextjs
 
 EXPOSE 3600
-
 ENV PORT 3600
 
+# Use the Next.js start command directly
 CMD ["node", "server.js"]
