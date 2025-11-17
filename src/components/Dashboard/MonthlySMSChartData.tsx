@@ -129,7 +129,7 @@ const MonthlySMSChart: React.FC<MonthlySMSChartProps> = ({ data }) => {
       }
     })
 
-    return monthNames.map((month, index) => {
+    return monthNames.map((_month, index) => {
       const monthNumber = (index + 1).toString()
       const monthData: ChartData = { month: monthNames[index] } // Use full month name for display
       selectedYears.forEach((year) => {

@@ -77,7 +77,7 @@ export function PatientVisitsDisplay({ patientData }: { patientData: VisitsDashB
             matchesCategory = patient.visitCount > 1 && patient.visitCount <= 8
             break
           case 'frequent':
-            matchesCategory = patient.visitCount > 5 
+            matchesCategory = patient.visitCount > 5
             break
         }
       }
@@ -162,17 +162,27 @@ export function PatientVisitsDisplay({ patientData }: { patientData: VisitsDashB
                 top: 5,
                 right: 30,
                 left: 20,
-                bottom: 5
+                bottom: 40
               }}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
+              <XAxis
+                dataKey="name"
+                angle={-45}
+                textAnchor="end"
+                tick={{
+                  fontSize: 12,
+                  height: 100 // Adjust height to prevent text cutoff
+                }}
+                interval={0}
+                height={60}
+              />
               <YAxis />
               <Tooltip
                 formatter={(value) => [value, 'Count']}
                 labelFormatter={(label) => `Category: ${label}`}
               />
               <Legend />
-              <Bar dataKey="count" name="Number of Patients/Visits" radius={[4, 4, 0, 0]}>
+              <Bar dataKey="count" name="Patients/Visits" fill="#8884d8" radius={[4, 4, 0, 0]}>
                 {[
                   { name: 'Patients with Bio Data', fill: '#4B5563' },
                   { name: 'Zero Visit Patients', fill: '#9CA3AF' },
