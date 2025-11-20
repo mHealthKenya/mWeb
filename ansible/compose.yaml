@@ -1,5 +1,5 @@
 services:
-  api:
+  mplus-web-prod:
     image: 'devmhk/mplusweb:latest'
 
     container_name: mplus-web-prod

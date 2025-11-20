@@ -19,7 +19,18 @@ enum MessageCategory {
   GENERAL = "GENERAL",
   GESTATION_PERIOD = "GESTATION_PERIOD",
   HIGH_RISK = "HIGH_RISK",
+  DELIVERED_MOTHERS = "DELIVERED_MOTHERS",
 }
+
+const HIGH_RISK_CONDITIONS = [
+  { value: "AGE_35_PLUS", label: "Age 35+" },
+  { value: "MULTIPLE_PREGNANCY", label: "Multiple Pregnancy" },
+  { value: "TEENAGE_PREGNANCIES", label: "Teenage Pregnancies" },
+  { value: "HIV_REACTIVE", label: "HIV Reactive (HIV Positive)" },
+  { value: "CARDIAC", label: "Cardiac Condition" },
+  { value: "DIABETES", label: "Diabetes" },
+  { value: "HYPERTENSION", label: "Hypertension" },
+];
 
 export function CreateMessageForm({ onCancel, onSuccess }: CreateMessageFormProps) {
   const [category, setCategory] = useState<MessageCategory>(MessageCategory.GENERAL);
@@ -38,7 +49,7 @@ export function CreateMessageForm({ onCancel, onSuccess }: CreateMessageFormProp
   const validateForm = () => {
     const e: typeof errors = {};
     if (!formData.message.trim()) e.message = "Message is required";
-    if (category === MessageCategory.GENERAL && !formData.scheduledAt) e.scheduledAt = "Scheduled date/time is required";
+    if ([MessageCategory.GENERAL, MessageCategory.DELIVERED_MOTHERS].includes(category) && !formData.scheduledAt) e.scheduledAt = "Scheduled date/time is required";
     if (category === MessageCategory.GESTATION_PERIOD && !formData.gestationTarget) e.gestationTarget = "Gestation weeks target is required";
     if (category === MessageCategory.HIGH_RISK && !formData.riskCondition) e.riskCondition = "Select a risk condition";
     setErrors(e);
@@ -50,7 +61,7 @@ export function CreateMessageForm({ onCancel, onSuccess }: CreateMessageFormProp
     if (!validateForm()) return;
 
     const payload: any = { message: formData.message, category };
-    if (category === MessageCategory.GENERAL) payload.scheduledAt = new Date(formData.scheduledAt).toISOString();
+    if ([MessageCategory.GENERAL, MessageCategory.DELIVERED_MOTHERS].includes(category)) payload.scheduledAt = new Date(formData.scheduledAt).toISOString();
     if (category === MessageCategory.GESTATION_PERIOD) payload.gestationTarget = parseInt(formData.gestationTarget, 10);
     if (category === MessageCategory.HIGH_RISK) payload.riskCondition = formData.riskCondition;
 
@@ -89,7 +100,7 @@ export function CreateMessageForm({ onCancel, onSuccess }: CreateMessageFormProp
             </div>
 
             {/* Conditional Inputs */}
-            {category === MessageCategory.GENERAL && (
+            {[MessageCategory.GENERAL, MessageCategory.DELIVERED_MOTHERS].includes(category) && (
               <div className="space-y-2">
                 <Label htmlFor="scheduledAt" className="flex items-center gap-2"><Calendar className="w-4 h-4" /> Scheduled Date & Time</Label>
                 <Input id="scheduledAt" type="datetime-local" value={formData.scheduledAt} onChange={(e) => setFormData({ ...formData, scheduledAt: e.target.value })} min={new Date().toISOString().slice(0, 16)} />
@@ -110,10 +121,11 @@ export function CreateMessageForm({ onCancel, onSuccess }: CreateMessageFormProp
                 <Label htmlFor="riskCondition">Risk Condition</Label>
                 <select id="riskCondition" className="border rounded p-2 w-full" value={formData.riskCondition} onChange={(e) => setFormData({ ...formData, riskCondition: e.target.value })}>
                   <option value="">Select a risk condition</option>
-                  <option value="AGE_35_PLUS">Age 35+</option>
-                  <option value="MULTIPLE_PREGNANCY">Multiple Pregnancy</option>
-                  <option value="UNDERWEIGHT">Underweight (Weight &lt; 45kg)</option>
-                  <option value="HIGH_PARITY">High Parity</option>
+                  {HIGH_RISK_CONDITIONS.map((condition) => (
+                    <option key={condition.value} value={condition.value}>
+                      {condition.label}
+                    </option>
+                  ))}
                 </select>
                 {errors.riskCondition && <p className="text-sm text-red-600">{errors.riskCondition}</p>}
               </div>

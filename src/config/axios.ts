@@ -3,6 +3,8 @@ import Cookies from 'js-cookie'
 
 export const baseURL = process.env.NEXT_PUBLIC_BASE_URL
 
+console.log(`Base URL: ${baseURL}`)
+
 export const axiosConfig = async (multipart?: boolean) => {
   const token = await Cookies.get('access-token')
   return await axios.create({

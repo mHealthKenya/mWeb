@@ -15,6 +15,7 @@ const userLogin = async ({ email, password }: LoginCredentials) => {
       password
     })
     .then(async (res) => {
+      console.log('res', res)
       return res.data
     })
 
