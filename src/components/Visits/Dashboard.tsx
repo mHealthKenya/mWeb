@@ -1,21 +1,41 @@
 import { useState, useMemo } from 'react'
-import { Search, Users, UserCheck, UserPlus, Phone, Activity } from 'lucide-react'
+import {
+  Search,
+  Users,
+  UserCheck,
+  UserPlus,
+  Phone,
+  Activity,
+  BarChart as BarChartIcon
+} from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@ui/ui/card'
 import { Badge } from '@ui/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@ui/ui/select'
 import { Input } from '@ui/ui/input'
 import { VisitsDashBoard } from '@models/visits-dash'
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer
+} from 'recharts'
+import { Button } from '@ui/ui/button'
+import ManageVisits from './ManageVisits'
 
 const getVisitBadge = (visitCount: number) => {
   if (visitCount === 0) {
     return {
-      label: 'Registered',
+      label: 'Zero Visit Patients',
       className: 'bg-gray-100 text-gray-700 border-gray-200',
       icon: UserPlus
     }
   } else if (visitCount === 1) {
     return {
-      label: 'New Patient',
+      label: 'First Visit Patient',
       className: 'bg-blue-100 text-blue-700 border-blue-200',
       icon: UserCheck
     }
@@ -37,6 +57,7 @@ const getVisitBadge = (visitCount: number) => {
 export function PatientVisitsDisplay({ patientData }: { patientData: VisitsDashBoard[] }) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
+  const [showCreateForm, setShowCreateForm] = useState(false)
 
   const filteredData = useMemo(() => {
     return patientData.filter((patient) => {
@@ -52,11 +73,11 @@ export function PatientVisitsDisplay({ patientData }: { patientData: VisitsDashB
           case 'registered':
             matchesCategory = patient.visitCount === 0
             break
-          case 'new':
+          case 'first':
             matchesCategory = patient.visitCount === 1
             break
           case 'regular':
-            matchesCategory = patient.visitCount > 1 && patient.visitCount <= 5
+            matchesCategory = patient.visitCount > 1 && patient.visitCount <= 8
             break
           case 'frequent':
             matchesCategory = patient.visitCount > 5
@@ -71,7 +92,7 @@ export function PatientVisitsDisplay({ patientData }: { patientData: VisitsDashB
   const stats = useMemo(() => {
     const totalPatients = patientData.length
     const registeredOnly = patientData.filter((p) => p.visitCount === 0).length
-    const newPatients = patientData.filter((p) => p.visitCount === 1).length
+    const firstVisitPatients = patientData.filter((p) => p.visitCount === 1).length
     const returningPatients = patientData.filter((p) => p.visitCount > 1).length
     const totalVisits = patientData.reduce((sum, patient) => sum + patient.visitCount, 0)
     const averageVisits = totalVisits / totalPatients
@@ -79,7 +100,7 @@ export function PatientVisitsDisplay({ patientData }: { patientData: VisitsDashB
     return {
       totalPatients,
       registeredOnly,
-      newPatients,
+      firstVisitPatients,
       returningPatients,
       totalVisits,
       averageVisits
@@ -96,19 +117,110 @@ export function PatientVisitsDisplay({ patientData }: { patientData: VisitsDashB
 
   return (
     <div className="p-6 space-y-6">
+      <Button onClick={() => setShowCreateForm(true)} className="flex items-center gap-2 bg-primary">
+        Manage Visits
+      </Button>
       {/* Header */}
       <div className="space-y-2">
         <h1 className="text-3xl font-bold text-gray-900">Patient Visits Dashboard</h1>
-        <p className="text-gray-600">
-          Track patient visits and engagement across your healthcare facility
-        </p>
+        <p className="text-gray-600">Track patient visits and engagement across mPlus</p>
       </div>
+
+      {/* Visit Distribution Chart */}
+      <Card className="mb-6">
+        <CardHeader className="pb-2">
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <BarChartIcon className="h-5 w-5 text-blue-600" />
+            Patient Visit Distribution
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="h-80">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={[
+                {
+                  name: 'Patients with Bio Data',
+                  count: stats.totalPatients,
+                  fill: '#4B5563' // gray-600
+                },
+                {
+                  name: 'Zero Visit Patients',
+                  count: stats.registeredOnly,
+                  fill: '#9CA3AF' // gray-400
+                },
+                {
+                  name: 'First Visit Patients',
+                  count: stats.firstVisitPatients,
+                  fill: '#3B82F6' // blue-500
+                },
+                {
+                  name: 'Returning Patients',
+                  count: stats.returningPatients,
+                  fill: '#10B981' // emerald-500
+                },
+                {
+                  name: 'Total Visits',
+                  count: stats.totalVisits,
+                  fill: '#8B5CF6' // violet-500
+                }
+              ]}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 40
+              }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                dataKey="name"
+                angle={-45}
+                textAnchor="end"
+                tick={{
+                  fontSize: 12,
+                  height: 100 // Adjust height to prevent text cutoff
+                }}
+                interval={0}
+                height={60}
+              />
+              <YAxis />
+              <Tooltip
+                formatter={(value) => [value, 'Count']}
+                labelFormatter={(label) => `Category: ${label}`}
+              />
+              <Legend />
+              <Bar dataKey="count" name="Patients/Visits" fill="#8884d8" radius={[4, 4, 0, 0]}>
+                {[
+                  { name: 'Patients with Bio Data', fill: '#4B5563' },
+                  { name: 'Zero Visit Patients', fill: '#9CA3AF' },
+                  { name: 'First Visit Patients', fill: '#3B82F6' },
+                  { name: 'Returning Patients', fill: '#10B981' },
+                  { name: 'Total Visits', fill: '#8B5CF6' }
+                ].map((entry, index) => (
+                  <Bar
+                    key={`bar-${index}`}
+                    dataKey="count"
+                    name={entry.name}
+                    fill={entry.fill}
+                    hide={
+                      entry.name !== 'Patients with Bio Data' &&
+                      entry.name !== 'Zero Visit Patients' &&
+                      entry.name !== 'First Visit Patients' &&
+                      entry.name !== 'Returning Patients' &&
+                      entry.name !== 'Total Visits'
+                    }
+                  />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Patients</CardTitle>
+            <CardTitle className="text-sm font-medium">Patients with Bio Data</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -119,11 +231,11 @@ export function PatientVisitsDisplay({ patientData }: { patientData: VisitsDashB
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">New Patients</CardTitle>
+            <CardTitle className="text-sm font-medium">First Visit Patients</CardTitle>
             <UserCheck className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{stats.newPatients}</div>
+            <div className="text-2xl font-bold text-blue-600">{stats.firstVisitPatients}</div>
             <p className="text-xs text-muted-foreground">First-time visitors</p>
           </CardContent>
         </Card>
@@ -171,9 +283,9 @@ export function PatientVisitsDisplay({ patientData }: { patientData: VisitsDashB
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Patients</SelectItem>
-            <SelectItem value="registered">Registered Only</SelectItem>
-            <SelectItem value="new">New Patients</SelectItem>
-            <SelectItem value="regular">Regular Patients</SelectItem>
+            <SelectItem value="registered">Zero Visit Patients</SelectItem>
+            <SelectItem value="first">First Visit Patients</SelectItem>
+            <SelectItem value="regular">Returning Patients</SelectItem>
             <SelectItem value="frequent">Frequent Patients</SelectItem>
           </SelectContent>
         </Select>
@@ -276,6 +388,18 @@ export function PatientVisitsDisplay({ patientData }: { patientData: VisitsDashB
           </p>
         </div>
       )}
+      {
+        showCreateForm && (
+          <ManageVisits
+            onCancel={() => setShowCreateForm(false)}
+            onSuccess={() => {
+              setShowCreateForm(false)
+              // Optionally, refresh data or show a success message
+            }}
+          />
+          // <div>Manage Visits Form Placeholder</div>
+        )
+      }
     </div>
   )
 }

@@ -3,6 +3,7 @@ import Home from '@components/Dashboard/Dashboard'
 import { baseURL } from '@config/axios'
 import NAdminLayout from '@layout/NAdminLayout/NAdminLayout'
 import { SMSCost } from '@models/sms'
+import { MonthlySMSStats } from '@models/smsmonthstats'
 import { SMSStats } from '@models/smsstats'
 import { MotherDistribution, TotalUsers, TotalVisits, UserDistribution } from '@models/user'
 import axios from 'axios'
@@ -26,6 +27,7 @@ interface HomeAdmin {
   monthly_sms_cost: number
   monthly_clinic_visits: TotalVisits
   age_distribution: AgeDist[]
+  monthly_sms_stats: MonthlySMSStats[]
 }
 
 const Admin = ({
@@ -41,7 +43,8 @@ const Admin = ({
   total_sms_count,
   monthly_sms_cost,
   monthly_clinic_visits,
-  age_distribution
+  age_distribution,
+  monthly_sms_stats
 }: HomeAdmin) => {
   return (
     <NAdminLayout>
@@ -61,6 +64,7 @@ const Admin = ({
         monthly_clinic_visits={monthly_clinic_visits}
         mothers_active_count={[]}
         age_distribution={age_distribution}
+        monthly_sms_stats={monthly_sms_stats}
       />
     </NAdminLayout>
   )
@@ -162,6 +166,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         Authorization: `Bearer ${cookie}`
       }
     })
+    const smsMonthlyStatsDist = axios.get(baseURL + 'sms/count/yearly-monthly', {
+      // or whatever your actual endpoint is
+      headers: {
+        Authorization: `Bearer ${cookie}`
+      }
+    })
 
     const [
       smsCost1,
@@ -176,7 +186,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       ageDist1,
       mSMSC1,
       smsC1,
-      mVistC1
+      mVistC1,
+      smsMonthlyStatsDist1
     ] = await Promise.all([
       sCost,
       mSCost,
@@ -190,7 +201,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       ageDist,
       mSMSC,
       smsC,
-      mVistC
+      mVistC,
+      smsMonthlyStatsDist
     ])
 
     const smsCost: SMSCost = smsCost1.data
@@ -206,6 +218,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const total_sms_count: TotalVisits = smsC1.data
     const monthly_clinic_visits: TotalVisits = mVistC1.data
     const age_distribution: AgeDist[] = ageDist1.data
+    const monthly_sms_stats: MonthlySMSStats[] = smsMonthlyStatsDist1.data
 
     return {
       props: {
@@ -222,7 +235,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         age_distribution,
         monthly_sms_count,
         total_sms_count,
-        monthly_clinic_visits
+        monthly_clinic_visits,
+        monthly_sms_stats
       }
     }
   } catch (error) {

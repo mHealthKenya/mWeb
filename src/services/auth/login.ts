@@ -29,7 +29,7 @@ const useLogin = () => {
     onSuccess: async (data) => {
       const { token } = data
       await Cookies.set('access-token', token)
-      router.push('/')
+      router.push('/sadmin')
     },
     onError: (error: any) => {
       Swal.fire({
