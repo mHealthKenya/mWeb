@@ -14,7 +14,10 @@ import {
 
 const acronymToNameMap: Record<string, string> = {}
 
-export function createAcronym(name: string) {
+export function createAcronym(name: string | undefined | null): string {
+  if (!name || typeof name !== 'string') {
+    return 'N/A'
+  }
   const words = name.split(' ')
 
   let acronym = ''
@@ -56,13 +59,15 @@ const CustomTooltip: React.FC<{
   return null
 }
 
-const MotherDistributionChart: FC<{ data: MotherDistribution[] }> = ({ data }) => {
+const MotherDistributionChart: FC<{ data: MotherDistribution[] }> = ({ data = [] }) => {
   const nVal = useMemo(
     () =>
-      data.map((item) => ({
-        facilityName: createAcronym(item.facilityName),
-        count: item.count
-      })),
+      data
+        .filter(item => item && typeof item.count === 'number')
+        .map((item) => ({
+          facilityName: createAcronym(item.facilityName),
+          count: item.count
+        })),
     [data]
   )
 

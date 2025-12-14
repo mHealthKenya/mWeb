@@ -6,6 +6,9 @@ export interface BiodataUser {
   active: boolean
   age: number
   last_monthly_period: Date
+  delivered: boolean
+  deliveryMethod?: string
+  comments: string[]
   expected_delivery_date: Date
   pregnancy_period: number
   last_clinic_visit: Date
