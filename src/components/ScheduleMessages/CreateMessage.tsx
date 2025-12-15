@@ -24,10 +24,10 @@ enum MessageCategory {
 
 const HIGH_RISK_CONDITIONS = [
   { value: "AGE_35_PLUS", label: "Age 35+" },
-  { value: "MULTIPLE_PREGNANCY", label: "Multiple Pregnancy" },
+  { value: "TWIN_TRIPLET_PREGNANCIES", label: "Twin/Triplet Pregnancies" },
   { value: "TEENAGE_PREGNANCIES", label: "Teenage Pregnancies" },
-  { value: "HIV_REACTIVE", label: "HIV Reactive (HIV Positive)" },
-  { value: "CARDIAC", label: "Cardiac Condition" },
+  { value: "HIV_REACTIVE", label: "HIV Reactive" },
+  { value: "CARDIAC", label: "Cardiac" },
   { value: "DIABETES", label: "Diabetes" },
   { value: "HYPERTENSION", label: "Hypertension" },
 ];
@@ -39,9 +39,10 @@ export function CreateMessageForm({ onCancel, onSuccess }: CreateMessageFormProp
     scheduledAt: "",
     gestationTarget: "",
     riskCondition: "",
+    monthsSinceDelivery: "",
   });
 
-  const [errors, setErrors] = useState<{ message?: string; scheduledAt?: string; gestationTarget?: string; riskCondition?: string }>({});
+  const [errors, setErrors] = useState<{ message?: string; scheduledAt?: string; gestationTarget?: string; riskCondition?: string; monthsSinceDelivery?: string }>({});
   const { toast } = useToast();
 
   const { mutateAsync: createMessage, isLoading } = useAddScheduledMessage();
@@ -49,9 +50,10 @@ export function CreateMessageForm({ onCancel, onSuccess }: CreateMessageFormProp
   const validateForm = () => {
     const e: typeof errors = {};
     if (!formData.message.trim()) e.message = "Message is required";
-    if ([MessageCategory.GENERAL, MessageCategory.DELIVERED_MOTHERS].includes(category) && !formData.scheduledAt) e.scheduledAt = "Scheduled date/time is required";
+    if ([MessageCategory.GENERAL, MessageCategory.DELIVERED_MOTHERS, MessageCategory.HIGH_RISK].includes(category) && !formData.scheduledAt) e.scheduledAt = "Scheduled date is required";
     if (category === MessageCategory.GESTATION_PERIOD && !formData.gestationTarget) e.gestationTarget = "Gestation weeks target is required";
     if (category === MessageCategory.HIGH_RISK && !formData.riskCondition) e.riskCondition = "Select a risk condition";
+    if (category === MessageCategory.DELIVERED_MOTHERS && !formData.monthsSinceDelivery) e.monthsSinceDelivery = "Months since delivery is required";
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -61,9 +63,15 @@ export function CreateMessageForm({ onCancel, onSuccess }: CreateMessageFormProp
     if (!validateForm()) return;
 
     const payload: any = { message: formData.message, category };
-    if ([MessageCategory.GENERAL, MessageCategory.DELIVERED_MOTHERS].includes(category)) payload.scheduledAt = new Date(formData.scheduledAt).toISOString();
+    if ([MessageCategory.GENERAL, MessageCategory.DELIVERED_MOTHERS, MessageCategory.HIGH_RISK].includes(category)) {
+      // Set time to start of day (00:00:00) for date-only input
+      const date = new Date(formData.scheduledAt);
+      date.setHours(0, 0, 0, 0);
+      payload.scheduledAt = date.toISOString();
+    }
     if (category === MessageCategory.GESTATION_PERIOD) payload.gestationTarget = parseInt(formData.gestationTarget, 10);
     if (category === MessageCategory.HIGH_RISK) payload.riskCondition = formData.riskCondition;
+    if (category === MessageCategory.DELIVERED_MOTHERS && formData.monthsSinceDelivery) payload.monthsSinceDelivery = parseFloat(formData.monthsSinceDelivery);
 
     try {
       await createMessage(payload);
@@ -100,10 +108,10 @@ export function CreateMessageForm({ onCancel, onSuccess }: CreateMessageFormProp
             </div>
 
             {/* Conditional Inputs */}
-            {[MessageCategory.GENERAL, MessageCategory.DELIVERED_MOTHERS].includes(category) && (
+            {[MessageCategory.GENERAL, MessageCategory.DELIVERED_MOTHERS, MessageCategory.HIGH_RISK].includes(category) && (
               <div className="space-y-2">
-                <Label htmlFor="scheduledAt" className="flex items-center gap-2"><Calendar className="w-4 h-4" /> Scheduled Date & Time</Label>
-                <Input id="scheduledAt" type="datetime-local" value={formData.scheduledAt} onChange={(e) => setFormData({ ...formData, scheduledAt: e.target.value })} min={new Date().toISOString().slice(0, 16)} />
+                <Label htmlFor="scheduledAt" className="flex items-center gap-2"><Calendar className="w-4 h-4" /> Scheduled Date</Label>
+                <Input id="scheduledAt" type="date" value={formData.scheduledAt} onChange={(e) => setFormData({ ...formData, scheduledAt: e.target.value })} min={new Date().toISOString().slice(0, 10)} />
                 {errors.scheduledAt && <p className="text-sm text-red-600">{errors.scheduledAt}</p>}
               </div>
             )}
@@ -128,6 +136,23 @@ export function CreateMessageForm({ onCancel, onSuccess }: CreateMessageFormProp
                   ))}
                 </select>
                 {errors.riskCondition && <p className="text-sm text-red-600">{errors.riskCondition}</p>}
+              </div>
+            )}
+
+            {category === MessageCategory.DELIVERED_MOTHERS && (
+              <div className="space-y-2">
+                <Label htmlFor="monthsSinceDelivery">Months Since Delivery</Label>
+                <Input 
+                  id="monthsSinceDelivery" 
+                  type="number" 
+                  step="0.5"
+                  min="0"
+                  placeholder="e.g., 0.5 (early mother), 1, 2, 3..." 
+                  value={formData.monthsSinceDelivery} 
+                  onChange={(e) => setFormData({ ...formData, monthsSinceDelivery: e.target.value })} 
+                />
+                <p className="text-sm text-gray-500">Enter months since delivery (e.g., 0.5 for early mother, 1 for 1 month, 2 for 2 months, etc.)</p>
+                {errors.monthsSinceDelivery && <p className="text-sm text-red-600">{errors.monthsSinceDelivery}</p>}
               </div>
             )}
 
