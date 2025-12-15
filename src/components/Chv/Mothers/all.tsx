@@ -101,7 +101,7 @@ const ChvMothersComponent: FC<{
         ]
       }
     ]
-  }, [])
+  }, [handleView])
 
   return (
     <>

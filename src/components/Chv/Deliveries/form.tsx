@@ -1,3 +1,5 @@
+'use client'
+
 import { useForm } from 'react-hook-form'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@ui/ui/card'
 import { Checkbox } from '@ui/ui/checkbox'
@@ -5,13 +7,16 @@ import { Label } from '@ui/ui/label'
 import { Textarea } from '@ui/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@ui/ui/select'
 import { Button } from '@ui/ui/button'
+import { Input } from '@ui/ui/input'
 import useAddDelivery from '@services/delivery-status/add'
-import { BiodataUser } from '@models/biodatauser'
+import type { BiodataUser } from '@models/biodatauser'
 
 type DeliveryData = {
   delivered: boolean
   comments: string
   deliveryMethod: string
+  deliveryDate?: string
+  undelivered?: string
 }
 
 export function DeliveryForm({ bioData }: { bioData: BiodataUser }) {
@@ -28,12 +33,15 @@ export function DeliveryForm({ bioData }: { bioData: BiodataUser }) {
     defaultValues: {
       delivered: bioData.delivered,
       comments: '',
-      deliveryMethod: bioData?.deliveryMethod || ''
+      deliveryMethod: bioData?.deliveryMethod || '',
+      deliveryDate: '',
+      undelivered: ''
     }
   })
 
   const deliveryMethod = watch('deliveryMethod')
   const delivered = watch('delivered')
+  const undelivered = watch('undelivered')
 
   const onSubmit = async (data: DeliveryData) => {
     mutate({
@@ -53,31 +61,6 @@ export function DeliveryForm({ bioData }: { bioData: BiodataUser }) {
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">
-            {/* Delivery Method */}
-            <div className="space-y-2">
-              <Label htmlFor="deliveryMethod" className="text-sm font-semibold">
-                Delivery Method <span className="text-destructive">*</span>
-              </Label>
-              <Select
-                value={deliveryMethod}
-                onValueChange={(value) =>
-                  setValue('deliveryMethod', value, { shouldValidate: true })
-                }>
-                <SelectTrigger id="deliveryMethod" className="h-12">
-                  <SelectValue placeholder="Select delivery method" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Natural">Natural</SelectItem>
-                  <SelectItem value="C-Section">C-Section</SelectItem>
-                  <SelectItem value="Assisted">Assisted Delivery</SelectItem>
-                  <SelectItem value="Water Birth">Water Birth</SelectItem>
-                </SelectContent>
-              </Select>
-              {!deliveryMethod && errors.deliveryMethod && (
-                <p className="text-sm text-destructive">{errors.deliveryMethod.message}</p>
-              )}
-            </div>
-
             {/* Delivered Status */}
             <div className="flex items-start space-x-3 rounded-lg border border-border bg-muted/30 p-4">
               <Checkbox
@@ -97,6 +80,74 @@ export function DeliveryForm({ bioData }: { bioData: BiodataUser }) {
                 </p>
               </div>
             </div>
+            {/* Delivery Method */}
+            {delivered && (
+              <div className="space-y-2">
+                <Label htmlFor="deliveryMethod" className="text-sm font-semibold">
+                  Delivery Method <span className="text-destructive">*</span>
+                </Label>
+                <Select
+                  value={deliveryMethod}
+                  onValueChange={(value) =>
+                    setValue('deliveryMethod', value, { shouldValidate: true })
+                  }>
+                  <SelectTrigger id="deliveryMethod" className="h-12">
+                    <SelectValue placeholder="Select delivery method" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Natural">Natural</SelectItem>
+                    <SelectItem value="C-Section">C-Section</SelectItem>
+                    <SelectItem value="Assisted">Assisted Delivery</SelectItem>
+                    <SelectItem value="Water Birth">Water Birth</SelectItem>
+                  </SelectContent>
+                </Select>
+                {!deliveryMethod && errors.deliveryMethod && (
+                  <p className="text-sm text-destructive">{errors.deliveryMethod.message}</p>
+                )}
+              </div>
+            )}
+
+            {delivered && (
+              <div className="space-y-2">
+                <Label htmlFor="deliveryDate" className="text-sm font-semibold">
+                  Delivery Date <span className="text-destructive">*</span>
+                </Label>
+                <Input
+                  id="deliveryDate"
+                  type="date"
+                  {...register('deliveryDate')}
+                  className="h-12"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Select the date when the delivery was completed
+                </p>
+              </div>
+            )}
+
+            {!delivered && (
+              <div className="space-y-2">
+                <Label htmlFor="complications" className="text-sm font-semibold">
+                  Complication Status <span className="text-destructive">*</span>
+                </Label>
+                <Select
+                  value={undelivered}
+                  onValueChange={(value) =>
+                    setValue('undelivered', value, { shouldValidate: true })
+                  }>
+                  <SelectTrigger id="undelivered" className="h-12">
+                    <SelectValue placeholder="Select complication status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="still birth">Still Birth</SelectItem>
+                    <SelectItem value="preterm birth">Preterm Birth</SelectItem>
+                    <SelectItem value="low birth weight">Low Birth Weight</SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground">
+                  Select the complication or outcome if not delivered successfully
+                </p>
+              </div>
+            )}
 
             {/* Comments */}
             <div className="space-y-2">
