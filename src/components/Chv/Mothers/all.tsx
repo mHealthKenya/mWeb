@@ -1,17 +1,18 @@
+import Center from '@components/Shared/CenterVert'
 import SharedModal from '@components/Shared/Modal'
 import { Col } from '@data/users-by-role'
-import { Box, Button, CardActions } from '@mui/material'
-import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid'
-import React, { FC, useMemo, useState } from 'react'
-import useAllChvMothers from '@services/chvmother/all'
-import { UserByRole } from '@models/user-by-role'
-import Center from '@components/Shared/CenterVert'
-import { ChvMothers } from '@models/chvmothers'
-import { ViewTargetComponent } from '../Target/all'
-import { Add, ViewTimelineTwoTone } from '@mui/icons-material'
-import { Target } from '@models/target'
-import AddMotherComponent from './add'
 import { User } from '@models/biodata'
+import { ChvMothers } from '@models/chvmothers'
+import { Target } from '@models/target'
+import { UserByRole } from '@models/user-by-role'
+import { Add, ArrowForward, ViewTimelineTwoTone } from '@mui/icons-material'
+import { Box, Button, CardActions } from '@mui/material'
+import { DataGrid, GridActionsCellItem, GridColDef, GridToolbar } from '@mui/x-data-grid'
+import useAllChvMothers from '@services/chvmother/all'
+import { FC, useMemo, useState } from 'react'
+import { ViewTargetComponent } from '../Target/all'
+import AddMotherComponent from './add'
+import { useRouter } from 'next/router'
 
 export interface ChvMothersData {
   chvmothers: ChvMothers
@@ -46,6 +47,7 @@ const ChvMothersComponent: FC<{
   const [_openAdd, _setOpenAdd] = useState(false)
   const chvmothers = useAllChvMothers(data)
   const [viewTarget, setViewTarget] = useState(false)
+  const router = useRouter()
 
   const toggleAdd = () => {
     setOpen((open) => !open)
@@ -53,6 +55,14 @@ const ChvMothersComponent: FC<{
 
   const toggleViewTarget = () => {
     setViewTarget((viewTarget) => !viewTarget)
+  }
+
+  // Handler for row actions
+  const handleView = (id: string | number) => {
+    console.log('View mother:', id)
+
+    router.push(`/chp/deliveries/${id}`)
+    // Add your view logic here
   }
 
   const rows = useMemo(() => {
@@ -74,10 +84,24 @@ const ChvMothersComponent: FC<{
         field: col.field,
         headerName: col.headerName,
         flex: 1
-      }))
-      // actionCol
+      })),
+      {
+        field: 'actions',
+        type: 'actions',
+        headerName: 'Actions',
+        width: 150,
+        getActions: (params) => [
+          <GridActionsCellItem
+            key="edit"
+            icon={<ArrowForward />}
+            label="View"
+            onClick={() => handleView(params.id)}
+            showInMenu={false}
+          />
+        ]
+      }
     ]
-  }, [])
+  }, [handleView])
 
   return (
     <>

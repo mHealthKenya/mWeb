@@ -23,8 +23,7 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts'
-import { Button } from '@ui/ui/button'
-import ManageVisits from './ManageVisits'
+import { ZeroVisists } from '@models/zero-visits'
 
 const getVisitBadge = (visitCount: number) => {
   if (visitCount === 0) {
@@ -54,7 +53,13 @@ const getVisitBadge = (visitCount: number) => {
   }
 }
 
-export function PatientVisitsDisplay({ patientData }: { patientData: VisitsDashBoard[] }) {
+export function PatientVisitsDisplay({
+  patientData,
+  zeroVisits
+}: {
+  patientData: VisitsDashBoard[]
+  zeroVisits: ZeroVisists
+}) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [showCreateForm, setShowCreateForm] = useState(false)
@@ -71,7 +76,7 @@ export function PatientVisitsDisplay({ patientData }: { patientData: VisitsDashB
       if (selectedCategory !== 'all') {
         switch (selectedCategory) {
           case 'registered':
-            matchesCategory = patient.visitCount === 0
+            matchesCategory = patient.balance === 7000
             break
           case 'first':
             matchesCategory = patient.visitCount === 1
@@ -91,7 +96,9 @@ export function PatientVisitsDisplay({ patientData }: { patientData: VisitsDashB
 
   const stats = useMemo(() => {
     const totalPatients = patientData.length
-    const registeredOnly = patientData.filter((p) => p.visitCount === 0).length
+    // const registeredOnly = patientData.filter((p) => p.visitCount === 0).length
+    const registeredOnly = zeroVisits.count
+
     const firstVisitPatients = patientData.filter((p) => p.visitCount === 1).length
     const returningPatients = patientData.filter((p) => p.visitCount > 1).length
     const totalVisits = patientData.reduce((sum, patient) => sum + patient.visitCount, 0)
@@ -105,7 +112,7 @@ export function PatientVisitsDisplay({ patientData }: { patientData: VisitsDashB
       totalVisits,
       averageVisits
     }
-  }, [patientData])
+  }, [patientData, zeroVisits])
 
   const formatPhoneNumber = (phone: string) => {
     // Format Kenyan phone number for better readability
@@ -342,7 +349,7 @@ export function PatientVisitsDisplay({ patientData }: { patientData: VisitsDashB
                           ? 'text-green-600'
                           : 'text-purple-600'
                       }`}>
-                      {patient.visitCount}
+                      {patient.balance === 7000 ? 0 : patient.visitCount}
                     </div>
                     <span className="text-xs text-gray-500">
                       {patient.visitCount === 1 ? 'visit' : 'visits'}

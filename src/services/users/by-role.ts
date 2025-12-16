@@ -16,7 +16,8 @@ const useUsersByRole = (role: string, initialData: UserByRole[]) =>
     queryKey: ['users-by-role', role],
     queryFn: () => getUsersByRole(role),
     enabled: !!role,
-    initialData
+    initialData,
+    
   })
 
 export default useUsersByRole

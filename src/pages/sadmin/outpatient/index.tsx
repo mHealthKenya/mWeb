@@ -7,10 +7,17 @@ import axios, { AxiosRequestConfig } from 'axios'
 import * as jwt from 'jsonwebtoken'
 import { baseURL } from '@config/axios'
 import { VisitsDashBoard } from '@models/visits-dash'
-const Outpatient = ({ patientData }: { patientData: VisitsDashBoard[] }) => {
+import { ZeroVisists } from '@models/zero-visits'
+const Outpatient = ({
+  patientData,
+  zeroVisits
+}: {
+  patientData: VisitsDashBoard[]
+  zeroVisits: ZeroVisists
+}) => {
   return (
     <AdminLayout>
-      <PatientVisitsDisplay patientData={patientData} />
+      <PatientVisitsDisplay patientData={patientData} zeroVisits={zeroVisits}/>
     </AdminLayout>
   )
 }
@@ -35,12 +42,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     (res) => res.data
   )
 
+  const zeroVisits = await axios(config(baseURL + 'stats/no-visit-mothers')).then((res) => res.data)
+
   try {
     await jwt.verify(cookie, `${process.env.NEXT_PUBLIC_JWT_SECRET}`)
 
     return {
       props: {
-        patientData
+        patientData,
+        zeroVisits
       }
     }
   } catch (error) {
