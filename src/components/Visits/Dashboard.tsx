@@ -343,7 +343,7 @@ export function PatientVisitsDisplay({
                           ? 'text-green-600'
                           : 'text-purple-600'
                       }`}>
-                      {patient.balance === 7000 ? 0 : patient.visitCount}
+                      { patient.visitCount}
                     </div>
                     <span className="text-xs text-gray-500">
                       {patient.visitCount === 1 ? 'visit' : 'visits'}
