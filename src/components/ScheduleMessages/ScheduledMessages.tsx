@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { Plus, MessageSquare, Send, Clock, Search, Loader2, Trash2, BadgeCheck, Hourglass, EyeIcon } from "lucide-react"
+import { Plus, MessageSquare, Send, Clock, Search, Loader2, Trash2, BadgeCheck, EyeIcon } from "lucide-react"
 import { useToast } from "@ui/ui/use-toast"
 import { Button } from "@ui/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@ui/ui/card"
@@ -149,8 +149,8 @@ export default function ScheduledMessagesComponent() {
           </div>
         ) : (
           <div className="flex flex-row items-center gap-2">
-            <Hourglass className="animate-spin w-4 h-4 text-orange-600" />
-            <span className="text-orange-600 font-semibold">Pending</span>
+            {/* <Hourglass className="animate-spin w-4 h-4 text-orange-600" />
+            <span className="text-orange-600 font-semibold">Pending</span> */}
           </div>
         )
       ),

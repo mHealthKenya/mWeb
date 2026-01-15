@@ -54,7 +54,7 @@ const ManageVisits = ({ onCancel, onSuccess }: ManageVisitsProps) => {
               <MessageSquare className="w-5 h-5" /> Manage non Updated Visits
             </CardTitle>
             <CardDescription>
-              Update and edit visits that haven't been recorded
+              Update and edit visits that haven&apos;t been recorded
             </CardDescription>
           </div>
           <Button variant="ghost" size="icon" onClick={onCancel}>

@@ -62,7 +62,6 @@ export function PatientVisitsDisplay({
 }) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
-  const [showCreateForm, setShowCreateForm] = useState(false)
 
   const filteredData = useMemo(() => {
     return patientData.filter((patient) => {
@@ -124,9 +123,7 @@ export function PatientVisitsDisplay({
 
   return (
     <div className="p-6 space-y-6">
-      <Button onClick={() => setShowCreateForm(true)} className="flex items-center gap-2 bg-primary">
-        Manage Visits
-      </Button>
+      
       {/* Header */}
       <div className="space-y-2">
         <h1 className="text-3xl font-bold text-gray-900">Patient Visits Dashboard</h1>
@@ -395,7 +392,7 @@ export function PatientVisitsDisplay({
           </p>
         </div>
       )}
-      {
+      {/* {
         showCreateForm && (
           <ManageVisits
             onCancel={() => setShowCreateForm(false)}
@@ -406,7 +403,7 @@ export function PatientVisitsDisplay({
           />
           // <div>Manage Visits Form Placeholder</div>
         )
-      }
+      } */}
     </div>
   )
 }
