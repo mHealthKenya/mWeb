@@ -10,14 +10,12 @@ import { VisitsDashBoard } from '@models/visits-dash'
 import { ZeroVisists } from '@models/zero-visits'
 const Outpatient = ({
   patientData,
-  zeroVisits
 }: {
   patientData: VisitsDashBoard[]
-  zeroVisits: ZeroVisists
 }) => {
   return (
     <AdminLayout>
-      <PatientVisitsDisplay patientData={patientData} zeroVisits={zeroVisits}/>
+      <PatientVisitsDisplay patientData={patientData} />
     </AdminLayout>
   )
 }

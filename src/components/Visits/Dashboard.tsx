@@ -23,7 +23,6 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts'
-import { ZeroVisists } from '@models/zero-visits'
 
 const getVisitBadge = (visitCount: number) => {
   if (visitCount === 0) {
@@ -54,11 +53,9 @@ const getVisitBadge = (visitCount: number) => {
 }
 
 export function PatientVisitsDisplay({
-  patientData,
-  zeroVisits
+  patientData
 }: {
   patientData: VisitsDashBoard[]
-  zeroVisits: ZeroVisists
 }) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
@@ -75,7 +72,7 @@ export function PatientVisitsDisplay({
       if (selectedCategory !== 'all') {
         switch (selectedCategory) {
           case 'registered':
-            matchesCategory = patient.balance === 7000
+            matchesCategory = patient.visitCount === 0
             break
           case 'first':
             matchesCategory = patient.visitCount === 1
@@ -95,8 +92,8 @@ export function PatientVisitsDisplay({
 
   const stats = useMemo(() => {
     const totalPatients = patientData.length
-    // const registeredOnly = patientData.filter((p) => p.visitCount === 0).length
-    const registeredOnly = zeroVisits.count
+    const registeredOnly = patientData.filter((p) => p.visitCount === 0).length
+    // const registeredOnly = zeroVisits.count
 
     const firstVisitPatients = patientData.filter((p) => p.visitCount === 1).length
     const returningPatients = patientData.filter((p) => p.visitCount > 1).length
@@ -111,7 +108,7 @@ export function PatientVisitsDisplay({
       totalVisits,
       averageVisits
     }
-  }, [patientData, zeroVisits])
+  }, [patientData])
 
   const formatPhoneNumber = (phone: string) => {
     // Format Kenyan phone number for better readability
