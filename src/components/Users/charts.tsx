@@ -1,6 +1,6 @@
 'use client'
 
-import { BiodataUser } from '@models/biodatauser'
+import { User } from '@models/biodata'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@ui/ui/card'
 import { Chart } from 'react-google-charts'
 
@@ -41,7 +41,7 @@ const barChartOptions = {
 }
 
 interface Props {
-  bioData: BiodataUser[]
+  mothers: User[]
   deliveredCount: number
   notDeliveredCount: number
   deliveryMethodData: DeliveryMethodData
@@ -49,13 +49,13 @@ interface Props {
 }
 
 export function DeliveryAnalytics({
-  bioData,
+  mothers,
   deliveredCount,
   notDeliveredCount,
   deliveryMethodData,
   deliveryStatusData
 }: Props) {
-  const totalRecords = bioData.length
+  const totalRecords = mothers.length
   const deliveryRate = ((deliveredCount / totalRecords) * 100).toFixed(1)
 
   return (
