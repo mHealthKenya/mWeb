@@ -8,9 +8,7 @@ const MotherActiveStats: React.FC<{ data: MotherStats[] }> = ({ data: items }) =
   const nVal: (string | number)[][] = React.useMemo(
     () => [
       ['Active', 'Count'],
-      ...items
-        .filter((item) => item.active === true)
-        .map((item) => ['Active', item._count.active]),
+      ...items.map((item) => [item.active ? 'Active' : 'Deactivated', item._count.active]),
     ],
     [items]
   )
